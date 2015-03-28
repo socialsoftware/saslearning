@@ -1,0 +1,29 @@
+package pt.ulisboa.tecnico.saslearning.domain;
+
+class Document {
+	String url;
+}
+
+relation DomainRootHasDocumentApplication {
+	.pt.ist.fenixframework.DomainRoot playsRole root {
+		multiplicity 1..1;
+	}
+	
+	Document playsRole document {
+		multiplicity 0..*;
+	}
+}
+
+class Annotation {
+	String annotation;
+}
+
+relation DocumentHasAnnotations {
+	Document playsRole document {
+		multiplicity 1..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
