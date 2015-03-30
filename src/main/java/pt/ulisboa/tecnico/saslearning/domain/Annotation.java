@@ -11,4 +11,8 @@ public class Annotation extends Annotation_Base {
     	return getAnnotation();
     }
     
+    public void delete(){
+    	setDocument(null);
+    	deleteDomainObject();
+    }
 }
