@@ -1,7 +1,9 @@
 package pt.ulisboa.tecnico.saslearning.domain;
 
 class Document {
+	String title;
 	String url;
+	String content;
 }
 
 relation DomainRootHasDocumentApplication {
