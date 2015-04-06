@@ -6,12 +6,15 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.google.gson.Gson;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
@@ -34,13 +37,14 @@ public class DocumentController {
 	}
 
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
-	public String addDocument(@ModelAttribute DocUrl doc) {
+	public String addDocument(@ModelAttribute DocUrl doc) throws IOException {
+		
 		addNewDocument(doc.getUrl());
 		return "addDocument";
 	}
 
 	@RequestMapping(value = "seeDocs", method = RequestMethod.GET)
-	public String seeDocuments(Model m) {
+	public String listDocumentsAvailable(Model m) {
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
 		m.addAttribute("docSelected", new DocUrl());
@@ -50,14 +54,9 @@ public class DocumentController {
 	@RequestMapping(value = "/selectDoc/{id}", method = RequestMethod.GET)
 	public String showDocument(@PathVariable String id, Model m)
 			throws IOException {
-		String docUrl = getUrlById(id);
-		org.jsoup.nodes.Document document = Jsoup.connect(docUrl).get();
-		for (Element e : document.getAllElements()) {
-			checkForAttributePath(e, "src");
-			checkForAttributePath(e, "href");
-			checkForAttributePath(e, "data");
-		}
-		m.addAttribute("link", document.children());
+		DocUrl doc = getDocumentById(id);
+		m.addAttribute("article", doc.getContent());
+		m.addAttribute("source", doc.getUrl());
 		return "docTemplate";
 	}
 
@@ -69,16 +68,40 @@ public class DocumentController {
 		}
 	}
 
-	@Atomic
-	private String getUrlById(String id) {
+	@Atomic(mode = TxMode.READ)
+	private DocUrl getDocumentById(String id) {
 		Document d = FenixFramework.getDomainObject(id);
-		return d.getUrl();
+		Gson gson = new Gson();
+		String json = gson.toJson(d);
+		System.out.println("JSON DO DOCUMENTO: ");
+		System.out.println(json);
+		DocUrl doc = new DocUrl();
+		doc.setId(id);
+		doc.setTitle(d.getTitle());
+		doc.setUrl(d.getUrl());
+		doc.setContent(d.getContent());
+		return doc;
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	private void addNewDocument(String url) {
+	private void addNewDocument(String url) throws IOException {
 		Document doc = new Document();
+		org.jsoup.nodes.Document document = Jsoup.connect(url).get();
+		for (Element e : document.getAllElements()) {
+			checkForAttributePath(e, "src");
+			checkForAttributePath(e, "href");
+			checkForAttributePath(e, "data");
+		}
 		doc.setUrl(url);
+		Elements titleSet = document.getElementsByTag("title");
+		String title = "";
+		if(!titleSet.isEmpty()){
+			title = titleSet.text();
+		}else{
+			title = url;
+		}
+		doc.setTitle(title);
+		doc.setContent(document.children().toString());
 		FenixFramework.getDomainRoot().addDocument(doc);
 	}
 
@@ -90,6 +113,8 @@ public class DocumentController {
 			DocUrl url = new DocUrl();
 			url.setId(doc.getExternalId());
 			url.setUrl(doc.getUrl());
+			url.setTitle(doc.getTitle());
+			url.setContent(doc.getContent());
 			docs.add(url);
 		}
 		return docs;

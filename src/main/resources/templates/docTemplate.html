@@ -1,15 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Fetching URL</title>
+    <title>View Document</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 	<script src="http://assets.annotateit.org/annotator/v1.1.0/annotator-full.min.js"></script>
 	<link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.1.0/annotator.min.css"></link>
 </head>
 <body>
-	<div></div>
-    <div> <span id="article" th:utext="${link}" ></span> </div>
+	<div style="text-align: center; background-color: yellow;">
+		Article extracted from 
+		<a th:href="${source}" th:text="${source}"></a>
+	</div>
+    <div> <span id="article" th:utext="${article}" ></span> </div>
 
     <script type="text/javascript">
    			var content = $('#article').annotator();

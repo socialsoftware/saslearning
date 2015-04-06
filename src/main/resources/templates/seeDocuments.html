@@ -6,7 +6,7 @@
 </head>
 <body>
 	<div th:each="doc : ${docs}">
-		<a th:href="@{/selectDoc/} + ${doc.id}" th:text="${doc.url}"></a>
+		<a th:href="@{/selectDoc/} + ${doc.id}" th:text="${doc.title}"></a>
 	</div>
 </body>
 </html>

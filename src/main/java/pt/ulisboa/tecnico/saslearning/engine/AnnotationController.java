@@ -30,7 +30,6 @@ public class AnnotationController {
 	@RequestMapping(value = "/selectDoc/{docId}/store/annotations", method = RequestMethod.GET)
 	public String getAnnotations(@PathVariable String docId) {
 		String resp = getDocAnnotations(docId);
-		System.out.println("RESPONSE: " + resp);
 		return resp;
 	}
 
@@ -55,8 +54,7 @@ public class AnnotationController {
 	// UPDATE
 	@RequestMapping(value = "/selectDoc/{docId}/store/annotations/{annId}", method = RequestMethod.PUT)
 	public RedirectView updateAnnotation(@PathVariable String annId,
-			@PathVariable String docId, @RequestBody String annot,
-			HttpServletResponse resp) throws IOException {
+			@PathVariable String docId, @RequestBody String annot) throws IOException {
 		updateAnnotationById(annId, annot);
 		RedirectView rv = new RedirectView("/selectDoc/" + docId
 				+ "/store/annotations/" + annId);
