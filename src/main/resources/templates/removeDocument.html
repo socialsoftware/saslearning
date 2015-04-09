@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<table>
+	<tr th:each="doc:${docs}">
+		<td th:text="${doc.title}"></td>
+
+		<td><a th:href="@{/removeDoc/} + ${doc.id}">(remove)</a></td>
+	</tr>
+
+</table>
+</body>
+</html>

@@ -12,4 +12,13 @@ public class Document extends Document_Base {
     	return getUrl();
     }
     
+    public void delete(){
+    	for(Annotation a : getAnnotationSet()){
+    		removeAnnotation(a);
+    		a.delete();
+    	}
+    	setRoot(null);
+    	deleteDomainObject();
+    }
+    
 }

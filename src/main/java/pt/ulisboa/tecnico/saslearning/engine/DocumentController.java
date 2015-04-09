@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.google.gson.Gson;
-
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.DomainRoot;
@@ -24,6 +22,27 @@ import pt.ulisboa.tecnico.saslearning.domain.Document;
 
 @Controller
 public class DocumentController {
+
+	@RequestMapping(value = "/removeDocs", method = RequestMethod.GET)
+	public String goToRemoveDocuments(Model m){
+		List<DocUrl> docs = getUrls();
+		m.addAttribute("docs", docs);
+		return "removeDocument";
+	}
+	
+	@RequestMapping(value = "/removeDoc/{id}", method = RequestMethod.GET)
+	public String removeDocument(Model m, @PathVariable String id){
+		removeDocumentById(id);
+		List<DocUrl> docs = getUrls();
+		m.addAttribute("docs", docs);
+		return "removeDocument";
+	}
+	
+	@Atomic
+	private void removeDocumentById(String id) {
+		Document d = FenixFramework.getDomainObject(id);
+		d.delete();
+	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String goToHome() {
@@ -71,10 +90,6 @@ public class DocumentController {
 	@Atomic(mode = TxMode.READ)
 	private DocUrl getDocumentById(String id) {
 		Document d = FenixFramework.getDomainObject(id);
-		Gson gson = new Gson();
-		String json = gson.toJson(d);
-		System.out.println("JSON DO DOCUMENTO: ");
-		System.out.println(json);
 		DocUrl doc = new DocUrl();
 		doc.setId(id);
 		doc.setTitle(d.getTitle());

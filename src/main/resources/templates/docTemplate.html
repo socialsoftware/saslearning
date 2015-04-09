@@ -3,9 +3,18 @@
 <head>
     <title>View Document</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-	<script src="http://assets.annotateit.org/annotator/v1.1.0/annotator-full.min.js"></script>
-	<link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.1.0/annotator.min.css"></link>
+	  <script src="http://assets.annotateit.org/annotator/v1.1.0/annotator-full.min.js"></script>
+	  <script src="/annotator-SAConcepts-plugin.js"></script>
+    <script src="/chosen/chosen.jquery.js" type="text/javascript"></script>
+    <script src="/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.1.0/annotator.min.css"></link>
+    <link rel="stylesheet" href="/chosen/docsupport/style.css"></link>
+    <link rel="stylesheet" href="/chosen/docsupport/prism.css"></link>
+    <link rel="stylesheet" href="/chosen/chosen.css"></link>
+
 </head>
 <body>
 	<div style="text-align: center; background-color: yellow;">
@@ -19,8 +28,28 @@
    			content.annotator('addPlugin', 'Store', {
           prefix: document.URL + '/store'
         });
-   			var content2 = $('#article').annotator().annotator('addPlugin', 'Tags');
+   			//var content2 = $('#article').annotator().annotator('addPlugin', 'Tags');
+        var content3 = $('#article').annotator().annotator('addPlugin', 'SAConcepts');
     </script>
-</body>
 
+ <style>
+   .annotator-item .chosen-container{width: 100% !important;}
+   .search-choice-close{border: none !important; padding: 0 !important;}
+   .search-choice-close::after{background: none !important;}
+   .offset1 { margin-left: 100px !important;}
+   .span10 {   width: 970px !important;}
+   body{
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+   }
+
+   div#content {
+      border: none !important;
+   }
+
+   p{
+    max-width: none !important;
+   }
+ </style>
+
+</body>
 </html>
