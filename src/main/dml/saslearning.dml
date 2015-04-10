@@ -29,3 +29,17 @@ relation DocumentHasAnnotations {
 		multiplicity 0..*;
 	}
 }
+
+class Tag {
+	String tag;
+}
+
+relation DomainRootHasTagApplication {
+	.pt.ist.fenixframework.DomainRoot playsRole root {
+		multiplicity 1..1;
+	}
+	
+	Tag playsRole tag {
+		multiplicity 0..*;
+	}
+}

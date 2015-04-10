@@ -1,10 +1,21 @@
-var concepts = ["Scenario", "Availability", "Scalability", "Performance", "Tactic", "Component", "Module"];
-       
 Annotator.Plugin.SAConcepts = function (element) {
   var plugin = {};
+  var concepts = [];
   plugin.pluginInit = function () {
+    console.log("SAConcepts plugin init");
+    var opts = {
+        type: "GET",
+        dataType: "json",
+        success: function(data){
+          concepts = data.tags;
+        }
+    };
+    var req = $.ajax(document.URL + "/store/tags", opts);
+
   	this.annotator.editor.addField({
       load: function (field, annotation) {
+        console.log("concepts:");
+        console.log(concepts);
         field.innerHTML="";
         var jqfield = $(field);
         var container = $("<div>");

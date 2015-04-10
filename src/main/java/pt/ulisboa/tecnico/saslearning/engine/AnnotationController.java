@@ -17,11 +17,14 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.google.gson.Gson;
 
 import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.DomainRoot;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
+import pt.ulisboa.tecnico.saslearning.domain.Tag;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
+import pt.ulisboa.tecnico.saslearning.jsonsupport.TagJ;
 
 @RestController
 public class AnnotationController {
@@ -67,6 +70,17 @@ public class AnnotationController {
 	public ResponseEntity<String> deleteAnnotation(@PathVariable String annId) {
 		deleteDocumentAnnotation(annId);
 		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+	}
+	
+	//GET TAGS
+	@RequestMapping(value = "/selectDoc/{docId}/store/tags")
+	public String getTags(){
+		Gson g = new Gson();
+		TagJ tj = new TagJ();
+		String[] tags = getTagsArray();
+		tj.setTags(tags);
+		String json = g.toJson(tj);
+		return json;
 	}
 	
 	@Atomic
@@ -123,6 +137,20 @@ public class AnnotationController {
 	private void deleteDocumentAnnotation(String annId) {
 		Annotation ann = FenixFramework.getDomainObject(annId);
 		ann.delete();
+	}
+	
+	@Atomic
+	private String[] getTagsArray(){
+		DomainRoot dr = FenixFramework.getDomainRoot();
+		Set<Tag> tags = dr.getTagSet();
+		int size = tags.size();
+		String[] tagsArray = new String[size];
+		int i = 0;
+		for(Tag t : tags){
+			tagsArray[i] = t.getTag();
+			i++;
+		}
+		return tagsArray;
 	}
 
 }

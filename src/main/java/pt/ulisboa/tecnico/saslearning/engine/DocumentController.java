@@ -23,11 +23,12 @@ import pt.ulisboa.tecnico.saslearning.domain.Document;
 @Controller
 public class DocumentController {
 
-	@RequestMapping(value = "/removeDocs", method = RequestMethod.GET)
-	public String goToRemoveDocuments(Model m){
+	@RequestMapping(value = "/manageDocs")
+	public String manageDocuments(Model m){
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
-		return "removeDocument";
+		m.addAttribute("newDoc", new DocUrl());
+		return "manageDocs";
 	}
 	
 	@RequestMapping(value = "/removeDoc/{id}", method = RequestMethod.GET)
@@ -35,31 +36,22 @@ public class DocumentController {
 		removeDocumentById(id);
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
-		return "removeDocument";
+		m.addAttribute("newDoc", new DocUrl());
+		return "manageDocs";
 	}
 	
-	@Atomic
-	private void removeDocumentById(String id) {
-		Document d = FenixFramework.getDomainObject(id);
-		d.delete();
-	}
-
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String goToHome() {
 		return "home";
 	}
 
-	@RequestMapping(value = "/addDoc", method = RequestMethod.GET)
-	public String goToAddDocument(Model model) {
-		model.addAttribute("docUrl", new DocUrl());
-		return "addDocument";
-	}
-
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
-	public String addDocument(@ModelAttribute DocUrl doc) throws IOException {
-		
+	public String addDocument(@ModelAttribute DocUrl doc, Model m) throws IOException {
 		addNewDocument(doc.getUrl());
-		return "addDocument";
+		m.addAttribute("newDoc", new DocUrl());
+		List<DocUrl> docs = getUrls();
+		m.addAttribute("docs", docs);
+		return "manageDocs";
 	}
 
 	@RequestMapping(value = "seeDocs", method = RequestMethod.GET)
@@ -77,6 +69,12 @@ public class DocumentController {
 		m.addAttribute("article", doc.getContent());
 		m.addAttribute("source", doc.getUrl());
 		return "docTemplate";
+	}
+
+	@Atomic
+	private void removeDocumentById(String id) {
+		Document d = FenixFramework.getDomainObject(id);
+		d.delete();
 	}
 
 	private void checkForAttributePath(Element e, String attr) {
