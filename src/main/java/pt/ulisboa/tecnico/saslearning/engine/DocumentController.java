@@ -123,7 +123,7 @@ public class DocumentController {
 			doc.setTitle(title);
 			doc.setContent(document.children().toString());
 			FenixFramework.getDomainRoot().addDocument(doc);
-		}
+			}
 	}
 
 	@Atomic
