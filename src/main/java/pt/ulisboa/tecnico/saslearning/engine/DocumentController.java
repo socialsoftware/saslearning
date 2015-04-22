@@ -24,29 +24,35 @@ import pt.ulisboa.tecnico.saslearning.domain.Document;
 public class DocumentController {
 
 	@RequestMapping(value = "/manageDocs")
-	public String manageDocuments(Model m){
+	public String manageDocuments(Model m) {
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
 		m.addAttribute("newDoc", new DocUrl());
 		return "manageDocs";
 	}
-	
+
 	@RequestMapping(value = "/removeDoc/{id}", method = RequestMethod.GET)
-	public String removeDocument(Model m, @PathVariable String id){
+	public String removeDocument(Model m, @PathVariable String id) {
 		removeDocumentById(id);
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
 		m.addAttribute("newDoc", new DocUrl());
 		return "manageDocs";
 	}
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String goToHome() {
 		return "home";
 	}
 
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginPage() {
+		return "login";
+	}
+
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
-	public String addDocument(@ModelAttribute DocUrl doc, Model m) throws IOException {
+	public String addDocument(@ModelAttribute DocUrl doc, Model m)
+			throws IOException {
 		addNewDocument(doc.getUrl());
 		m.addAttribute("newDoc", new DocUrl());
 		List<DocUrl> docs = getUrls();
@@ -98,24 +104,37 @@ public class DocumentController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void addNewDocument(String url) throws IOException {
-		Document doc = new Document();
-		org.jsoup.nodes.Document document = Jsoup.connect(url).get();
-		for (Element e : document.getAllElements()) {
-			checkForAttributePath(e, "src");
-			checkForAttributePath(e, "href");
-			checkForAttributePath(e, "data");
+		if (!documentExists(url)){
+			Document doc = new Document();
+			org.jsoup.nodes.Document document = Jsoup.connect(url).get();
+			for (Element e : document.getAllElements()) {
+				checkForAttributePath(e, "src");
+				checkForAttributePath(e, "href");
+				checkForAttributePath(e, "data");
+			}
+			doc.setUrl(url);
+			Elements titleSet = document.getElementsByTag("title");
+			String title = "";
+			if (!titleSet.isEmpty()) {
+				title = titleSet.text();
+			} else {
+				title = url;
+			}
+			doc.setTitle(title);
+			doc.setContent(document.children().toString());
+			FenixFramework.getDomainRoot().addDocument(doc);
 		}
-		doc.setUrl(url);
-		Elements titleSet = document.getElementsByTag("title");
-		String title = "";
-		if(!titleSet.isEmpty()){
-			title = titleSet.text();
-		}else{
-			title = url;
+	}
+
+	@Atomic
+	private boolean documentExists(String url) {
+		DomainRoot d = FenixFramework.getDomainRoot();
+		for (Document doc : d.getDocumentSet()) {
+			if (doc.getUrl().equals(url)) {
+				return true;
+			}
 		}
-		doc.setTitle(title);
-		doc.setContent(document.children().toString());
-		FenixFramework.getDomainRoot().addDocument(doc);
+		return false;
 	}
 
 	@Atomic

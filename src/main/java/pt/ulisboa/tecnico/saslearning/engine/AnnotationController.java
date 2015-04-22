@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.saslearning.engine;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Tag;
+import pt.ulisboa.tecnico.saslearning.domain.User;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagJ;
 
@@ -45,9 +47,10 @@ public class AnnotationController {
 	// CREATE
 	@RequestMapping(value = "/selectDoc/{docId}/store/annotations", method = RequestMethod.POST)
 	public RedirectView saveAnnotation(@PathVariable String docId,
-			@RequestBody String annot, HttpServletResponse resp)
+			@RequestBody String annot, HttpServletResponse resp,
+			Principal user)
 			throws IOException {
-		String annId = writeAnnotation(annot, docId);
+		String annId = writeAnnotation(user.getName(), annot, docId);
 		RedirectView rv = new RedirectView("/selectDoc/" + docId
 				+ "/store/annotations/" + annId);
 		rv.setStatusCode(HttpStatus.SEE_OTHER);
@@ -73,7 +76,7 @@ public class AnnotationController {
 	}
 	
 	//GET TAGS
-	@RequestMapping(value = "/selectDoc/{docId}/store/tags")
+	@RequestMapping(value = "/annotator/getTags")
 	public String getTags(){
 		Gson g = new Gson();
 		TagJ tj = new TagJ();
@@ -115,16 +118,30 @@ public class AnnotationController {
 	}
 	
 	@Atomic(mode = TxMode.WRITE)
-	private String writeAnnotation(String annotation, String docId) {
+	private String writeAnnotation(String username, String annotation, String docId) {
 		Document d = FenixFramework.getDomainObject(docId);
+		User u = getUserByUsername(username);
 		Annotation ann = new Annotation();
 		String annId = ann.getExternalId();
 		Gson gson = new Gson();
 		AnnotationJ jsonObject = gson.fromJson(annotation, AnnotationJ.class);
 		jsonObject.setId(annId);
+		jsonObject.setUser(username);
 		ann.setAnnotation(gson.toJson(jsonObject));
 		d.addAnnotation(ann);
+		u.addAnnotation(ann);
 		return annId;
+	}
+	
+	@Atomic
+	public User getUserByUsername(String username){
+		Set<User> users = FenixFramework.getDomainRoot().getUserSet();
+		for(User u : users){
+			if(u.getUsername().equals(username)){
+				return u;
+			}
+		}
+		return null;
 	}
 	
 	@Atomic

@@ -23,13 +23,13 @@
 	</div>
     <div> <span id="article" th:utext="${article}" ></span> </div>
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
+        console.log(/*[[${source}]]*/);
    			var content = $('#article').annotator();
    			content.annotator('addPlugin', 'Store', {
           prefix: document.URL + '/store'
         });
-   			//var content2 = $('#article').annotator().annotator('addPlugin', 'Tags');
-        var content3 = $('#article').annotator().annotator('addPlugin', 'SAConcepts');
+        var content3 = $('#article').annotator().annotator('addPlugin', 'SAConcepts', /*[[@{/annotator/getTags}]]*/);
     </script>
 
  <style>

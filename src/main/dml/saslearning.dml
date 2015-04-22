@@ -43,3 +43,30 @@ relation DomainRootHasTagApplication {
 		multiplicity 0..*;
 	}
 }
+
+class User {
+	String username;
+	String password;
+	String firstName;
+	String lastName;
+}
+
+relation DomainRootHasUsers {
+	.pt.ist.fenixframework.DomainRoot playsRole root {
+		multiplicity 1..1;
+	}
+	
+	User playsRole user {
+		multiplicity 0..*;
+	}
+}
+
+relation UserHasAnnotations {
+	User playsRole owner {
+		multiplicity 1..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}

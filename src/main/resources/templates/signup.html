@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Sign up for SASLearning</title>
+    </head>
+    <body>
+        <form th:action="@{/signup}" method="post" th:object="${user}">
+            <div><label> User Name : <input type="text" name="username"/> </label></div> <b th:text="${message}!=null? ${message} : ''"></b>
+            <br/>
+            <div><label> Password: <input type="password" name="password"/> </label></div>
+            <br/>
+            <div><label> First Name: <input type="text" name="firstName"/> </label></div><br/>
+            <div><label> Last Name: <input type="text" name="lastName"/> </label></div><br/>
+            <div><input type="submit" value="Sign Up"/></div>
+        </form>
+    </body>
+</html>

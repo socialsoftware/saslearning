@@ -10,6 +10,7 @@ public class AnnotationJ {
 	private String quote;
 	private String uri;
 	private Range[] ranges;
+	private String user;
 	private String[] tags;
 	
 	public String getId() {
@@ -65,6 +66,12 @@ public class AnnotationJ {
 	}
 	public void setTags(String[] tags) {
 		this.tags = tags;
+	}
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 	

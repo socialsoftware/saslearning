@@ -1,4 +1,4 @@
-Annotator.Plugin.SAConcepts = function (element) {
+Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
   var plugin = {};
   var concepts = [];
   plugin.pluginInit = function () {
@@ -10,7 +10,8 @@ Annotator.Plugin.SAConcepts = function (element) {
           concepts = data.tags;
         }
     };
-    var req = $.ajax(document.URL + "/store/tags", opts);
+    console.log("TagsLocation: " + tagsLocation);
+    var req = $.ajax(tagsLocation, opts);
 
   	this.annotator.editor.addField({
       load: function (field, annotation) {
