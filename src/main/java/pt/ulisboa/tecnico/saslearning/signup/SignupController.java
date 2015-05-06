@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
+
 import pt.ulisboa.tecnico.saslearning.domain.User;
 
 @Controller
@@ -35,7 +36,7 @@ public class SignupController {
     	addNewUser(user);
         return "login";
     }
-    
+
     @Atomic(mode=TxMode.WRITE)
     private void addNewUser(UserForm user) {
     	User newUser = new User();
@@ -43,6 +44,13 @@ public class SignupController {
     	newUser.setPassword(user.getPassword());
     	newUser.setFirstName(user.getFirstName());
     	newUser.setLastName(user.getLastName());
+    //TEMPORARY CODE TO ADD TEACHERS
+    	if(user.getType() != null){
+    		newUser.setType("TEACHER");
+    	}else{
+    		newUser.setType("STUDENT");
+    	}
+    //END OF TEMPORARY CODE	
     	FenixFramework.getDomainRoot().addUser(newUser);
 	}
 

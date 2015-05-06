@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Spring Security Example </title>
+        <title>Login in SASLearning</title>
     </head>
     <body>
         <div th:if="${param.error}">
@@ -16,7 +16,6 @@
             <div><label> Password: <input type="password" name="password"/> </label></div>
             <div><input type="submit" value="Sign In"/></div>
         </form>
-
         <p>Not registered yet? Sign up <a href="#" th:href="@{/signup}">here</a></p>
     </body>
 </html>

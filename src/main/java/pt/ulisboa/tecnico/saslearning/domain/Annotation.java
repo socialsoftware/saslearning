@@ -13,6 +13,7 @@ public class Annotation extends Annotation_Base {
     
     public void delete(){
     	setDocument(null);
+    	setOwner(null);
     	deleteDomainObject();
     }
 }

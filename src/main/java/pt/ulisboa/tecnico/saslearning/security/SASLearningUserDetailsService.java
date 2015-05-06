@@ -32,7 +32,7 @@ public class SASLearningUserDetailsService implements UserDetailsService {
 		for (User u : users) {
 			if (u.getUsername().equals(username)) {
 				Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-				authorities.add(new SimpleGrantedAuthority("STUDENT"));
+				authorities.add(new SimpleGrantedAuthority(u.getType()));
 				return new SASLearningUserDetails(username, u.getPassword(),
 						u.getFirstName(), u.getLastName(), authorities);
 			}

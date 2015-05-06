@@ -40,15 +40,6 @@ public class DocumentController {
 		return "manageDocs";
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String goToHome() {
-		return "home";
-	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginPage() {
-		return "login";
-	}
 
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
 	public String addDocument(@ModelAttribute DocUrl doc, Model m)

@@ -5,12 +5,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <h1>Welcome to SASLearning!</h1>
+<div style="
+    background-color: greenyellow;
+    height: 50px;
+    border: dashed;
+">
+You are logged in as <span sec:authentication="name"></span>. 
+<a href="#" th:href="@{/logout}">Logout</a>
+</div>
+    <h1>Welcome to SASLearning, <span sec:authentication="name"></span>!</h1>
     <br/>
     <a href="#" th:href="@{/seeDocs}">See Available Documents</a>
     <br/>
-    <a href="#" th:href="@{/manageDocs}">Manage Documents</a>
+    <a sec:authorize="hasRole('TEACHER')" href="#" th:href="@{/manageDocs}">Manage Documents</a>
     <br/>
-    <a href="#" th:href="@{/manageTags}">Manage Tags</a>
+    <a sec:authorize="hasRole('TEACHER')" href="#" th:href="@{/manageTags}">Manage Tags</a>
 </body>
 </html>

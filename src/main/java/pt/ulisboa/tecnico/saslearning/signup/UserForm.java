@@ -16,7 +16,9 @@ public class UserForm {
 	
 	@NotNull
 	private String lastName;
-
+	
+	private String type;
+	
 	public String getUsername() {
 		return username;
 	}
@@ -47,6 +49,14 @@ public class UserForm {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	
