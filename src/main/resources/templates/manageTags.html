@@ -6,17 +6,21 @@
 </head>
 <body>
 	<h1>Existant Tags</h1>
-	<table>
-	<tr th:each="tag:${tags}">
-		<td th:text="${tag.tag}"></td>
-
-		<td><a th:href="@{/removeTag/} + ${tag.id}">(remove)</a></td>
-	</tr>
-</table>
+	<section layout:include="@{/tagFragment} :: tagFragment" th:with="tagsList=${tags}"></section>
 <h1>Add new Tag</h1>
     <form action="#" th:action="@{/addTag}" th:object="${newTag}" method="post">
     	<p>New Tag: <input type="text" th:field="*{tag}" /></p>
+    	<p>Parent: 
+    		<select th:field="*{parentId}">
+    			<option th:value="${'none'}" th:text="${'--none--'}"></option>
+  <option th:each="tag : ${tagFlatList}" 
+          th:value="${tag.id}" 
+          th:text="${tag.tag}"></option>
+</select>
+    	</p>
+        
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+
     </form>
 </body>
 </html>

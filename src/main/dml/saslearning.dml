@@ -36,7 +36,7 @@ class Tag {
 
 relation DomainRootHasTagApplication {
 	.pt.ist.fenixframework.DomainRoot playsRole root {
-		multiplicity 1..1;
+		multiplicity 0..1;
 	}
 	
 	Tag playsRole tag {
@@ -68,6 +68,16 @@ relation UserHasAnnotations {
 	}
 	
 	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation tagHasSubtags {
+	Tag playsRole supertag {
+		multiplicity 0..1;
+	}
+	
+	Tag playsRole subtag {
 		multiplicity 0..*;
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
@@ -32,23 +33,25 @@ public class DocumentController {
 	}
 
 	@RequestMapping(value = "/removeDoc/{id}", method = RequestMethod.GET)
-	public String removeDocument(Model m, @PathVariable String id) {
+	public RedirectView removeDocument(Model m, @PathVariable String id) {
 		removeDocumentById(id);
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
 		m.addAttribute("newDoc", new DocUrl());
-		return "manageDocs";
+		RedirectView rv = new RedirectView("/manageDocs");
+		return rv;
 	}
 
 
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
-	public String addDocument(@ModelAttribute DocUrl doc, Model m)
+	public RedirectView addDocument(@ModelAttribute DocUrl doc, Model m)
 			throws IOException {
 		addNewDocument(doc.getUrl());
 		m.addAttribute("newDoc", new DocUrl());
 		List<DocUrl> docs = getUrls();
 		m.addAttribute("docs", docs);
-		return "manageDocs";
+		RedirectView rv = new RedirectView("/manageDocs");
+		return rv;
 	}
 
 	@RequestMapping(value = "seeDocs", method = RequestMethod.GET)
@@ -65,6 +68,7 @@ public class DocumentController {
 		DocUrl doc = getDocumentById(id);
 		m.addAttribute("article", doc.getContent());
 		m.addAttribute("source", doc.getUrl());
+		m.addAttribute("docId", id);
 		return "docTemplate";
 	}
 
@@ -75,10 +79,13 @@ public class DocumentController {
 	}
 
 	private void checkForAttributePath(Element e, String attr) {
+		
 		if (e.hasAttr(attr)) {
-			String path = e.absUrl(attr);
-			e.removeAttr(attr);
-			e.attr(attr, path);
+			if(e.attr(attr).charAt(0) != '#'){
+				String path = e.absUrl(attr);
+				e.removeAttr(attr);
+				e.attr(attr, path);
+			}
 		}
 	}
 

@@ -25,10 +25,14 @@
     <div> <span id="article" th:utext="${article}" ></span> </div>
 
     <script type="text/javascript" th:inline="javascript">
-        console.log(/*[[${source}]]*/);
+        console.log('running javascript code...');
+        console.log('source: ' + /*[[${source}]]*/);
+        console.log('document url: ' + document.URL);
    			var content = $('#article').annotator();
+        var docId = /*[[${docId}]]*/
+        console.log("Doc id: " + docId);
    			content.annotator('addPlugin', 'Store', {
-          prefix: document.URL + '/store'
+          prefix: /*[[@{/selectDoc/} + ${docId} + '/store']]*/
         });
         var content3 = $('#article').annotator().annotator('addPlugin', 'SAConcepts', /*[[@{/annotator/getTags}]]*/);
     </script>
