@@ -10,13 +10,10 @@ Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
           concepts = data.tags;
         }
     };
-    console.log("TagsLocation: " + tagsLocation);
     var req = $.ajax(tagsLocation, opts);
 
   	this.annotator.editor.addField({
       load: function (field, annotation) {
-        console.log("concepts:");
-        console.log(concepts);
         field.innerHTML="";
         var jqfield = $(field);
         var container = $("<div>");
@@ -43,7 +40,7 @@ Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
           container.append(select);
         }         
         $(".chosen-select").chosen();
-        }})
+        }});
 
         this.annotator.viewer.addField({
           load: function(field, annotation){            
@@ -60,16 +57,30 @@ Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
           }
         });
 
-        this.annotator.subscribe("annotationEditorSubmit", function(editor, annotation){
+        this.annotator.subscribe("annotationEditorShown", function(editor, annotation){
+          var extra1 = $(".chosen-container > .annotator-controls");
+          while(extra1.length > 0){
+            extra1[0].remove();
+            extra1 = $(".chosen-container > .annotator-controls");
+          }
+
+          var extra2 = $(".chosen-drop > .annotator-controls");
+          while(extra2.length > 0){
+            extra2[0].remove();
+            extra2 = $(".chosen-container > .annotator-controls");
+          }  
+
+        }).subscribe("annotationEditorSubmit", function(editor, annotation){
           var tags = $("div#tagContainer > div.chosen-container > ul.chosen-choices > li.search-choice > span");
           var tagArray = [];
           for (var i = 0; i < tags.length; i++) {
             var tag = $(tags[i]).html();
             tagArray[i] = tag;
-          };
+          }
           annotation.tags = tagArray;
-          console.log(annotation);
-        })
+        });
+
+        //remover coisas indesejáveis do editor (aka o segundo par de botoes)
       				
   }
   return plugin;
