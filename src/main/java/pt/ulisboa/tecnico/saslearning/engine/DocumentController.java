@@ -65,11 +65,20 @@ public class DocumentController {
 	@RequestMapping(value = "/selectDoc/{id}", method = RequestMethod.GET)
 	public String showDocument(@PathVariable String id, Model m)
 			throws IOException {
-		DocUrl doc = getDocumentById(id);
-		m.addAttribute("article", doc.getContent());
-		m.addAttribute("source", doc.getUrl());
+//		DocUrl doc = getDocumentById(id);
+//		m.addAttribute("article", doc.getContent());
+//		m.addAttribute("source", doc.getUrl());
 		m.addAttribute("docId", id);
 		return "docTemplate";
+	}
+	
+	@RequestMapping(value = "/getDoc/{id}")
+	public String getDocument(@PathVariable String id, Model m){
+		DocUrl doc = getDocumentById(id);
+//		m.addAttribute("article", doc.getContent());
+//		m.addAttribute("source", doc.getUrl());
+		m.addAttribute("doc", doc);
+		return "document";
 	}
 
 	@Atomic

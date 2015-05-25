@@ -17,6 +17,12 @@ public class HomeController {
 		return "login";
 	}
 	
+	@RequestMapping(value = "/headerFragment")
+	public String getHeader(){
+		return "headerFragment";
+	}
+	
+	
 	
 
 }

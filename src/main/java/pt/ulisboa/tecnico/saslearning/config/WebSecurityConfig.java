@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
 import pt.ulisboa.tecnico.saslearning.security.SASLearningUserDetailsService;
 
@@ -19,7 +20,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/signup", "/signupTeacher")
 				.permitAll().anyRequest().authenticated().and().formLogin()
 				.loginPage("/login").permitAll().and().logout()
-				.logoutUrl("/logout").permitAll().and().csrf().disable();
+				.logoutUrl("/logout").permitAll().and().headers()
+				.addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+				.and().csrf().disable();
 	}
 
 	@Override

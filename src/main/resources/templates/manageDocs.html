@@ -3,8 +3,21 @@
 <head>
     <title>Manage Documents</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 </head>
 <body>
+	<section layout:include="@{/headerFragment} :: headerFragment"></section>
 	<h1>Existant Documents</h1>
 	<table>
 	<tr th:each="doc:${docs}">
