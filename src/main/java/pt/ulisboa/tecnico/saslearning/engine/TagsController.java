@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.google.gson.Gson;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.DomainRoot;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Tag;
+import pt.ulisboa.tecnico.saslearning.jsonsupport.TagJ;
 
 @Controller
 public class TagsController {
@@ -65,6 +69,34 @@ public class TagsController {
 		m.addAttribute("tagFlatList", flatList);
 		RedirectView rv = new RedirectView("/manageTags");
 		return rv;
+	}
+	
+	//GET TAGS
+	@RequestMapping(value = "/annotator/getTags")
+	@ResponseBody
+	public String getTags(){
+		System.out.println("Get Tags!");
+		Gson g = new Gson();
+		TagJ tj = new TagJ();
+		String[] tags = getTagsArray();
+		System.out.println("Array: " + tags + " length " + tags.length);
+		System.out.println("array[0]: " + tags[0]);
+		tj.setTags(tags);
+		String json = g.toJson(tj);
+		System.out.println("json: " + json);
+		return json;
+	}
+
+	private String[] getTagsArray() {
+		List<TagAux> roots =  getTagHierarchy();
+		List<TagAux> flatList = getTagsFlatList(roots);
+		String[] tags = new String[flatList.size()];
+		int i = 0;
+		while(i < tags.length){
+			tags[i] = flatList.get(i).getTag();
+			i++;
+		}
+		return tags;
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -155,7 +187,7 @@ public class TagsController {
 		}
 	}
 	
-	public List<TagAux> getTagsFlatList(List<TagAux> tagHierarchy){
+	private List<TagAux> getTagsFlatList(List<TagAux> tagHierarchy){
 		List<TagAux> flatList = new ArrayList<TagAux>();
 		for(TagAux t : tagHierarchy){
 			TagAux n = new TagAux();
@@ -166,7 +198,7 @@ public class TagsController {
 			}
 			flatList.add(n);
 		}
-		Collections.sort(flatList);
+//		Collections.sort(flatList);
 		return flatList;
 	}
 

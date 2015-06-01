@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Available Documents</title>
+    <title>Manage Tags</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- jQuery -->
@@ -17,12 +17,18 @@
 
 </head>
 <body>
-	<section layout:include="@{/headerFragment} :: headerFragment"></section>
-    <div class="well">
-        <h2>Available Documents: </h2>
-    	<div class="list-group" th:each="doc : ${docs}">
-    		<a class="list-group-item" th:href="@{/selectDoc/} + ${doc.id}" th:text="${doc.title}"></a>
-    	</div>
-    </div>
+  <section layout:include="@{/headerFragment} :: headerFragment"></section>
+  <div class="well">
+     <h2>Annotations added to the Document: </h2>
+      <ul class="list-group" >
+        <li class="list-group-item" th:each="ann : ${annotations}">
+          <p><b>Creator: </b><span th:text="${ann.user}"></span></p>
+          <p><b>Document Quote: </b><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></p>
+          <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+          <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+        </li>
+      </ul>
+  </div>
+  
 </body>
 </html>

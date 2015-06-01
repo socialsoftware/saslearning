@@ -81,3 +81,105 @@ relation tagHasSubtags {
 		multiplicity 0..*;
 	}
 }
+
+
+class Scenario {
+	String name;
+}
+
+relation documentHasScenarios {
+	Scenario playsRole scenario {
+		multiplicity 0..*;
+	}
+	
+	Document playsRole document {
+		multiplicity 1..1;
+	}
+}
+
+class SrcOfStimulus {
+	String name;
+}
+
+relation scenarioHasSrcOfStimulus {
+	SrcOfStimulus playsRole srcOfStimulus {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Stimulus {
+	String name;
+}
+
+relation scenarioaHasStimulus {
+	Stimulus playsRole Stimulus {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario { 
+		multiplicity 1..1;
+	}
+}
+
+class Artifact {
+	String name;
+}
+
+relation scenarioHasArtifact {
+	Artifact playsRole artifact {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class ResponseMeasure {
+	String name;
+}
+
+relation scenarioHasResponseMeasure {
+	ResponseMeasure playsRole responseMeasure {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Response {
+	String name;
+}
+
+relation scenarioHasResponse {
+	Response playsRole response {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Environment {
+	String name;
+}
+
+relation scenarioHasEnvironment {
+	Environment playsRole environment {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+
+

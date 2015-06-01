@@ -80,7 +80,12 @@ public class DocumentController {
 		m.addAttribute("doc", doc);
 		return "document";
 	}
-
+	
+	@RequestMapping(value="/documentHeader")
+	public String getDocumentHeader(){
+		return "documentHeader";
+	}
+	
 	@Atomic
 	private void removeDocumentById(String id) {
 		Document d = FenixFramework.getDomainObject(id);

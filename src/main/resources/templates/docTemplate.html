@@ -18,7 +18,14 @@
 </head>
 <body>
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
-
+  <nav id="docHeader" class="navbar navbar-default">
+     <div class="container">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">View Structured Representation</a></li>
+        <li><a href="#" th:href="@{/addSyntax/} + ${docId}">Add Syntax</a></li>
+      </ul>
+     </div>
+  </nav>
   <iframe th:src="@{/getDoc/} + ${docId}"></iframe>
   <style>
     iframe,body,html{
@@ -27,6 +34,10 @@
     }
     iframe{
       width: 100%;
+      margin-top: -20px;
+    }
+
+    #docHeader{
       margin-top: -20px;
     }
   </style>

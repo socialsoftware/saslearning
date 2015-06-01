@@ -12,6 +12,7 @@ public class AnnotationJ {
 	private Range[] ranges;
 	private String user;
 	private String[] tags;
+	private String tag;
 	
 	public String getId() {
 		return id;
@@ -72,6 +73,25 @@ public class AnnotationJ {
 	}
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public String getTagsRepresentation(){
+		String rep = "[";
+		int i = 0;
+		while(i < tags.length - 1){
+			String tag = tags[i];
+			rep += tag;
+			rep += ", ";
+			i++;
+		}
+		rep+= tags[i]+"]";
+		return rep;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 	
 	

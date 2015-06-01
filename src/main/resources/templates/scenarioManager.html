@@ -1,28 +1,32 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Available Documents</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-    <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
         <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
-
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
-
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
+  <title>Annotation Context</title>
 </head>
+
 <body>
-	<section layout:include="@{/headerFragment} :: headerFragment"></section>
-    <div class="well">
-        <h2>Available Documents: </h2>
-    	<div class="list-group" th:each="doc : ${docs}">
-    		<a class="list-group-item" th:href="@{/selectDoc/} + ${doc.id}" th:text="${doc.title}"></a>
-    	</div>
-    </div>
+<div class="panel panel-default" style="
+    margin-left: 33%;
+    width: 33%;
+    margin-top: 100px;
+">
+  <div class="panel-heading">
+    <h3 class="panel-title"><b>Scenario Manager</b></h3>
+  </div>
+  <div class="panel-body">
+  <div class="well well-lg">
+    <a href="#">Create new Scenario</a>
+  </div>
+</div>
+</div>
+ 
 </body>
 </html>

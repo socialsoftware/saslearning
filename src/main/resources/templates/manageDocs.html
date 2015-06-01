@@ -18,18 +18,20 @@
 </head>
 <body>
 	<section layout:include="@{/headerFragment} :: headerFragment"></section>
-	<h1>Existant Documents</h1>
-	<table>
-	<tr th:each="doc:${docs}">
-		<td th:text="${doc.title}"></td>
-
-		<td><a th:href="@{/removeDoc/} + ${doc.id}">(remove)</a></td>
-	</tr>
-</table>
-<h1>Add new Document</h1>
+    <div class="well">
+        <h1>Existant Documents</h1>
+    <table>
+        <tr th:each="doc:${docs}">
+            <td th:text="${doc.title}"></td>
+            <td><a th:href="@{/removeDoc/} + ${doc.id}">(remove)</a></td>
+        </tr>
+    </table>
+    <h1>Add new Document</h1>
     <form action="#" th:action="@{/addDoc}" th:object="${newDoc}" method="post">
-    	<p>URL to fetch: <input type="text" th:field="*{url}" /></p>
+        <p>URL to fetch: <input type="text" th:field="*{url}" /></p>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
+    </div>
+	
 </body>
 </html>

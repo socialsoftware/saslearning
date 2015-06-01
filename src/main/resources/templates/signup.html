@@ -1,24 +1,57 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Sign up for SASLearning</title>
-    </head>
-    <body>
-        <form th:action="@{/signup}" method="post" th:object="${user}">
-            <div><label> User Name : <input type="text" name="username"/> </label></div> <b th:text="${message}!=null? ${message} : ''"></b>
-            <br/>
-            <div><label> Password: <input type="password" name="password"/> </label></div>
-            <br/>
-            <div><label> First Name: <input type="text" name="firstName"/> </label></div><br/>
-            <div><label> Last Name: <input type="text" name="lastName"/> </label></div><br/>
-            <br/>
-            <p style="color: red;"><b>FOR TESTING PURPOSES:</b> Select to register the user as a teacher.
-            <br/>Students can only access the "See documents" option.
-            <br/>Teachers can access all options.</p>
-            <div><label> Teacher <input type="checkbox" name="type"/> </label></div><br/>
-            
-            <div><input type="submit" value="Sign Up"/></div>
-        </form>
-    </body>
+<head>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <title>Register in SASLearning</title>
+</head>
+
+<body>
+<div class="panel panel-default" style="
+    margin-left: 33%;
+    width: 33%;
+    margin-top: 100px;
+">
+  <div class="panel-heading">
+    <h3 class="panel-title"><b>Register in SASLearning</b></h3>
+  </div>
+  <div class="panel-body">
+  <div class="well well-lg">
+    <form th:action="@{/signup}" method="post" style="
+    margin-bottom: 1em;
+">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" class="form-control" name="username" placeholder="Enter username"/>
+      </div>
+      <div class="form-group">
+        <label >Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Password"/>
+      </div>
+       <div class="form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control" name="firstName" placeholder="ex: John"/>
+      </div>
+       <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastName" placeholder="ex: Doe"/>
+      </div>
+      <div class="form-group alert alert-warning" role="alert"><span class="glyphicon glyphicon-warning-sign"></span> <b>FOR TESTING PURPOSES:</b> Select to register the user as a teacher.
+            Students can only access the "See documents" option. Teachers can access all options.
+          <br/><label> Teacher <input type="checkbox" name="type"/> </label>
+        </div>
+      <button type="submit" class="btn btn-default">Sign Up</button>
+    </form> 
+    <a href="#" th:href="@{/login}"><span class="glyphicon glyphicon-arrow-left"></span> <u>Return</u></a>
+  </div>
+</div>
+</div>
+ 
+</body>
 </html>
