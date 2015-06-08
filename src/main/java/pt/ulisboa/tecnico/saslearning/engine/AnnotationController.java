@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,14 +42,14 @@ public class AnnotationController {
 	// CREATE
 	@RequestMapping(value = "/selectDoc/{docId}/store/annotations", method = RequestMethod.POST)
 	public RedirectView saveAnnotation(@PathVariable String docId,
-			@RequestBody String annot, HttpServletResponse resp,
-			Principal user)
+			@RequestBody String annot, Principal user)
 			throws IOException {
 		String annId = writeAnnotation(user.getName(), annot, docId);
 		RedirectView rv = new RedirectView("/selectDoc/" + docId
 				+ "/store/annotations/" + annId);
 //		RedirectView rv = new RedirectView("/scenarioManager");
 		rv.setStatusCode(HttpStatus.SEE_OTHER);
+		
 		return rv;
 	}
 
@@ -73,12 +71,12 @@ public class AnnotationController {
 		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 	}
 	
-	
 	@Atomic
 	private String getDocAnnotations(String docId) {
 		Document d = FenixFramework.getDomainObject(docId);
 		AnnotationJ[] annotations = getAnnotationArray(d);
 		Gson gson = new Gson();
+		
 		return gson.toJson(annotations);
 	}
 	
@@ -95,9 +93,6 @@ public class AnnotationController {
 		}
 		return annotationsJson;
 	}
-	
-	
-	
 	
 	@Atomic
 	private String getSingleAnnotation(String annId){
@@ -116,13 +111,14 @@ public class AnnotationController {
 		jsonObject.setId(annId);
 		jsonObject.setUser(username);
 		ann.setAnnotation(gson.toJson(jsonObject));
+		ann.setTag(jsonObject.getTag());
 		d.addAnnotation(ann);
 		u.addAnnotation(ann);
 		return annId;
 	}
 	
 	@Atomic
-	public User getUserByUsername(String username){
+	private User getUserByUsername(String username){
 		Set<User> users = FenixFramework.getDomainRoot().getUserSet();
 		for(User u : users){
 			if(u.getUsername().equals(username)){
@@ -135,13 +131,19 @@ public class AnnotationController {
 	@Atomic
 	private void updateAnnotationById(String annId, String annot) {
 		Annotation a = FenixFramework.getDomainObject(annId);
-		a.setAnnotation(annot);
+		Gson gson = new Gson();
+		AnnotationJ ann = gson.fromJson(annot, AnnotationJ.class);
+		//getScenario por agora, mas vai ter que ser mudado quando se estender ao restante vocabulário...
+		if(a.getScenario() == null){ 
+			a.setTag(ann.getTag());
+			a.setAnnotation(annot);
+		}
+		
 	}
 	
 	@Atomic(mode = TxMode.WRITE)
 	private void deleteDocumentAnnotation(String annId) {
 		Annotation ann = FenixFramework.getDomainObject(annId);
-		System.out.println("found annotation to delete: " + ann);
 		ann.delete();
 	}
 }

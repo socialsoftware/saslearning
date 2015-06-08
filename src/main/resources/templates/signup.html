@@ -25,7 +25,7 @@
   <div class="well well-lg">
     <form th:action="@{/signup}" method="post" style="
     margin-bottom: 1em;
-">
+" th:object="${user}">
       <div class="form-group">
         <label>Username</label>
         <input type="text" class="form-control" name="username" placeholder="Enter username"/>

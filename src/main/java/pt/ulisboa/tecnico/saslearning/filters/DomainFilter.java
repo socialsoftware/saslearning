@@ -10,6 +10,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
+import org.springframework.stereotype.Component;
+
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.Atomic.TxMode;
+
+@Component
 @WebFilter
 public class DomainFilter implements Filter{
 
@@ -20,6 +26,7 @@ public class DomainFilter implements Filter{
 	}
 
 	@Override
+	@Atomic(mode=TxMode.READ)
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		chain.doFilter(request, response);

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Manage Tags</title>
+    <title>Syntax Manager</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- jQuery -->
@@ -19,13 +19,53 @@
 <body>
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
   <div class="well">
-     <h2>Annotations added to the Document: </h2>
+     <h2>Scenarios in the document: </h2>
       <ul class="list-group" >
-        <li class="list-group-item" th:each="ann : ${annotations}">
-          <p><b>Creator: </b><span th:text="${ann.user}"></span></p>
-          <p><b>Document Quote: </b><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></p>
-          <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-          <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+        <li class="list-group-item">
+          <a href="#" th:href="@{/createScenario/} + ${docId}">Add new Scenario</a>
+        </li>
+        <li class="list-group-item" th:each="scen : ${scenarios}">
+          <p><b>Scenario<span th:text="${scen.getExternalId()}"></span></b><a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Scenario/' + ${scen.getExternalId()}">(Link/Unlink Annotations)</a><a href="#">(Remove)</a>
+          </p>
+        <h4>Annotations:</h4>
+        <ul class="list-group">
+          <li class="list-group-item" th:each="scenAnn : ${scen.getAnnotations()}">
+            <p><b>Document Quote: </b><span th:text="'(...)' + ${scenAnn.quote} + '(...)'"></span></p>
+            <p><b>Comment: </b><span th:text="'(...)' + ${scenAnn.text} + '(...)'"></span></p>
+          </li>
+        </ul>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <p><b>Source Of Stimulus: </b></p>
+              <p></p>
+              <span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()}" th:if="${scen.getSrcOfStimulus()} != null"></span>(...)
+              <a href="#" th:href="@{/addSrcOfStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getSrcOfStimulus()} == null">
+                Add Source Of Stimulus
+              </a>
+
+              <a href="#" th:href="@{/removeSrcOfStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getSrcOfStimulus()} != null">
+                Remove Source Of Stimulus
+              </a>
+
+            </li>
+
+            <li class="list-group-item">
+              <p>
+                <b>Stimulus:</b>
+              </p>
+              <p th:if="${scen.getStimulus()} != null">
+                <span th:text="'Stimulus' + ${scen.getStimulus().getExternalId()}" ></span>
+              </p> 
+                
+                <p>(...)</p>
+                <a href="#" th:href="@{/addStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getStimulus()} == null">
+                  Add Stimulus
+                </a>
+                <a href="#" th:href="@{/removeStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getStimulus()} != null">
+                  Remove Stimulus
+                </a>
+            </li>
+          </ul>
         </li>
       </ul>
   </div>

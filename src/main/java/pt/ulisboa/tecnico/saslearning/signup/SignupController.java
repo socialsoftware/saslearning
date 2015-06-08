@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
-
 import pt.ulisboa.tecnico.saslearning.domain.User;
 
 @Controller
 public class SignupController {
 
 	@RequestMapping(value="/signup", method = RequestMethod.GET)
-	public String signupForm(UserForm user){
+	public String signupForm(@SuppressWarnings("unused") UserForm user){
 		return "signup";
 	}
 	

@@ -18,6 +18,7 @@ relation DomainRootHasDocumentApplication {
 
 class Annotation {
 	String annotation;
+	String tag;
 }
 
 relation DocumentHasAnnotations {
@@ -178,6 +179,16 @@ relation scenarioHasEnvironment {
 	
 	Scenario playsRole scenario {
 		multiplicity 1..1;
+	}
+}
+
+relation scenarioHasAnnotations {
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 0..1;
 	}
 }
 
