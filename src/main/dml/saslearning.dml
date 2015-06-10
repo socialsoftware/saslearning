@@ -73,17 +73,6 @@ relation UserHasAnnotations {
 	}
 }
 
-relation tagHasSubtags {
-	Tag playsRole supertag {
-		multiplicity 0..1;
-	}
-	
-	Tag playsRole subtag {
-		multiplicity 0..*;
-	}
-}
-
-
 class Scenario {
 	String name;
 }
@@ -189,6 +178,16 @@ relation scenarioHasAnnotations {
 	
 	Scenario playsRole scenario {
 		multiplicity 0..1;
+	}
+}
+
+relation srcOfStimulusHasAnnotations {
+	SrcOfStimulus playsRole srcOfStimulus {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
 	}
 }
 

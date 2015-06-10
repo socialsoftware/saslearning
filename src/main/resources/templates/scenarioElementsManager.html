@@ -29,32 +29,23 @@
   <div class="well" style="margin-top: -20px;">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <b>Scenario</b>
+        <b><span th:text="${elem.getName()}"></span></b>
       </div>
       <div class="panel-body">
-        <b>Scenario<span th:text="${scen.getExternalId()}"></span></b>
+        <b><span th:text="${elem.getName()}+${elem.getExternalId()}"></span></b>
 
         <ul class="list-group">
-          <li class="list-group-item" th:each="scenAnn : ${scen.getAnnotations()}">
-            <p><b>Document Quote: </b><span th:text="'(...)' + ${scenAnn.quote} + '(...)'"></span></p>
-            <p><b>Comment: </b><span th:text="${scenAnn.text}"></span></p>
-            <a href="#" th:href="@{/unlinkFromScenario/} + ${docId}+'/' + ${scen.getExternalId()} + '/' + ${scenAnn.id}">Unlink this annotation</a>
-          </li>
-          <li class="list-group-item" th:if="${scen.getSrcOfStimulus()} != null">
-            <p><b>Source of Stimulus:</b></p>
-            <p><span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()}"></span></p>
-            <h6>Annotations:</h6>
-
-          </li>
-          <li class="list-group-item">
-            Stimulus, Artifact, Environment, Response, ...
+          <li class="list-group-item" th:each="elemAnn : ${elem.getAnnotations()}">
+            <p><b>Document Quote: </b><span th:text="'(...)' + ${elemAnn.quote} + '(...)'"></span></p>
+            <p><b>Comment: </b><span th:text="${elemAnn.text}"></span></p>
+            <a href="#" th:href="@{/unlinkFromElement/}+ ${elem.getName()}+'/' + ${docId}+'/' + ${elem.getExternalId()} + '/' + ${elemAnn.id}">Unlink this annotation</a>
           </li>
         </ul>
       </div>
     </div>
     <h3>Possible annotations to link:</h3>
     <ul class="list-group">
-      <li class="list-group-item" th:each="ann : ${annotations} " th:if="${scen.containsAnnotation(ann.id)} == false">
+      <li class="list-group-item" th:each="ann : ${annotations} " th:if="${elem.containsAnnotation(ann.id)} == false">
         <p>
           <b>Document Quote: </b>
           <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
@@ -64,7 +55,7 @@
           <span th:text="${ann.text}"></span>
         </p>
         <p>
-          <a href="#" th:href="@{/linkAnnotation/} +${docId}+'/'+ ${scen.getExternalId()} + '/' + ${ann.id}">Link to Scenario</a>
+          <a href="#" th:href="@{/linkAnnotation/} +${docId}+'/' + ${elem.getName()} + '/'+ ${elem.getExternalId()} + '/' + ${ann.id}" th:text="'Link to ' + ${elem.getName()}"></a>
         </p>
       </li>
     </ul>

@@ -5,5 +5,10 @@ public class Stimulus extends Stimulus_Base {
     public Stimulus() {
         super();
     }
+
+	public void delete() {
+		setScenario(null);
+		deleteDomainObject();
+	}
     
 }

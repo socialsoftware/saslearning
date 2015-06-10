@@ -64,6 +64,93 @@ public class DomainEntitiesController {
 		return rv;
 	}
 	
+	@RequestMapping(value="/unlinkFromScenario/{docId}/{scenarioId}/{annotationId}")
+	public RedirectView unlinkAnnotationFromScenario(@PathVariable String docId, @PathVariable String scenarioId, @PathVariable String annotationId) {
+		removeAnnotationFromScenario(scenarioId, annotationId);
+		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/Scenario/" + scenarioId);
+		return rv;
+	}
+	
+	@RequestMapping(value="/removeScenario/{docId}/{scenarioId}")
+	public RedirectView removeScenario(@PathVariable String docId, @PathVariable String scenarioId) {
+		removeScenario(scenarioId);
+		RedirectView rv = new RedirectView("/addSyntax/" + docId);
+		return rv;
+	}
+	
+	@RequestMapping(value="/removeSrcOfStimulus/{docId}/{srcId}")
+	public RedirectView removeSrcOfStimulus(@PathVariable String docId, @PathVariable String srcId) {
+		removeSrcOfStimulus(srcId);
+		RedirectView rv = new RedirectView("/addSyntax/" + docId);
+		return rv;
+	}
+	
+	@RequestMapping(value="/linkAnnotation/{docId}/SrcOfStimulus/{srcId}")
+	public String srcStimulusManager(@PathVariable String docId, @PathVariable String srcId, Model m) {
+		m.addAttribute("docId", docId);
+		m.addAttribute("elem", getSrcOfStimulusById(srcId));
+		m.addAttribute("annotations", getAnnotationsByTag("Source Of Stimulus", docId));
+		return "scenarioElementsManager";
+	}
+	
+	@RequestMapping(value="/linkAnnotation/{docId}/Source of Stimulus/{srcId}/{annId}")
+	public RedirectView linkToSrcStimulus(@PathVariable String docId, @PathVariable String srcId, @PathVariable String annId) {
+		linkAnnotationToSrcStimulus(srcId, annId);
+		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/SrcOfStimulus/" + srcId);
+		return rv;
+	}
+	
+	@RequestMapping(value="/unlinkAnnotation/Source of Stimulus/{docId}/{srcId}/{annId}")
+	public RedirectView unlinkAnnotationFromSrcStimulux(@PathVariable String docId, @PathVariable String srcId, @PathVariable String annId) {
+		removeAnnotationFromSrcStimulus(srcId, annId);
+		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/SrcOfStimulus/" + srcId);
+		return rv;
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	@Atomic(mode=TxMode.WRITE)
+	private void linkAnnotationToSrcStimulus(String srcId, String annId){
+		SrcOfStimulus s = FenixFramework.getDomainObject(srcId);
+		Annotation a = FenixFramework.getDomainObject(annId);
+		s.addAnnotation(a);
+	}
+	
+	@Atomic(mode=TxMode.READ)
+	private SrcOfStimulus getSrcOfStimulusById(String srcId) {
+		SrcOfStimulus src = FenixFramework.getDomainObject(srcId);
+		List<AnnotationJ> srcAnnotations = getAnnotationsFromSet(src.getAnnotationSet());
+		src.setAnnotations(srcAnnotations);
+		return src;
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void removeSrcOfStimulus(String srcId) {
+		SrcOfStimulus src = FenixFramework.getDomainObject(srcId);
+		src.delete();
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void removeScenario(String scenarioId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		s.delete();
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeAnnotationFromScenario(String scenarioId, String annotationId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		s.removeAnnotation(a);
+		a.setScenario(null);
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeAnnotationFromSrcStimulus(String srcId, String annotationId) {
+		SrcOfStimulus s = FenixFramework.getDomainObject(srcId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		s.removeAnnotation(a);
+		a.setSrcOfStimulus(null);
+	}
+	
 	@Atomic(mode=TxMode.READ)
 	private Set<Scenario> getDocumentScenarios(String docId){
 		Document d = FenixFramework.getDomainObject(docId);
@@ -107,9 +194,11 @@ public class DomainEntitiesController {
 	@Atomic(mode=TxMode.WRITE)
 	private void addSrcOfStimulus(String scenarioId){
 		Scenario s = FenixFramework.getDomainObject(scenarioId);
-		SrcOfStimulus src = new SrcOfStimulus();
-		src.setName("Source of Stimulus");
-		s.setSrcOfStimulus(src);
+		if(s.getSrcOfStimulus() == null) {
+			SrcOfStimulus src = new SrcOfStimulus();
+			src.setName("Source of Stimulus");
+			s.setSrcOfStimulus(src);
+		}
 	}
 	
 	@Atomic(mode=TxMode.WRITE)

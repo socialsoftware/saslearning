@@ -18,14 +18,22 @@
 </head>
 <body>
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
-  <div class="well">
+  <div class="panel panel-default" style="margin-top: -20px; height: 30px;">
+    <div class="panel-body" style="margin-top: -10px;">
+      <a href="#" th:href="@{/selectDoc/} + ${docId}">
+        <span class="glyphicon glyphicon-arrow-left"></span> 
+        Back
+      </a>
+    </div>
+  </div>
+  <div class="well" style="margin-top: -20px;">
      <h2>Scenarios in the document: </h2>
       <ul class="list-group" >
         <li class="list-group-item">
           <a href="#" th:href="@{/createScenario/} + ${docId}">Add new Scenario</a>
         </li>
         <li class="list-group-item" th:each="scen : ${scenarios}">
-          <p><b>Scenario<span th:text="${scen.getExternalId()}"></span></b><a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Scenario/' + ${scen.getExternalId()}">(Link/Unlink Annotations)</a><a href="#">(Remove)</a>
+          <p><b>Scenario<span th:text="${scen.getExternalId()}"></span></b><a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Scenario/' + ${scen.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeScenario/} + ${docId} + '/' + ${scen.getExternalId()}">(Remove)</a>
           </p>
         <h4>Annotations:</h4>
         <ul class="list-group">
@@ -38,14 +46,17 @@
             <li class="list-group-item">
               <p><b>Source Of Stimulus: </b></p>
               <p></p>
-              <span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()}" th:if="${scen.getSrcOfStimulus()} != null"></span>(...)
+              
               <a href="#" th:href="@{/addSrcOfStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getSrcOfStimulus()} == null">
                 Add Source Of Stimulus
               </a>
-
-              <a href="#" th:href="@{/removeSrcOfStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getSrcOfStimulus()} != null">
+              <div th:with="src=${scen.getSrcOfStimulus()}" th:if="${scen.getSrcOfStimulus()} != null"> 
+                <span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()} + ${src}" th:if="${scen.getSrcOfStimulus()} != null"></span>(...)
+                <a href="#" th:href="@{/removeSrcOfStimulus/}+ ${docId} + '/' + ${src.getExternalId()}" >
                 Remove Source Of Stimulus
-              </a>
+                </a>
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/SrcOfStimulus/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a>    
+              </div>  
 
             </li>
 

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.google.gson.Gson;
-
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.DomainRoot;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Tag;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagJ;
+
+import com.google.gson.Gson;
 
 @Controller
 public class TagsController {
@@ -33,36 +33,24 @@ public class TagsController {
 
 	@RequestMapping(value = "/manageTags")
 	public String manageTags(Model m) {
-		List<TagAux> tags = getTagHierarchy();
 		TagAux nt = new TagAux();
+		Set<Tag> tags = getTagList();
+		System.out.println(tags);
 		m.addAttribute("tags", tags);
-		List<TagAux> flatList = getTagsFlatList(tags);
-		m.addAttribute("tagFlatList", flatList);
 		m.addAttribute("newTag", nt);
 		return "manageTags";
 	}
-
+	
 	@RequestMapping(value = "/addTag", method = RequestMethod.POST)
-	public RedirectView addTag(@ModelAttribute TagAux tag, Model m) {
+	public RedirectView addTag(@ModelAttribute TagAux tag) {
 		addNewTag(tag);
-		List<TagAux> tags = getTagHierarchy();
-		TagAux nt = new TagAux();
-		m.addAttribute("tags", tags);
-		m.addAttribute("newTag", nt);
-		List<TagAux> flatList = getTagsFlatList(tags);
-		m.addAttribute("tagFlatList", flatList);
 		RedirectView rv = new RedirectView("/manageTags");
 		return rv;
 	}
 
 	@RequestMapping(value = "/removeTag/{id}")
-	public RedirectView removeTag(Model m, @PathVariable String id) {
+	public RedirectView removeTag(@PathVariable String id) {
 		removeTagById(id);
-		List<TagAux> tags = getTagHierarchy();
-		m.addAttribute("tags", tags);
-		m.addAttribute("newTag", new TagAux());
-		List<TagAux> flatList = getTagsFlatList(tags);
-		m.addAttribute("tagFlatList", flatList);
 		RedirectView rv = new RedirectView("/manageTags");
 		return rv;
 	}
@@ -71,138 +59,64 @@ public class TagsController {
 	@RequestMapping(value = "/annotator/getTags")
 	@ResponseBody
 	public String getTags(){
-		Gson g = new Gson();
-		TagJ tj = new TagJ();
-		String[] tags = getTagsArray();
-		tj.setTags(tags);
-		String json = g.toJson(tj);
+		String json = getJsonTags();
+		System.out.println(json);
 		return json;
 	}
-
-	private String[] getTagsArray() {
-		List<TagAux> roots =  getTagHierarchy();
-		List<TagAux> flatList = getTagsFlatList(roots);
-		String[] tags = new String[flatList.size()];
-		int i = 0;
-		while(i < tags.length){
-			tags[i] = flatList.get(i).getTag();
-			i++;
+	
+	//---------------------------------------------------------------
+	@Atomic(mode=TxMode.READ)
+	private String getJsonTags(){
+		DomainRoot dr = FenixFramework.getDomainRoot();
+		Set<Tag> set = dr.getTagSet();
+		List<String> tags = new ArrayList<String>(set.size());
+		for(Tag t : set) {
+			tags.add(t.getTag());
 		}
+		Collections.sort(tags);
+		TagJ tagObj = new TagJ();
+		tagObj.setTags(tags);
+		Gson gson = new Gson();
+		String json = gson.toJson(tagObj);
+		return json;
+	}
+	
+	//lista de tags:
+	@Atomic(mode=TxMode.READ)
+	private Set<Tag> getTagList(){
+		DomainRoot dr = FenixFramework.getDomainRoot();
+		System.out.println(dr);
+		Set<Tag> tags = dr.getTagSet();
+		System.out.println(tags);
+		System.out.println(tags.size());
 		return tags;
+		
 	}
 
 	@Atomic(mode = TxMode.WRITE)
 	private void addNewTag(TagAux tag) {
-		String parentId = tag.getParentId();
-		if (!tagExists(tag.getTag(), parentId)) {
+		if (!tagExists(tag.getTag())) {
+			DomainRoot dr = FenixFramework.getDomainRoot();
 			Tag t = new Tag();
 			t.setTag(tag.getTag());
-			if(parentId.equals("none")){
-				FenixFramework.getDomainRoot().addTag(t);	
-			}else{
-				Tag parent = FenixFramework.getDomainObject(parentId);
-				parent.addSubtag(t);
-			}
-			
+			dr.addTag(t);
 		}
 	}
 
-	@Atomic
-	private boolean tagExists(String tag, String parentId) {
-		if(parentId.equals("none")){
-			Set<Tag> tags = FenixFramework.getDomainRoot().getTagSet();
-			return findTagOccurrenceInSet(tag, tags);
-		}
-		Tag parent = FenixFramework.getDomainObject(parentId);
-		Set<Tag> children = parent.getSubtagSet();
-		return findTagOccurrenceInSet(tag, children);
-		
-	}
-	
-	private boolean findTagOccurrenceInSet(String tag, Set<Tag> set){
-		for (Tag t : set) {
-			if (t.getTag().equals(tag)) {
+	@Atomic(mode=TxMode.READ)
+	private boolean tagExists(String tag) {
+		DomainRoot dr = FenixFramework.getDomainRoot();
+		for(Tag t : dr.getTagSet()) {
+			if(t.getTag().equals(tag)) {
 				return true;
 			}
 		}
 		return false;
+		
 	}
-
-	@Atomic
+	@Atomic(mode=TxMode.WRITE)
 	private void removeTagById(String id) {
 		Tag t = FenixFramework.getDomainObject(id);
 		t.delete();
 	}
-
-	@Atomic
-	private List<TagAux> getTagHierarchy() {
-		DomainRoot dr = FenixFramework.getDomainRoot();
-		Set<Tag> tags = dr.getTagSet();
-		List<TagAux> tagList = new ArrayList<TagAux>();
-		for (Tag t : tags) {
-			List<TagAux> children = getChildrenList(t.getExternalId());
-			if(children != null){
-				Collections.sort(children);
-			}
-			TagAux nt = new TagAux();
-			nt.setTag(t.getTag());
-			nt.setId(t.getExternalId());
-			nt.setSubtags(children);
-			tagList.add(nt);
-		}
-		Collections.sort(tagList);
-		return tagList;
-	}
-
-	@Atomic
-	private List<TagAux> getChildrenList(String externalId) {
-		List<TagAux> list = new ArrayList<TagAux>();
-		Tag t = FenixFramework.getDomainObject(externalId);
-		Set<Tag> children = t.getSubtagSet();
-		if(children.size() == 0){
-			return null;
-		}
-		for(Tag ch : children){
-			TagAux c = new TagAux();
-			c.setId(ch.getExternalId());
-			c.setTag(ch.getTag());
-			List<TagAux> subtags = getChildrenList(ch.getExternalId());
-			if(subtags!= null){
-				Collections.sort(subtags);
-			}
-			c.setSubtags(subtags);
-			list.add(c);
-		}
-		Collections.sort(list);
-		return list;
-	}
-	
-	private List<TagAux> getTagsFlatList(List<TagAux> tagHierarchy){
-		List<TagAux> flatList = new ArrayList<TagAux>();
-		for(TagAux t : tagHierarchy){
-			TagAux n = new TagAux();
-			n.setId(t.getId());
-			n.setTag(t.getTag());
-			if(t.getSubtags() != null){
-				getTagChildren(t, flatList);
-			}
-			flatList.add(n);
-		}
-//		Collections.sort(flatList);
-		return flatList;
-	}
-
-	private void getTagChildren(TagAux t, List<TagAux> flatList) {
-		for(TagAux child : t.getSubtags()){
-			TagAux ch = new TagAux();
-			ch.setId(child.getId());
-			ch.setTag(child.getTag());
-			flatList.add(ch);
-			if(ch.getSubtags() != null){
-				getTagChildren(child, flatList);
-			}
-		}
-	}
-	
-	
 }

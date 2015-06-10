@@ -1,13 +1,15 @@
 package pt.ulisboa.tecnico.saslearning.jsonsupport;
 
-public class TagJ {
-	private String[] tags;
+import java.util.List;
 
-	public String[] getTags() {
+public class TagJ {
+	private List<String> tags;
+
+	public List<String> getTags() {
 		return tags;
 	}
 
-	public void setTags(String[] tags) {
+	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
 	

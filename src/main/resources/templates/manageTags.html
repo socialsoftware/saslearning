@@ -20,16 +20,15 @@
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
   <div class="well">
         <h1>Existant Tags</h1>
-      <section layout:include="@{/tagFragment} :: tagFragment" th:with="tagsList=${tags}"></section>
+       <ul class="list-group">
+            <li class="list-group-item" th:each="tag : ${tags}">
+              <span th:text="${tag.getTag()}"></span>
+              <a th:href="@{/removeTag/} + ${tag.getExternalId()}">(remove)</a>
+            </li>
+        </ul> 
       <h1>Add new Tag</h1>
       <form action="#" th:action="@{/addTag}" th:object="${newTag}" method="post">
         <p>New Tag: <input type="text" th:field="*{tag}" /></p>
-        <p>Parent:
-            <select th:field="*{parentId}">
-                <option th:value="${'none'}" th:text="${'--none--'}"></option>
-                <option th:each="tag : ${tagFlatList}" th:value="${tag.id}" th:text="${tag.tag}"></option>
-            </select>
-        </p>
         <p>
             <input type="submit" value="Submit" /> <input type="reset" value="Reset" />
         </p>
