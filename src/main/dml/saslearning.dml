@@ -191,5 +191,55 @@ relation srcOfStimulusHasAnnotations {
 	}
 }
 
+relation stimulusHasAnnotations {
+	Stimulus playsRole stimulus {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation artifactHasAnnotations {
+	Artifact playsRole artifact {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation environmentHasAnnotations {
+	Environment playsRole environment {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation responseHasAnnotations {
+	Response playsRole response {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation responseMeasureHasAnnotations {
+	ResponseMeasure playsRole responseMeasure {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
 
 

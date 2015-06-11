@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.google.gson.Gson;
-
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Scenario;
-import pt.ulisboa.tecnico.saslearning.domain.SrcOfStimulus;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
+
+import com.google.gson.Gson;
 
 @Controller
 public class DomainEntitiesController {
@@ -51,18 +50,13 @@ public class DomainEntitiesController {
 	}
 	
 	@RequestMapping(value="/linkAnnotation/{docId}/{scenId}/{annId}")
-	public RedirectView linkAnnotation(@PathVariable String docId, @PathVariable String scenId, @PathVariable String annId){
+	public RedirectView linkAnnotationToScenario(@PathVariable String docId, @PathVariable String scenId, @PathVariable String annId){
 		linkAnnotationToScenario(scenId, annId);
 		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/Scenario/"+ scenId);
 		return rv;
 	}
 	
-	@RequestMapping(value="/addSrcOfStimulus/{docId}/{scenarioId}")
-	public RedirectView addSourceOfStimulus(@PathVariable String scenarioId, @PathVariable String docId){
-		addSrcOfStimulus(scenarioId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
+
 	
 	@RequestMapping(value="/unlinkFromScenario/{docId}/{scenarioId}/{annotationId}")
 	public RedirectView unlinkAnnotationFromScenario(@PathVariable String docId, @PathVariable String scenarioId, @PathVariable String annotationId) {
@@ -78,56 +72,16 @@ public class DomainEntitiesController {
 		return rv;
 	}
 	
-	@RequestMapping(value="/removeSrcOfStimulus/{docId}/{srcId}")
-	public RedirectView removeSrcOfStimulus(@PathVariable String docId, @PathVariable String srcId) {
-		removeSrcOfStimulus(srcId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
+
 	
-	@RequestMapping(value="/linkAnnotation/{docId}/SrcOfStimulus/{srcId}")
-	public String srcStimulusManager(@PathVariable String docId, @PathVariable String srcId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getSrcOfStimulusById(srcId));
-		m.addAttribute("annotations", getAnnotationsByTag("Source Of Stimulus", docId));
-		return "scenarioElementsManager";
-	}
+
 	
-	@RequestMapping(value="/linkAnnotation/{docId}/Source of Stimulus/{srcId}/{annId}")
-	public RedirectView linkToSrcStimulus(@PathVariable String docId, @PathVariable String srcId, @PathVariable String annId) {
-		linkAnnotationToSrcStimulus(srcId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/SrcOfStimulus/" + srcId);
-		return rv;
-	}
+
 	
-	@RequestMapping(value="/unlinkAnnotation/Source of Stimulus/{docId}/{srcId}/{annId}")
-	public RedirectView unlinkAnnotationFromSrcStimulux(@PathVariable String docId, @PathVariable String srcId, @PathVariable String annId) {
-		removeAnnotationFromSrcStimulus(srcId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/SrcOfStimulus/" + srcId);
-		return rv;
-	}
+
 
 	//-------------------------------------------------------------------------------------------------------------------
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToSrcStimulus(String srcId, String annId){
-		SrcOfStimulus s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		s.addAnnotation(a);
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private SrcOfStimulus getSrcOfStimulusById(String srcId) {
-		SrcOfStimulus src = FenixFramework.getDomainObject(srcId);
-		List<AnnotationJ> srcAnnotations = getAnnotationsFromSet(src.getAnnotationSet());
-		src.setAnnotations(srcAnnotations);
-		return src;
-	}
-	
-	@Atomic(mode = TxMode.WRITE)
-	private void removeSrcOfStimulus(String srcId) {
-		SrcOfStimulus src = FenixFramework.getDomainObject(srcId);
-		src.delete();
-	}
+
 	
 	@Atomic(mode = TxMode.WRITE)
 	private void removeScenario(String scenarioId) {
@@ -143,21 +97,12 @@ public class DomainEntitiesController {
 		a.setScenario(null);
 	}
 	
-	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromSrcStimulus(String srcId, String annotationId) {
-		SrcOfStimulus s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		s.removeAnnotation(a);
-		a.setSrcOfStimulus(null);
-	}
+
 	
 	@Atomic(mode=TxMode.READ)
 	private Set<Scenario> getDocumentScenarios(String docId){
 		Document d = FenixFramework.getDomainObject(docId);
 		Set<Scenario> scenarios = d.getScenarioSet();
-		for(Scenario s : scenarios){
-			s.setAnnotations(getAnnotationsFromSet(s.getAnnotationSet()));
-		}
 		return scenarios;
 	}
 	
@@ -186,20 +131,10 @@ public class DomainEntitiesController {
 	@Atomic(mode=TxMode.READ)
 	private Scenario getScenarioById(String scenId) {
 		Scenario s = FenixFramework.getDomainObject(scenId);
-		List<AnnotationJ> scenAnnotations = getAnnotationsFromSet(s.getAnnotationSet());
-		s.setAnnotations(scenAnnotations);
 		return s;
 	}
 
-	@Atomic(mode=TxMode.WRITE)
-	private void addSrcOfStimulus(String scenarioId){
-		Scenario s = FenixFramework.getDomainObject(scenarioId);
-		if(s.getSrcOfStimulus() == null) {
-			SrcOfStimulus src = new SrcOfStimulus();
-			src.setName("Source of Stimulus");
-			s.setSrcOfStimulus(src);
-		}
-	}
+
 	
 	@Atomic(mode=TxMode.WRITE)
 	private void addScenario(String docId){

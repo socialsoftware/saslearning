@@ -75,23 +75,24 @@ public class AnnotationJ {
 		this.user = user;
 	}
 	
-	public String getTagsRepresentation(){
-		String rep = "[";
-		int i = 0;
-		while(i < tags.length - 1){
-			String tag = tags[i];
-			rep += tag;
-			rep += ", ";
-			i++;
-		}
-		rep+= tags[i]+"]";
-		return rep;
-	}
 	public String getTag() {
 		return tag;
 	}
 	public void setTag(String tag) {
 		this.tag = tag;
+	}
+	
+	public String getQuoteIntro() {
+		String[] words = quote.split(" ");
+		if(words.length > 5) {
+			String intro = "";
+			for(int i = 0; i< 4; i++) {
+				intro += words[i] + " ";
+			}
+			intro += words[4];
+			return intro;
+		}
+		return quote;
 	}
 	
 	

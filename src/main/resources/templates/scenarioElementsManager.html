@@ -36,9 +36,9 @@
 
         <ul class="list-group">
           <li class="list-group-item" th:each="elemAnn : ${elem.getAnnotations()}">
-            <p><b>Document Quote: </b><span th:text="'(...)' + ${elemAnn.quote} + '(...)'"></span></p>
+            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${elemAnn.quote} + '(...)'"></span></i></p>
             <p><b>Comment: </b><span th:text="${elemAnn.text}"></span></p>
-            <a href="#" th:href="@{/unlinkFromElement/}+ ${elem.getName()}+'/' + ${docId}+'/' + ${elem.getExternalId()} + '/' + ${elemAnn.id}">Unlink this annotation</a>
+            <a href="#" th:href="@{/unlinkAnnotation/}+ ${elem.getName()}+'/' + ${docId}+'/' + ${elem.getExternalId()} + '/' + ${elemAnn.id}">Unlink this annotation</a>
           </li>
         </ul>
       </div>

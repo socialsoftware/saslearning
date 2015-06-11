@@ -35,47 +35,157 @@
         <li class="list-group-item" th:each="scen : ${scenarios}">
           <p><b>Scenario<span th:text="${scen.getExternalId()}"></span></b><a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Scenario/' + ${scen.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeScenario/} + ${docId} + '/' + ${scen.getExternalId()}">(Remove)</a>
           </p>
-        <h4>Annotations:</h4>
         <ul class="list-group">
+          <li class="list-group-item list-group-item-info">
+            <b>Annotations:</b>
+          </li>
           <li class="list-group-item" th:each="scenAnn : ${scen.getAnnotations()}">
-            <p><b>Document Quote: </b><span th:text="'(...)' + ${scenAnn.quote} + '(...)'"></span></p>
-            <p><b>Comment: </b><span th:text="'(...)' + ${scenAnn.text} + '(...)'"></span></p>
+            <p><i><span th:text="'(...)' + ${scenAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+            <p><b>Comment: </b><span th:text="${scenAnn.text}"></span></p>
           </li>
         </ul>
           <ul class="list-group">
-            <li class="list-group-item">
-              <p><b>Source Of Stimulus: </b></p>
-              <p></p>
-              
-              <a href="#" th:href="@{/addSrcOfStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getSrcOfStimulus()} == null">
-                Add Source Of Stimulus
+            <!-- SOURCE OF STIMULUS -->
+            <li class="list-group-item list-group-item-info">
+              <b>Source Of Stimulus</b>
+            </li>
+            <li class="list-group-item" th:with="name='SrcOfStimulus'">
+              <a href="#" th:href="@{'/add' +${name}+'/'+ ${docId} + '/' + ${scen.getExternalId()}}" th:if="${scen.getSrcOfStimulus()} == null">
+                (Add)
               </a>
               <div th:with="src=${scen.getSrcOfStimulus()}" th:if="${scen.getSrcOfStimulus()} != null"> 
-                <span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()} + ${src}" th:if="${scen.getSrcOfStimulus()} != null"></span>(...)
-                <a href="#" th:href="@{/removeSrcOfStimulus/}+ ${docId} + '/' + ${src.getExternalId()}" >
-                Remove Source Of Stimulus
-                </a>
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/SrcOfStimulus/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a>    
+                <span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()}" th:if="${scen.getSrcOfStimulus()} != null"></span>
+               
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/SrcOfStimulus/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeSrcOfStimulus/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <b>Annotations:</b>
+                  </li>
+                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
+                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
+                  </li>
+                </ul>    
               </div>  
-
             </li>
+            <!-- END OF SOURCE OF STIMULUS -->
 
+            <!-- STIMULUS -->
+             <li class="list-group-item list-group-item-info">
+              <b>Stimulus</b>
+            </li>
             <li class="list-group-item">
-              <p>
-                <b>Stimulus:</b>
-              </p>
-              <p th:if="${scen.getStimulus()} != null">
-                <span th:text="'Stimulus' + ${scen.getStimulus().getExternalId()}" ></span>
-              </p> 
-                
-                <p>(...)</p>
-                <a href="#" th:href="@{/addStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getStimulus()} == null">
-                  Add Stimulus
-                </a>
-                <a href="#" th:href="@{/removeStimulus/}+ ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getStimulus()} != null">
-                  Remove Stimulus
-                </a>
+              <a href="#" th:href="@{/addStimulus/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getStimulus()} == null">
+                (Add)
+              </a>
+              <div th:with="src=${scen.getStimulus()}" th:if="${scen.getStimulus()} != null"> 
+                <span th:text="'Stimulus' + ${scen.getStimulus().getExternalId()}" th:if="${scen.getStimulus()} != null"></span>
+               
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Stimulus/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeStimulus/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <b>Annotations:</b>
+                  </li>
+                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
+                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
+                  </li>
+                </ul>    
+              </div>  
             </li>
+             <!--STIMULUS -->
+            <!-- ARTIFACT -->
+            <li class="list-group-item list-group-item-info">
+              <b>Artifact</b>
+            </li>
+            <li class="list-group-item">
+              <a href="#" th:href="@{/addArtifact/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getArtifact()} == null">
+                (Add)
+              </a>
+              <div th:with="src=${scen.getArtifact()}" th:if="${scen.getArtifact()} != null"> 
+                <span th:text="'Artifact' + ${src.getExternalId()}"></span>
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Artifact/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeArtifact/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <b>Annotations:</b>
+                  </li>
+                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
+                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
+                  </li>
+                </ul>    
+              </div>  
+            </li>
+            <!-- END OF ARTIFACT -->
+            <!-- ENVIRONMENT -->
+            <li class="list-group-item list-group-item-info">
+              <b>Environment</b>
+            </li>
+            <li class="list-group-item">
+              <a href="#" th:href="@{/addEnvironment/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getEnvironment()} == null">
+                (Add)
+              </a>
+              <div th:with="src=${scen.getEnvironment()}" th:if="${scen.getEnvironment()} != null"> 
+                <span th:text="'Environment' + ${src.getExternalId()}"></span>
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Environment/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeEnvironment/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <b>Annotations:</b>
+                  </li>
+                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
+                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
+                  </li>
+                </ul>    
+              </div>  
+            </li>
+            <!-- END OF ENVIRONMENT -->
+            <!-- RESPONSE -->
+             <li class="list-group-item list-group-item-info">
+              <b>Response</b>
+            </li>
+            <li class="list-group-item">
+              <a href="#" th:href="@{/addResponse/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getResponse()} == null">
+                (Add)
+              </a>
+              <div th:with="src=${scen.getResponse()}" th:if="${scen.getResponse()} != null"> 
+                <span th:text="'Response' + ${src.getExternalId()}"></span>
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Response/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeResponse/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <b>Annotations:</b>
+                  </li>
+                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
+                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
+                  </li>
+                </ul>    
+              </div>  
+            </li>
+            <!-- END OF RESPONSE -->
+            <!-- RESPONSE MEASURE -->
+             <li class="list-group-item list-group-item-info">
+              <b>Response Measure</b>
+            </li>
+            <li class="list-group-item">
+              <a href="#" th:href="@{/addResponseMeasure/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getResponseMeasure()} == null">
+                (Add)
+              </a>
+              <div th:with="src=${scen.getResponseMeasure()}" th:if="${scen.getResponseMeasure()} != null"> 
+                <span th:text="'ResponseMeasure' + ${src.getExternalId()}"></span>
+                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/ResponseMeasure/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeResponseMeasure/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <b>Annotations:</b>
+                  </li>
+                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
+                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
+                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
+                  </li>
+                </ul>    
+              </div>  
+            </li>
+            <!-- END OF RESPONSE MEASURE-->
           </ul>
         </li>
       </ul>

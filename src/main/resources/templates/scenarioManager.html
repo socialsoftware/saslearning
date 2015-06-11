@@ -35,19 +35,12 @@
         <b>Scenario<span th:text="${scen.getExternalId()}"></span></b>
 
         <ul class="list-group">
+          <li class="list-group-item list-group-item-info">
+            <b>Annotations:</b>
+          </li>
           <li class="list-group-item" th:each="scenAnn : ${scen.getAnnotations()}">
-            <p><b>Document Quote: </b><span th:text="'(...)' + ${scenAnn.quote} + '(...)'"></span></p>
+            <p><i><span th:text="'(...)' + ${scenAnn.getQuoteIntro()} + '(...)'"></span></i></p>
             <p><b>Comment: </b><span th:text="${scenAnn.text}"></span></p>
-            <a href="#" th:href="@{/unlinkFromScenario/} + ${docId}+'/' + ${scen.getExternalId()} + '/' + ${scenAnn.id}">Unlink this annotation</a>
-          </li>
-          <li class="list-group-item" th:if="${scen.getSrcOfStimulus()} != null">
-            <p><b>Source of Stimulus:</b></p>
-            <p><span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()}"></span></p>
-            <h6>Annotations:</h6>
-
-          </li>
-          <li class="list-group-item">
-            Stimulus, Artifact, Environment, Response, ...
           </li>
         </ul>
       </div>
