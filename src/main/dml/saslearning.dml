@@ -87,9 +87,23 @@ relation documentHasScenarios {
 	}
 }
 
-class SrcOfStimulus {
+class ScenarioElement {
 	String name;
 }
+
+relation scenarioElementHasAnnotations {
+	ScenarioElement playsRole scenarioElement {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+class SrcOfStimulus extends ScenarioElement {
+}
+
 
 relation scenarioHasSrcOfStimulus {
 	SrcOfStimulus playsRole srcOfStimulus {
@@ -101,8 +115,7 @@ relation scenarioHasSrcOfStimulus {
 	}
 }
 
-class Stimulus {
-	String name;
+class Stimulus extends ScenarioElement {
 }
 
 relation scenarioaHasStimulus {
@@ -115,8 +128,7 @@ relation scenarioaHasStimulus {
 	}
 }
 
-class Artifact {
-	String name;
+class Artifact extends ScenarioElement {
 }
 
 relation scenarioHasArtifact {
@@ -129,8 +141,7 @@ relation scenarioHasArtifact {
 	}
 }
 
-class ResponseMeasure {
-	String name;
+class ResponseMeasure extends ScenarioElement {
 }
 
 relation scenarioHasResponseMeasure {
@@ -143,8 +154,7 @@ relation scenarioHasResponseMeasure {
 	}
 }
 
-class Response {
-	String name;
+class Response extends ScenarioElement {
 }
 
 relation scenarioHasResponse {
@@ -157,8 +167,7 @@ relation scenarioHasResponse {
 	}
 }
 
-class Environment {
-	String name;
+class Environment extends ScenarioElement {
 }
 
 relation scenarioHasEnvironment {
@@ -240,6 +249,3 @@ relation responseMeasureHasAnnotations {
 		multiplicity 0..*;
 	}
 }
-
-
-

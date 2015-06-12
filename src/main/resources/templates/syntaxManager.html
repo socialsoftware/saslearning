@@ -49,141 +49,66 @@
             <li class="list-group-item list-group-item-info">
               <b>Source Of Stimulus</b>
             </li>
-            <li class="list-group-item" th:with="name='SrcOfStimulus'">
-              <a href="#" th:href="@{'/add' +${name}+'/'+ ${docId} + '/' + ${scen.getExternalId()}}" th:if="${scen.getSrcOfStimulus()} == null">
+            <li class="list-group-item" th:with="elem=${scen.getSrcOfStimulus()}">
+              <a href="#" th:href="@{'/addSrcOfStimulus/'+ ${docId} + '/' + ${scen.getExternalId()}}" th:if="${scen.getSrcOfStimulus()} == null">
                 (Add)
               </a>
-              <div th:with="src=${scen.getSrcOfStimulus()}" th:if="${scen.getSrcOfStimulus()} != null"> 
-                <span th:text="'SourceOfStimulus' + ${scen.getSrcOfStimulus().getExternalId()}" th:if="${scen.getSrcOfStimulus()} != null"></span>
-               
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/SrcOfStimulus/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeSrcOfStimulus/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <b>Annotations:</b>
-                  </li>
-                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
-                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
-                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
-                  </li>
-                </ul>    
-              </div>  
+              <section layout:include="@{/scenarioElementFragment} :: scenarioElement" th:with="elem=${elem}"></section>    
             </li>
             <!-- END OF SOURCE OF STIMULUS -->
-
             <!-- STIMULUS -->
              <li class="list-group-item list-group-item-info">
               <b>Stimulus</b>
             </li>
-            <li class="list-group-item">
-              <a href="#" th:href="@{/addStimulus/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getStimulus()} == null">
+            <li class="list-group-item" th:with="elem=${scen.getStimulus()}">
+              <a href="#" th:href="@{/addStimulus/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${elem} == null">
                 (Add)
               </a>
-              <div th:with="src=${scen.getStimulus()}" th:if="${scen.getStimulus()} != null"> 
-                <span th:text="'Stimulus' + ${scen.getStimulus().getExternalId()}" th:if="${scen.getStimulus()} != null"></span>
-               
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Stimulus/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeStimulus/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <b>Annotations:</b>
-                  </li>
-                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
-                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
-                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
-                  </li>
-                </ul>    
-              </div>  
+              <section layout:include="@{/scenarioElementFragment} :: scenarioElement" th:with="elem=${elem}"></section>  
             </li>
              <!--STIMULUS -->
             <!-- ARTIFACT -->
             <li class="list-group-item list-group-item-info">
               <b>Artifact</b>
             </li>
-            <li class="list-group-item">
-              <a href="#" th:href="@{/addArtifact/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getArtifact()} == null">
+            <li class="list-group-item" th:with="elem=${scen.getArtifact()}">
+              <a href="#" th:href="@{/addArtifact/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${elem} == null">
                 (Add)
               </a>
-              <div th:with="src=${scen.getArtifact()}" th:if="${scen.getArtifact()} != null"> 
-                <span th:text="'Artifact' + ${src.getExternalId()}"></span>
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Artifact/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeArtifact/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <b>Annotations:</b>
-                  </li>
-                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
-                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
-                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
-                  </li>
-                </ul>    
-              </div>  
+              <section layout:include="@{/scenarioElementFragment} :: scenarioElement" th:with="elem=${elem}"></section>  
             </li>
             <!-- END OF ARTIFACT -->
             <!-- ENVIRONMENT -->
             <li class="list-group-item list-group-item-info">
               <b>Environment</b>
             </li>
-            <li class="list-group-item">
-              <a href="#" th:href="@{/addEnvironment/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getEnvironment()} == null">
+            <li class="list-group-item" th:with="elem=${scen.getEnvironment()}">
+              <a href="#" th:href="@{/addEnvironment/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${elem} == null">
                 (Add)
               </a>
-              <div th:with="src=${scen.getEnvironment()}" th:if="${scen.getEnvironment()} != null"> 
-                <span th:text="'Environment' + ${src.getExternalId()}"></span>
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Environment/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeEnvironment/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <b>Annotations:</b>
-                  </li>
-                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
-                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
-                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
-                  </li>
-                </ul>    
-              </div>  
+              <section layout:include="@{/scenarioElementFragment} :: scenarioElement" th:with="elem=${elem}"></section>  
             </li>
             <!-- END OF ENVIRONMENT -->
             <!-- RESPONSE -->
              <li class="list-group-item list-group-item-info">
               <b>Response</b>
             </li>
-            <li class="list-group-item">
-              <a href="#" th:href="@{/addResponse/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getResponse()} == null">
+            <li class="list-group-item" th:with="elem=${scen.getResponse()}">
+              <a href="#" th:href="@{/addResponse/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${elem} == null">
                 (Add)
               </a>
-              <div th:with="src=${scen.getResponse()}" th:if="${scen.getResponse()} != null"> 
-                <span th:text="'Response' + ${src.getExternalId()}"></span>
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Response/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeResponse/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <b>Annotations:</b>
-                  </li>
-                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
-                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
-                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
-                  </li>
-                </ul>    
-              </div>  
+              <section layout:include="@{/scenarioElementFragment} :: scenarioElement" th:with="elem=${elem}"></section>  
             </li>
             <!-- END OF RESPONSE -->
             <!-- RESPONSE MEASURE -->
              <li class="list-group-item list-group-item-info">
               <b>Response Measure</b>
             </li>
-            <li class="list-group-item">
-              <a href="#" th:href="@{/addResponseMeasure/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${scen.getResponseMeasure()} == null">
+            <li class="list-group-item" th:with="elem=${scen.getResponseMeasure()}">
+              <a href="#" th:href="@{/addResponseMeasure/} + ${docId} + '/' + ${scen.getExternalId()}" th:if="${elem} == null">
                 (Add)
-              </a>
-              <div th:with="src=${scen.getResponseMeasure()}" th:if="${scen.getResponseMeasure()} != null"> 
-                <span th:text="'ResponseMeasure' + ${src.getExternalId()}"></span>
-                <a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/ResponseMeasure/' + ${src.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeResponseMeasure/}+ ${docId} + '/' + ${src.getExternalId()}">(Remove)</a>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <b>Annotations:</b>
-                  </li>
-                  <li class="list-group-item" th:each="srcAnn : ${src.getAnnotations()}">
-                    <p><i><span th:text="'(...)' + ${srcAnn.getQuoteIntro()} + '(...)'"></span></i></p>
-                    <p><b>Comment: </b><span th:text="${srcAnn.text}"></span></p>
-                  </li>
-                </ul>    
-              </div>  
+              </a> 
+              <section layout:include="@{/scenarioElementFragment} :: scenarioElement" th:with="elem=${elem}"></section>  
             </li>
             <!-- END OF RESPONSE MEASURE-->
           </ul>

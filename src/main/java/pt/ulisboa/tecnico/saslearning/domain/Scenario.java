@@ -14,6 +14,17 @@ public class Scenario extends Scenario_Base {
     public Scenario() {
         super();
     }
+    
+    public List<ScenarioElement> getScenarioElements(){
+    	List<ScenarioElement> elems = new ArrayList<ScenarioElement>();
+    	elems.add(getSrcOfStimulus());
+    	elems.add(getStimulus());
+    	elems.add(getArtifact());
+    	elems.add(getEnvironment());
+    	elems.add(getResponse());
+    	elems.add(getResponseMeasure());
+    	return elems;
+    }
 
 	public List<AnnotationJ> getAnnotations() {
 		Gson gson = new Gson();

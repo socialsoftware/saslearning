@@ -35,7 +35,6 @@ public class TagsController {
 	public String manageTags(Model m) {
 		TagAux nt = new TagAux();
 		Set<Tag> tags = getTagList();
-		System.out.println(tags);
 		m.addAttribute("tags", tags);
 		m.addAttribute("newTag", nt);
 		return "manageTags";
@@ -60,7 +59,6 @@ public class TagsController {
 	@ResponseBody
 	public String getTags(){
 		String json = getJsonTags();
-		System.out.println(json);
 		return json;
 	}
 	
@@ -85,10 +83,7 @@ public class TagsController {
 	@Atomic(mode=TxMode.READ)
 	private Set<Tag> getTagList(){
 		DomainRoot dr = FenixFramework.getDomainRoot();
-		System.out.println(dr);
 		Set<Tag> tags = dr.getTagSet();
-		System.out.println(tags);
-		System.out.println(tags.size());
 		return tags;
 		
 	}

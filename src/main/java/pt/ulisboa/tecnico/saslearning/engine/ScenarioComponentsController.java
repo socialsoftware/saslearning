@@ -22,12 +22,19 @@ import pt.ulisboa.tecnico.saslearning.domain.Environment;
 import pt.ulisboa.tecnico.saslearning.domain.Response;
 import pt.ulisboa.tecnico.saslearning.domain.ResponseMeasure;
 import pt.ulisboa.tecnico.saslearning.domain.Scenario;
+import pt.ulisboa.tecnico.saslearning.domain.ScenarioElement;
 import pt.ulisboa.tecnico.saslearning.domain.SrcOfStimulus;
 import pt.ulisboa.tecnico.saslearning.domain.Stimulus;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 
 @Controller
 public class ScenarioComponentsController {
+
+	@RequestMapping(value="/scenarioElementFragment")
+	public String getElementFragment() {
+		return "scenarioElementFragment";
+	}
+	
 	@RequestMapping(value = "/addSrcOfStimulus/{docId}/{scenarioId}")
 	public RedirectView addSourceOfStimulus(@PathVariable String scenarioId,
 			@PathVariable String docId) {
@@ -41,7 +48,7 @@ public class ScenarioComponentsController {
 		Scenario s = FenixFramework.getDomainObject(scenarioId);
 		if(s.getSrcOfStimulus() == null) {
 			SrcOfStimulus elem = new SrcOfStimulus();
-			elem.setName("Source of Stimulus");
+			elem.setName("Source Of Stimulus");
 			s.setSrcOfStimulus(elem);
 		}
 	}
@@ -137,93 +144,6 @@ public class ScenarioComponentsController {
 		}
 	}
 	
-	
-	//---------------------------------------------------------------------
-	@RequestMapping(value="/linkAnnotation/{docId}/SrcOfStimulus/{elemId}")
-	public String srcStimulusManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getSrcOfStimulusById(elemId));
-		m.addAttribute("annotations", getAnnotationsByTag("Source Of Stimulus", docId));
-		return "scenarioElementsManager";
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private SrcOfStimulus getSrcOfStimulusById(String elemId) {
-		SrcOfStimulus elem = FenixFramework.getDomainObject(elemId);
-		return elem;
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Stimulus/{elemId}")
-	public String stimulusManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getStimulusById(elemId));
-		m.addAttribute("annotations", getAnnotationsByTag("Stimulus", docId));
-		return "scenarioElementsManager";
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private Stimulus getStimulusById(String elemId) {
-		Stimulus elem = FenixFramework.getDomainObject(elemId);
-		return elem;
-	}
-	
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Artifact/{elemId}")
-	public String artifactManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getArtifactById(elemId));
-		m.addAttribute("annotations", getAnnotationsByTag("Artifact", docId));
-		return "scenarioElementsManager";
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private Artifact getArtifactById(String elemId) {
-		Artifact elem = FenixFramework.getDomainObject(elemId);
-		return elem;
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Environment/{elemId}")
-	public String environmentManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getEnvironmentById(elemId));
-		m.addAttribute("annotations", getAnnotationsByTag("Environment", docId));
-		return "scenarioElementsManager";
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private Environment getEnvironmentById(String elemId) {
-		Environment elem = FenixFramework.getDomainObject(elemId);
-		return elem;
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Response/{elemId}")
-	public String responseManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getResponseById(elemId));
-		m.addAttribute("annotations", getAnnotationsByTag("Response", docId));
-		return "scenarioElementsManager";
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private Response getResponseById(String elemId) {
-		Response elem = FenixFramework.getDomainObject(elemId);
-		return elem;
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/ResponseMeasure/{elemId}")
-	public String responseMeasureManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
-		m.addAttribute("docId", docId);
-		m.addAttribute("elem", getResponseMeasureById(elemId));
-		m.addAttribute("annotations", getAnnotationsByTag("Response Measure", docId));
-		return "scenarioElementsManager";
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private ResponseMeasure getResponseMeasureById(String elemId) {
-		ResponseMeasure elem = FenixFramework.getDomainObject(elemId);
-		return elem;
-	}
-	
 	@Atomic(mode=TxMode.READ)
 	private List<AnnotationJ> getAnnotationsByTag(String tag, String docId){
 		List<AnnotationJ> annotations = new ArrayList<AnnotationJ>();
@@ -238,6 +158,37 @@ public class ScenarioComponentsController {
 		return annotations;
 	}
 	
+	//---------------------------------------------------------------------
+	@RequestMapping(value="/elementManager/{docId}/{elemId}")
+	public String scenarioElementsManager(@PathVariable String docId, @PathVariable String elemId, Model m) {
+		m.addAttribute("docId", docId);
+		ScenarioElement elem = FenixFramework.getDomainObject(elemId);
+		m.addAttribute("elem", elem);
+		m.addAttribute("annotations", getAnnotationsByTag(elem.getName(), docId));
+		return "scenarioElementsManager";
+	}
+
+	@RequestMapping(value="/removeScenarioElement/{docId}/{elemId}")
+	public RedirectView removeScenarioElement(@PathVariable String docId, @PathVariable String elemId) {
+		removeScenarioElement(elemId);
+		RedirectView rv = new RedirectView("/addSyntax/" + docId);
+		return rv;
+	}
+
+	@RequestMapping(value="/unlinkAnnotation/{docId}/{elemId}/{annId}")
+	public RedirectView unlinkAnnotationFromElement(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
+		removeAnnotationFromElement(elemId, annId);
+		RedirectView rv = new RedirectView("/elementManager/"+docId+"/" + elemId);
+		return rv;
+	}
+
+	@RequestMapping(value="/linkAnnotationToElement/{docId}/{elemId}/{annId}")
+	public RedirectView linkAnnotation(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
+		linkAnnotationToElement(elemId, annId);
+		RedirectView rv = new RedirectView("/elementManager/" + docId + "/" + elemId);
+		return rv;
+	}
+
 	@Atomic(mode=TxMode.READ)
 	private List<AnnotationJ> getAnnotationsFromSet(Set<Annotation> anns){
 		Gson gson = new Gson();
@@ -248,261 +199,25 @@ public class ScenarioComponentsController {
 		}
 		return annotations;
 	}
-	//----------------------------------------------------------------------
-	@RequestMapping(value="/removeSrcOfStimulus/{docId}/{elemId}")
-	public RedirectView removeSrcOfStimulus(@PathVariable String docId, @PathVariable String elemId) {
-		removeSrcOfStimulus(elemId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
-	
-	@Atomic(mode = TxMode.WRITE)
-	private void removeSrcOfStimulus(String srcId) {
-		SrcOfStimulus src = FenixFramework.getDomainObject(srcId);
-		src.delete();
-	}
-	
-	@RequestMapping(value="/removeStimulus/{docId}/{elemId}")
-	public RedirectView removeStimulus (@PathVariable String docId, @PathVariable String elemId) {
-		removeStimulus(elemId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
-	
-	@Atomic(mode = TxMode.WRITE)
-	private void removeStimulus(String elemId) {
-		Stimulus s = FenixFramework.getDomainObject(elemId);
-		s.delete();
-	}
 
-	@RequestMapping(value="/removeArtifact/{docId}/{elemId}")
-	public RedirectView removeArtifact(@PathVariable String docId, @PathVariable String elemId) {
-		removeArtifact(elemId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
-	
-	@Atomic(mode = TxMode.WRITE)
-	private void removeArtifact(String elemId) {
-		Artifact a = FenixFramework.getDomainObject(elemId);
-		a.delete();
-	}
-
-	@RequestMapping(value="/removeEnvironment/{docId}/{elemId}")
-	public RedirectView removeEnvironment(@PathVariable String docId, @PathVariable String elemId) {
-		removeEnvironment(elemId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
-	
-	@Atomic(mode = TxMode.WRITE)
-	private void removeEnvironment(String elemId) {
-		Environment e = FenixFramework.getDomainObject(elemId);
+	@Atomic(mode=TxMode.WRITE)
+	private void removeScenarioElement(String elemId) {
+		ScenarioElement e = FenixFramework.getDomainObject(elemId);
 		e.delete();
 	}
 
-	@RequestMapping(value="/removeResponse/{docId}/{elemId}")
-	public RedirectView removeResponse(@PathVariable String docId, @PathVariable String elemId) {
-		removeResponse(elemId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
-	
-	@Atomic(mode = TxMode.WRITE)
-	private void removeResponse(String elemId) {
-		Response r = FenixFramework.getDomainObject(elemId);
-		r.delete();
-	}
-	
-	@RequestMapping(value="/removeResponseMeasure/{docId}/{elemId}")
-	public RedirectView removeResponseMeasure(@PathVariable String docId, @PathVariable String elemId) {
-		removeResponseMeasure(elemId);
-		RedirectView rv = new RedirectView("/addSyntax/" + docId);
-		return rv;
-	}
-
-	@Atomic(mode = TxMode.WRITE)
-	private void removeResponseMeasure(String elemId) {
-		ResponseMeasure rm = FenixFramework.getDomainObject(elemId);
-		rm.delete();
-	}
-//-------------------------------------------------------------------------------------------------
-	@RequestMapping(value="/unlinkAnnotation/Source of Stimulus/{docId}/{srcId}/{annId}")
-	public RedirectView unlinkAnnotationFromSrcStimulus(@PathVariable String docId, @PathVariable String srcId, @PathVariable String annId) {
-		removeAnnotationFromSrcStimulus(srcId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/SrcOfStimulus/" + srcId);
-		return rv;
-	}
-	
 	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromSrcStimulus(String srcId, String annotationId) {
-		SrcOfStimulus s = FenixFramework.getDomainObject(srcId);
+	private void removeAnnotationFromElement(String elemId, String annotationId) {
+		ScenarioElement s = FenixFramework.getDomainObject(elemId);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
 		s.removeAnnotation(a);
 		a.setSrcOfStimulus(null);
 	}
-	
-	@RequestMapping(value="/unlinkAnnotation/Stimulus/{docId}/{elemId}/{annId}")
-	public RedirectView unlinkAnnotationFromStimulus(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		removeAnnotationFromStimulus(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/Stimulus/" + elemId);
-		return rv;
-	}
-	
+		
 	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromStimulus(String elemId, String annotationId) {
-		Stimulus s = FenixFramework.getDomainObject(elemId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		s.removeAnnotation(a);
-		a.setStimulus(null);
-	}
-	
-	@RequestMapping(value="/unlinkAnnotation/Artifact/{docId}/{elemId}/{annId}")
-	public RedirectView unlinkAnnotationFromArtifact(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		removeAnnotationFromArtifact(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/Artifact/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromArtifact(String elemId, String annotationId) {
-		Artifact s = FenixFramework.getDomainObject(elemId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		s.removeAnnotation(a);
-		a.setArtifact(null);
-	}
-	
-	@RequestMapping(value="/unlinkAnnotation/Environment/{docId}/{elemId}/{annId}")
-	public RedirectView unlinkAnnotationFromEnvironment(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		removeAnnotationFromEnvironment(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/Environment/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromEnvironment(String elemId, String annotationId) {
-		Environment s = FenixFramework.getDomainObject(elemId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		s.removeAnnotation(a);
-		a.setEnvironment(null);
-	}
-	
-	@RequestMapping(value="/unlinkAnnotation/Response/{docId}/{elemId}/{annId}")
-	public RedirectView unlinkAnnotationFromResponse(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		removeAnnotationFromResponse(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/Response/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromResponse(String elemId, String annotationId) {
-		Response s = FenixFramework.getDomainObject(elemId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		s.removeAnnotation(a);
-		a.setResponse(null);
-	}
-	
-	@RequestMapping(value="/unlinkAnnotation/Response Measure/{docId}/{elemId}/{annId}")
-	public RedirectView unlinkAnnotationFromResponseMeasure(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		removeAnnotationFromResponseMeasure(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/"+docId+"/ResponseMeasure/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void removeAnnotationFromResponseMeasure(String elemId, String annotationId) {
-		ResponseMeasure s = FenixFramework.getDomainObject(elemId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		s.removeAnnotation(a);
-		a.setResponseMeasure(null);
-	}
-	
-	
-	
-//---------------------------------------------------------------------------------------------	
-	@RequestMapping(value="/linkAnnotation/{docId}/Source of Stimulus/{elemId}/{annId}")
-	public RedirectView linkToSrcStimulus(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		linkAnnotationToSrcStimulus(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/SrcOfStimulus/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToSrcStimulus(String srcId, String annId){
-		SrcOfStimulus s = FenixFramework.getDomainObject(srcId);
+	private void linkAnnotationToElement(String elemId, String annId){
+		ScenarioElement s = FenixFramework.getDomainObject(elemId);
 		Annotation a = FenixFramework.getDomainObject(annId);
 		s.addAnnotation(a);
 	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Stimulus/{elemId}/{annId}")
-	public RedirectView linkToStimulus(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		linkAnnotationToStimulus(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/Stimulus/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToStimulus(String srcId, String annId){
-		Stimulus s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		s.addAnnotation(a);
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Artifact/{elemId}/{annId}")
-	public RedirectView linkToArtifact(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		linkAnnotationToArtifact(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/Artifact/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToArtifact(String srcId, String annId){
-		Artifact s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		s.addAnnotation(a);
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Environment/{elemId}/{annId}")
-	public RedirectView linkToEnvironment(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		linkAnnotationToEnvironment(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/Environment/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToEnvironment(String srcId, String annId){
-		Environment s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		s.addAnnotation(a);
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Response/{elemId}/{annId}")
-	public RedirectView linkToResponse(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		linkAnnotationToResponse(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/Response/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToResponse(String srcId, String annId){
-		Response s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		s.addAnnotation(a);
-	}
-	
-	@RequestMapping(value="/linkAnnotation/{docId}/Response Measure/{elemId}/{annId}")
-	public RedirectView linkToResponseMeasure(@PathVariable String docId, @PathVariable String elemId, @PathVariable String annId) {
-		linkAnnotationToResponseMeasure(elemId, annId);
-		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/ResponseMeasure/" + elemId);
-		return rv;
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void linkAnnotationToResponseMeasure(String srcId, String annId){
-		ResponseMeasure s = FenixFramework.getDomainObject(srcId);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		s.addAnnotation(a);
-	}
-	
-	
 }
