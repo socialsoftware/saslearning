@@ -42,7 +42,7 @@ public class DomainEntitiesController {
 	//GO TO SCENARIO MANAGER TO CHOOSE ANNOTATIONS TO LINK
 	@RequestMapping(value="/linkAnnotation/{docId}/Scenario/{scenId}")
 	public String scenarioManager(Model m, @PathVariable String docId, @PathVariable String scenId){
-		Scenario scen = getScenarioById(scenId);
+		Scenario scen = FenixFramework.getDomainObject(scenId);
 		m.addAttribute("scen", scen);
 		m.addAttribute("annotations", getAnnotationsByTag("Scenario", docId));
 		m.addAttribute("docId", docId);
@@ -72,17 +72,6 @@ public class DomainEntitiesController {
 		return rv;
 	}
 	
-
-	
-
-	
-
-	
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-
-	
 	@Atomic(mode = TxMode.WRITE)
 	private void removeScenario(String scenarioId) {
 		Scenario s = FenixFramework.getDomainObject(scenarioId);
@@ -96,8 +85,6 @@ public class DomainEntitiesController {
 		s.removeAnnotation(a);
 		a.setScenario(null);
 	}
-	
-
 	
 	@Atomic(mode=TxMode.READ)
 	private Set<Scenario> getDocumentScenarios(String docId){
@@ -128,30 +115,11 @@ public class DomainEntitiesController {
 		return annotations;
 	}
 	
-	@Atomic(mode=TxMode.READ)
-	private Scenario getScenarioById(String scenId) {
-		Scenario s = FenixFramework.getDomainObject(scenId);
-		return s;
-	}
-
-
-	
 	@Atomic(mode=TxMode.WRITE)
 	private void addScenario(String docId){
 		Document d = FenixFramework.getDomainObject(docId);
 		Scenario s = new Scenario();
 		s.setName("Scenario");
 		d.addScenario(s);
-	}
-	
-	@Atomic(mode=TxMode.READ)
-	private List<AnnotationJ> getAnnotationsFromSet(Set<Annotation> anns){
-		Gson gson = new Gson();
-		List<AnnotationJ> annotations = new ArrayList<AnnotationJ>(); 
-		for(Annotation a : anns){
-			AnnotationJ ann = gson.fromJson(a.getAnnotation(), AnnotationJ.class);
-			annotations.add(ann);
-		}
-		return annotations;
 	}
 }

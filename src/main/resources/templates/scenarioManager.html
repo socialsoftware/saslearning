@@ -41,6 +41,7 @@
           <li class="list-group-item" th:each="scenAnn : ${scen.getAnnotations()}">
             <p><i><span th:text="'(...)' + ${scenAnn.getQuoteIntro()} + '(...)'"></span></i></p>
             <p><b>Comment: </b><span th:text="${scenAnn.text}"></span></p>
+            <a href="#" th:href="@{/unlinkFromScenario/}+ ${docId}+'/' + ${scen.getExternalId()} + '/' + ${scenAnn.id}">Unlink this annotation</a>
           </li>
         </ul>
       </div>

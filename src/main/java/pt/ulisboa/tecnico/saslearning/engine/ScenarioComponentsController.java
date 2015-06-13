@@ -35,7 +35,7 @@ public class ScenarioComponentsController {
 		return "scenarioElementFragment";
 	}
 	
-	@RequestMapping(value = "/addSrcOfStimulus/{docId}/{scenarioId}")
+	@RequestMapping(value = "/add/Source Of Stimulus/{docId}/{scenarioId}")
 	public RedirectView addSourceOfStimulus(@PathVariable String scenarioId,
 			@PathVariable String docId) {
 		addSrcOfStimulus(scenarioId);
@@ -53,7 +53,7 @@ public class ScenarioComponentsController {
 		}
 	}
 
-	@RequestMapping(value = "/addStimulus/{docId}/{scenarioId}")
+	@RequestMapping(value = "/add/Stimulus/{docId}/{scenarioId}")
 	public RedirectView addStimulus(@PathVariable String scenarioId,
 			@PathVariable String docId) {
 		addStimulus(scenarioId);
@@ -71,7 +71,7 @@ public class ScenarioComponentsController {
 		}
 	}
 	
-	@RequestMapping(value = "/addArtifact/{docId}/{scenarioId}")
+	@RequestMapping(value = "/add/Artifact/{docId}/{scenarioId}")
 	public RedirectView addArtifact(@PathVariable String scenarioId,
 			@PathVariable String docId) {
 		addArtifact(scenarioId);
@@ -89,7 +89,7 @@ public class ScenarioComponentsController {
 		}
 	}
 	
-	@RequestMapping(value = "/addEnvironment/{docId}/{scenarioId}")
+	@RequestMapping(value = "/add/Environment/{docId}/{scenarioId}")
 	public RedirectView addEnvironment(@PathVariable String scenarioId,
 			@PathVariable String docId) {
 		addEnvironment(scenarioId);
@@ -108,7 +108,7 @@ public class ScenarioComponentsController {
 	}
 	
 	
-	@RequestMapping(value = "/addResponse/{docId}/{scenarioId}")
+	@RequestMapping(value = "/add/Response/{docId}/{scenarioId}")
 	public RedirectView addResponse(@PathVariable String scenarioId,
 			@PathVariable String docId) {
 		addResponse(scenarioId);
@@ -126,7 +126,7 @@ public class ScenarioComponentsController {
 		}
 	}
 	
-	@RequestMapping(value = "/addResponseMeasure/{docId}/{scenarioId}")
+	@RequestMapping(value = "/add/Response Measure/{docId}/{scenarioId}")
 	public RedirectView addResponseMeasure(@PathVariable String scenarioId,
 			@PathVariable String docId) {
 		addResponseMeasure(scenarioId);

@@ -2,11 +2,13 @@ package pt.ulisboa.tecnico.saslearning.domain;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.google.gson.Gson;
+import java.util.Map;
 
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
+
+import com.google.gson.Gson;
 
 public class Scenario extends Scenario_Base {
     
@@ -15,15 +17,15 @@ public class Scenario extends Scenario_Base {
         super();
     }
     
-    public List<ScenarioElement> getScenarioElements(){
-    	List<ScenarioElement> elems = new ArrayList<ScenarioElement>();
-    	elems.add(getSrcOfStimulus());
-    	elems.add(getStimulus());
-    	elems.add(getArtifact());
-    	elems.add(getEnvironment());
-    	elems.add(getResponse());
-    	elems.add(getResponseMeasure());
-    	return elems;
+    public Map<String, ScenarioElement> getScenarioElements(){
+    	Map<String, ScenarioElement> elements = new LinkedHashMap<String, ScenarioElement>();
+    	elements.put("Source Of Stimulus", getSrcOfStimulus());
+    	elements.put("Stimulus", getStimulus());
+    	elements.put("Artifact", getArtifact());
+    	elements.put("Environment", getEnvironment());
+    	elements.put("Response", getResponse());
+    	elements.put("Response Measure", getResponseMeasure());
+    	return elements;
     }
 
 	public List<AnnotationJ> getAnnotations() {
@@ -46,6 +48,17 @@ public class Scenario extends Scenario_Base {
 		}
 		return false;
 	}
+	
+	private List<ScenarioElement> getElements(){
+		List<ScenarioElement> elems = new ArrayList<ScenarioElement>(6);
+		elems.add(getArtifact());
+		elems.add(getEnvironment());
+		elems.add(getResponse());
+		elems.add(getResponseMeasure());
+		elems.add(getSrcOfStimulus());
+		elems.add(getStimulus());
+		return elems;
+	}
     
     public void delete() {
     	Iterator<Annotation> i = getAnnotationSet().iterator();
@@ -54,27 +67,13 @@ public class Scenario extends Scenario_Base {
     		a.setScenario(null);
     	}
     	
-    	if(getSrcOfStimulus() != null) {
-    		getSrcOfStimulus().delete();
+    	Iterator<ScenarioElement> s = getElements().iterator();
+    	while(s.hasNext()) {
+    		ScenarioElement e = s.next();
+    		if(e != null) {
+    			e.delete();
+    		}
     	}
-    	if(getArtifact() != null) {
-    		getArtifact().delete();
-    	}
-    	
-    	if(getEnvironment() != null) {
-    		getEnvironment().delete();
-    	}
-    	
-    	if (getResponse() != null) {
-			getResponse().delete();
-		}
-    	
-    	if (getResponseMeasure() != null) {
-			getResponseMeasure().delete();
-		}
-    	if (getStimulus() != null) {
-    		getStimulus().delete();
-		}
     	setDocument(null);
     	deleteDomainObject();
     }
