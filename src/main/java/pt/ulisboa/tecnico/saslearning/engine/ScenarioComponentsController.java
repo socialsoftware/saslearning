@@ -150,7 +150,7 @@ public class ScenarioComponentsController {
 		Document d = FenixFramework.getDomainObject(docId);
 		Gson gson = new Gson();
 		for(Annotation a : d.getAnnotationSet()){
-			if(a.getTag().equals(tag)){
+			if(a.getTag().equals(tag) && !a.hasScenarioElement()){
 				AnnotationJ ann = gson.fromJson(a.getAnnotation(), AnnotationJ.class);
 				annotations.add(ann);
 			}

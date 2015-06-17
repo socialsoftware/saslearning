@@ -1,9 +1,9 @@
 <html>
 	<section layout:fragment="scenarioElement">
 	   <div th:if="${elem} != null"> 
-	    <span th:text="${elem.getName()} + ${elem.getExternalId()}"></span>
+	    <!--<span th:text="${elem.getName()} + ${elem.getExternalId()}"></span>-->
 	    <a href="#" th:href="@{/elementManager/} + ${docId} + '/' + ${elem.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeScenarioElement/}+ ${docId} + '/' + ${elem.getExternalId()}">(Remove)</a>
-	    <ul class="list-group">
+	    <ul class="list-group" th:if="${elem.getAnnotations()} != null">
 	      <li class="list-group-item list-group-item-info">
 	        <b>Annotations:</b>
 	      </li>

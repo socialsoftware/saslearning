@@ -36,7 +36,7 @@
           <p><b>Scenario<span th:text="${scen.getExternalId()}"></span></b><a href="#" th:href="@{/linkAnnotation/} + ${docId}+ '/Scenario/' + ${scen.getExternalId()}">(Link/Unlink Annotations)</a><a href="#" th:href="@{/removeScenario/} + ${docId} + '/' + ${scen.getExternalId()}">(Remove)</a>
           </p>
           
-        <ul class="list-group">
+        <ul class="list-group" th:if="${scen.getAnnotations()} != null">
           <li class="list-group-item list-group-item-info">
             <b>Annotations:</b>
           </li>
