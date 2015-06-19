@@ -24,7 +24,11 @@
       content.annotator('addPlugin', 'Store', {
         prefix: /*[[@{/selectDoc/} + ${doc.id} + '/store']]*/
       });
-      content.annotator('addPlugin', 'SAConcepts', /*[[@{/annotator/getTags}]]*/);
+      var opts ={
+        tagsLocation: /*[[@{/annotator/getTags}]]*/,
+        docId: /*[[${doc.id}]]*/
+      };
+      content.annotator('addPlugin', 'SAConcepts', opts);
     </script>
 
  <style>

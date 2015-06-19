@@ -18,13 +18,16 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
+import pt.ulisboa.tecnico.saslearning.domain.ElementFragment;
 import pt.ulisboa.tecnico.saslearning.domain.User;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
+import pt.ulisboa.tecnico.saslearning.utils.Utils;
 
 import com.google.gson.Gson;
 
 @RestController
 public class AnnotationController {
+	Utils utils = new Utils();
 
 	// INDEX
 	@RequestMapping(value = "/selectDoc/{docId}/store/annotations", method = RequestMethod.GET)
@@ -49,7 +52,6 @@ public class AnnotationController {
 				+ "/store/annotations/" + annId);
 //		RedirectView rv = new RedirectView("/scenarioManager");
 		rv.setStatusCode(HttpStatus.SEE_OTHER);
-		
 		return rv;
 	}
 
@@ -100,6 +102,7 @@ public class AnnotationController {
 		return ann.getAnnotation();
 	}
 	
+	
 	@Atomic(mode = TxMode.WRITE)
 	private String writeAnnotation(String username, String annotation, String docId) {
 		Document d = FenixFramework.getDomainObject(docId);
@@ -114,6 +117,19 @@ public class AnnotationController {
 		ann.setTag(jsonObject.getTag());
 		d.addAnnotation(ann);
 		u.addAnnotation(ann);
+		Class<?> fragClass = utils.getFragClass(ann.getTag());
+		if(fragClass != null) {
+			try {
+				ElementFragment o = (ElementFragment) fragClass.newInstance();
+				o.setName(ann.getTag());
+				o.setLinked(false);
+				d.addFragment(o);
+				o.setAnnotation(ann);
+			} catch (InstantiationException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return annId;
 	}
 	

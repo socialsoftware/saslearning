@@ -1,4 +1,4 @@
-Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
+Annotator.Plugin.SAConcepts = function (element, options) {
   var plugin = {};
   var concepts = [];
   plugin.pluginInit = function () {
@@ -12,7 +12,7 @@ Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
         }
 
     };
-    var req = $.ajax(tagsLocation, opts);
+    var req = $.ajax(options.tagsLocation, opts);
 
   	this.annotator.editor.addField({
       load: function (field, annotation) {
@@ -67,6 +67,19 @@ Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
             //}
             $(field).append(x);
           }
+        }).addField({
+          load: function(field, annotation){
+            console.log("loading field: ");
+            console.log(field);
+            if(annotation.tag != undefined){
+              var a = $("<a>");
+              a.attr("href", "/fragmentManager/" + options.docId + "/" + annotation.id);
+              a.attr("target", "_parent");
+              a.append("fragment manager");
+              $(field).append(a);
+            }
+
+          }
         });
 
         this.annotator.subscribe("annotationEditorShown", function(editor, annotation){
@@ -98,6 +111,14 @@ Annotator.Plugin.SAConcepts = function (element, tagsLocation) {
           var tag = $("div#tagContainer > div.chosen-container > ul.chosen-choices > li.search-choice > span").html();
           annotation.tag = tag;
           //console.log(annotation);
+        }).subscribe("annotationsLoaded", function(annotations){
+          console.log("annotations loaded");
+          console.log(annotations);
+          var x = annotations[0];
+          console.log(x);
+          var i = x.highlights.length;
+          var n = x.highlights[i-1];
+          console.log(n); 
         });
       				
   }

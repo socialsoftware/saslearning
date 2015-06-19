@@ -35,6 +35,11 @@ public class ScenarioComponentsController {
 		return "scenarioElementFragment";
 	}
 	
+	
+	
+	
+	
+	//_-----------------------------------------------------------
 	@RequestMapping(value = "/add/Source Of Stimulus/{docId}/{scenarioId}")
 	public RedirectView addSourceOfStimulus(@PathVariable String scenarioId,
 			@PathVariable String docId) {

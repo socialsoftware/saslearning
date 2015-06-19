@@ -249,3 +249,42 @@ relation responseMeasureHasAnnotations {
 		multiplicity 0..*;
 	}
 }
+
+class ElementFragment {
+	String name;
+	boolean linked;
+}
+
+
+
+relation documentHasSrcFragments {
+	Document playsRole document {
+		multiplicity 0..1;
+	}
+	
+	ElementFragment playsRole fragment {
+		multiplicity 0..*;
+	}
+}
+
+relation fragmentHasChild {
+	ElementFragment playsRole parent {
+		multiplicity 0..1;
+	}
+	
+	ElementFragment playsRole child {
+		multiplicity 0..1;
+	}
+}
+
+relation fragmentHasAnnotation {
+	ElementFragment playsRole fragment {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..1;
+	}	
+}
+
+class SrcOfStimulusFragment extends ElementFragment{}

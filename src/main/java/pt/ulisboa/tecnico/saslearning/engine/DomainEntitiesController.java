@@ -22,6 +22,11 @@ import com.google.gson.Gson;
 
 @Controller
 public class DomainEntitiesController {
+
+	
+	
+	
+	
 	
 	@RequestMapping(value="/addSyntax/{docId}")
 	public String syntaxManager(Model m, @PathVariable String docId){
@@ -55,8 +60,6 @@ public class DomainEntitiesController {
 		RedirectView rv = new RedirectView("/linkAnnotation/" + docId + "/Scenario/"+ scenId);
 		return rv;
 	}
-	
-
 	
 	@RequestMapping(value="/unlinkFromScenario/{docId}/{scenarioId}/{annotationId}")
 	public RedirectView unlinkAnnotationFromScenario(@PathVariable String docId, @PathVariable String scenarioId, @PathVariable String annotationId) {
