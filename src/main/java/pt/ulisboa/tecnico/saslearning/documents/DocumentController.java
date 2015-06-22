@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.saslearning.engine;
+package pt.ulisboa.tecnico.saslearning.documents;
 
 import java.io.IOException;
 import java.util.ArrayList;

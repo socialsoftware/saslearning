@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.saslearning.engine;
+package pt.ulisboa.tecnico.saslearning.scenarios;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

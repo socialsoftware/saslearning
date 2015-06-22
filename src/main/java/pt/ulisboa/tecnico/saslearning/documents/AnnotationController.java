@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.saslearning.engine;
+package pt.ulisboa.tecnico.saslearning.documents;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -71,6 +71,11 @@ public class AnnotationController {
 	public ResponseEntity<String> deleteAnnotation(@PathVariable String annId) {
 		deleteDocumentAnnotation(annId);
 		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+	}
+	
+	@RequestMapping(value = "/annotator/getTags")
+	public String getTags(){
+		return Utils.getJsonTags();
 	}
 	
 	@Atomic

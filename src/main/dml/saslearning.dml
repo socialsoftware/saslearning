@@ -31,20 +31,6 @@ relation DocumentHasAnnotations {
 	}
 }
 
-class Tag {
-	String tag;
-}
-
-relation DomainRootHasTagApplication {
-	.pt.ist.fenixframework.DomainRoot playsRole root {
-		multiplicity 0..1;
-	}
-	
-	Tag playsRole tag {
-		multiplicity 0..*;
-	}
-}
-
 class User {
 	String username;
 	String password;
@@ -287,4 +273,10 @@ relation fragmentHasAnnotation {
 	}	
 }
 
+class ScenarioFragment extends ElementFragment{}
 class SrcOfStimulusFragment extends ElementFragment{}
+class StimulusFragment extends ElementFragment{}
+class ArtifactFragment extends ElementFragment{}
+class EnvironmentFragment extends ElementFragment{}
+class ResponseFragment extends ElementFragment{}
+class ResponseMeasureFragment extends ElementFragment{}

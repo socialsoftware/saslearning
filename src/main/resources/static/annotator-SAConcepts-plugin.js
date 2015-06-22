@@ -1,19 +1,36 @@
 Annotator.Plugin.SAConcepts = function (element, options) {
   var plugin = {};
-  var concepts = [];
+  var concepts;
   plugin.pluginInit = function () {
     var annotator = this.annotator;
     console.log("SAConcepts plugin init");
     var opts = {
         type: "GET",
         dataType: "json",
-        success: function(data){
-          concepts = data.tags;
+        success: function(data, textStatus, jqXHR){
+          console.log("----- request succeded ------");
+          console.log(data);
+          console.log(textStatus);
+          console.log(jqXHR);
+        },
+        complete: function(jqXHR, textStatus){
+          console.log("------ request completed ------");
+          console.log(jqXHR);
+          console.log(textStatus);
+        },
+        error: function(jqXHR, textStatus, error){
+          console.log("------ request error ------");
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(error);
         }
-
     };
-    var req = $.ajax(options.tagsLocation, opts);
-
+    $.ajax(options.tagsLocation, opts).done(function(data){
+      console.log("------ done ------");
+      concepts = data;
+    });
+    console.log("------ concepts: ------");
+    console.log(concepts);
   	this.annotator.editor.addField({
       load: function (field, annotation) {
         field.innerHTML="";
@@ -29,28 +46,23 @@ Annotator.Plugin.SAConcepts = function (element, options) {
         select.attr("multiple", "");
         select.attr('tabindex','7');
         select.attr("style","width: 350px;");
-        for (var i = 0; i < concepts.length; i++) {
-          var opt  = $("<option>");
-          opt.append(concepts[i]);
-          /*if(annotation.tags != undefined){
-            var index = annotation.tags.indexOf(concepts[i]);
-            if(index != -1){
-              opt.attr("selected", "");
+        for(var i in concepts){
+          var group = $("<optgroup>");
+          group.attr("label", i);
+          for (var j = 0; j < concepts[i].length; j++) {
+            var opt  = $("<option>");
+            opt.append(concepts[i][j]);
+            if(annotation.tag != undefined){
+              var tag = annotation.tag;
+              if(tag == concepts[i][j]){
+                opt.attr("selected", "");
+              }
             }
-          }*/
-          console.log(annotation.tag);
-          if(annotation.tag != undefined){
-
-            var tag = annotation.tag;
-            if(tag == concepts[i]){
-              opt.attr("selected", "");
-            }
+            group.append(opt);
           }
-
-          select.append(opt);
-          container.append(select);
-        }         
-        //$("#tagSelector").chosen({allow_single_deselect: true});
+          select.append(group);
+        }
+        container.append(select);
         $("#tagSelector").chosen({max_selected_options: 1});
       }});
 
@@ -59,18 +71,15 @@ Annotator.Plugin.SAConcepts = function (element, options) {
             field.innerHTML = "";
             var x = $("<div>");
             x.attr("class", "annotator-tags");
-            //for(i in annotation.tags){
               var t = $("<span>");
               t.attr("class", "annotator-tag");
               t.append(annotation.tag);
               x.append(t);
-            //}
             $(field).append(x);
           }
         }).addField({
           load: function(field, annotation){
-            console.log("loading field: ");
-            console.log(field);
+            
             if(annotation.tag != undefined){
               var a = $("<a>");
               a.attr("href", "/fragmentManager/" + options.docId + "/" + annotation.id);
@@ -94,31 +103,11 @@ Annotator.Plugin.SAConcepts = function (element, options) {
             extra2[0].remove();
             extra2 = $(".chosen-container > .annotator-controls");
           }
-
-
-
         }).subscribe("annotationEditorSubmit", function(editor, annotation){
-          /*console.log("annotationEditorSubmit event.")
-          var tags = $("div#tagContainer > div.chosen-container > ul.chosen-choices > li.search-choice > span");
-          var tagArray = [];
-          for (var i = 0; i < tags.length; i++) {
-            var tag = $(tags[i]).html();
-            tagArray[i] = tag;
-          }
-          annotation.tags = tagArray; */
-          //var tag = $("a.chosen-single > span")[0].innerHTML;
-          //console.log(tag);
           var tag = $("div#tagContainer > div.chosen-container > ul.chosen-choices > li.search-choice > span").html();
           annotation.tag = tag;
-          //console.log(annotation);
         }).subscribe("annotationsLoaded", function(annotations){
           console.log("annotations loaded");
-          console.log(annotations);
-          var x = annotations[0];
-          console.log(x);
-          var i = x.highlights.length;
-          var n = x.highlights[i-1];
-          console.log(n); 
         });
       				
   }
