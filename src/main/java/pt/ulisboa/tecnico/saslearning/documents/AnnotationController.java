@@ -78,6 +78,11 @@ public class AnnotationController {
 		return Utils.getJsonTags();
 	}
 	
+	@RequestMapping(value = "getTactics/{type}")
+	public String getTactics(@PathVariable String type) {
+		return Utils.getTactics(type);
+	}
+	
 	@Atomic
 	private String getDocAnnotations(String docId) {
 		Document d = FenixFramework.getDomainObject(docId);

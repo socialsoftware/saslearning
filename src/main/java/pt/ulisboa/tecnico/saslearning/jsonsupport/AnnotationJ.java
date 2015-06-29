@@ -13,6 +13,7 @@ public class AnnotationJ {
 	private String user;
 	private String[] tags;
 	private String tag;
+	private String tactic;
 	
 	public String getId() {
 		return id;
@@ -93,6 +94,12 @@ public class AnnotationJ {
 			return intro;
 		}
 		return quote;
+	}
+	public String getTactic() {
+		return tactic;
+	}
+	public void setTactic(String tactic) {
+		this.tactic = tactic;
 	}
 	
 	

@@ -20,7 +20,9 @@ public class Annotation extends Annotation_Base {
 	public void delete() {
 		setDocument(null);
 		setOwner(null);
-		getFragment().delete();
+		if(getFragment() != null) {
+			getFragment().delete();
+		}
 		deleteDomainObject();
 		
 	}

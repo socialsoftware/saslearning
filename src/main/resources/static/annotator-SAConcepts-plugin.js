@@ -31,6 +31,9 @@ Annotator.Plugin.SAConcepts = function (element, options) {
     });
     console.log("------ concepts: ------");
     console.log(concepts);
+    var ann = this.annotator;
+    console.log("---- annotator ---------");
+    console.log(ann);
   	this.annotator.editor.addField({
       load: function (field, annotation) {
         field.innerHTML="";
@@ -40,7 +43,6 @@ Annotator.Plugin.SAConcepts = function (element, options) {
         container.attr("style", "width:350px");
         jqfield.append(container);
         var select = $("<select>");
-        //select.attr('class', 'chosen-select-deselect');
         select.attr("id", "tagSelector");
         select.attr("data-placeholder","Select a tag...");
         select.attr("multiple", "");
@@ -48,10 +50,10 @@ Annotator.Plugin.SAConcepts = function (element, options) {
         select.attr("style","width: 350px;");
         for(var i in concepts){
           var group = $("<optgroup>");
-          group.attr("label", i);
-          for (var j = 0; j < concepts[i].length; j++) {
+          group.attr("label", concepts[i].name);
+          for (var j = 0; j < concepts[i].tags.length; j++) {
             var opt  = $("<option>");
-            opt.append(concepts[i][j]);
+            opt.append(concepts[i].tags[j]);
             if(annotation.tag != undefined){
               var tag = annotation.tag;
               if(tag == concepts[i][j]){
@@ -64,7 +66,49 @@ Annotator.Plugin.SAConcepts = function (element, options) {
         }
         container.append(select);
         $("#tagSelector").chosen({max_selected_options: 1});
-      }});
+        $("#tagSelector").chosen().change(function(eve, choice){
+          if(choice.selected != undefined && choice.selected.indexOf("Tactic") != -1){
+              var tacts;
+              ann.editor.addField({
+                load: function(field, annotation){
+                },
+                type: 'select',
+                id: 'tactics'
+              });
+            var opts = {
+              type: "GET",
+              dataType: "json"
+            };
+
+            $.ajax("/getTactics/" + choice.selected, opts).done(function(data){
+              tacts = data;
+                            var tactics = $("#tactics");
+              $("#tactics").attr("class", "chosen-select");
+              $("#tactics").attr("data-placeholder","Select a tag...");
+              $("#tactics").attr("tabindex","7");
+              $("#tactics").attr("style","width: 350px;");
+              for(var i in tacts.tacticGroups){
+                var grp = tacts.tacticGroups[i];
+                var group = $("<optgroup>");
+                group.attr("label", grp.name);
+                tactics.append(group);
+                for(var j=0; j < grp.tags.length; j++){
+                var opt = $("<option>");
+                opt.append(grp.tags[j]);
+                group.append(opt);
+              }
+              }
+              tactics.chosen();
+            });
+
+            }
+
+            if(choice.deselected != undefined && choice.deselected.indexOf("Tactic") != -1){
+              $("#tactics").parent().remove();
+            }
+        });
+      }
+    });
 
         this.annotator.viewer.addField({
           load: function(field, annotation){            
@@ -106,6 +150,7 @@ Annotator.Plugin.SAConcepts = function (element, options) {
         }).subscribe("annotationEditorSubmit", function(editor, annotation){
           var tag = $("div#tagContainer > div.chosen-container > ul.chosen-choices > li.search-choice > span").html();
           annotation.tag = tag;
+          console.log(editor);
         }).subscribe("annotationsLoaded", function(annotations){
           console.log("annotations loaded");
         });
