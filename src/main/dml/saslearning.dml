@@ -59,191 +59,13 @@ relation UserHasAnnotations {
 	}
 }
 
-class Scenario {
-	String name;
-}
-
-relation documentHasScenarios {
-	Scenario playsRole scenario {
-		multiplicity 0..*;
-	}
-	
-	Document playsRole document {
-		multiplicity 1..1;
-	}
-}
-
-class ScenarioElement {
-	String name;
-}
-
-relation scenarioElementHasAnnotations {
-	ScenarioElement playsRole scenarioElement {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
-class SrcOfStimulus extends ScenarioElement {
-}
-
-
-relation scenarioHasSrcOfStimulus {
-	SrcOfStimulus playsRole srcOfStimulus {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 1..1;
-	}
-}
-
-class Stimulus extends ScenarioElement {
-}
-
-relation scenarioaHasStimulus {
-	Stimulus playsRole Stimulus {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario { 
-		multiplicity 1..1;
-	}
-}
-
-class Artifact extends ScenarioElement {
-}
-
-relation scenarioHasArtifact {
-	Artifact playsRole artifact {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 1..1;
-	}
-}
-
-class ResponseMeasure extends ScenarioElement {
-}
-
-relation scenarioHasResponseMeasure {
-	ResponseMeasure playsRole responseMeasure {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 1..1;
-	}
-}
-
-class Response extends ScenarioElement {
-}
-
-relation scenarioHasResponse {
-	Response playsRole response {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 1..1;
-	}
-}
-
-class Environment extends ScenarioElement {
-}
-
-relation scenarioHasEnvironment {
-	Environment playsRole environment {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 1..1;
-	}
-}
-
-relation scenarioHasAnnotations {
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 0..1;
-	}
-}
-
-relation srcOfStimulusHasAnnotations {
-	SrcOfStimulus playsRole srcOfStimulus {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
-relation stimulusHasAnnotations {
-	Stimulus playsRole stimulus {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
-relation artifactHasAnnotations {
-	Artifact playsRole artifact {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
-relation environmentHasAnnotations {
-	Environment playsRole environment {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
-relation responseHasAnnotations {
-	Response playsRole response {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
-relation responseMeasureHasAnnotations {
-	ResponseMeasure playsRole responseMeasure {
-		multiplicity 0..1;
-	}
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
 class ElementFragment {
 	String name;
 	boolean linked;
 }
 
 
-
-relation documentHasSrcFragments {
+relation documentHasFragments {
 	Document playsRole document {
 		multiplicity 0..1;
 	}
@@ -280,3 +102,17 @@ class ArtifactFragment extends ElementFragment{}
 class EnvironmentFragment extends ElementFragment{}
 class ResponseFragment extends ElementFragment{}
 class ResponseMeasureFragment extends ElementFragment{}
+class AvailabilityFragment extends ElementFragment{}
+class InteroperabilityFragment extends ElementFragment{}
+class ModifiabilityFragment extends ElementFragment{}
+class PerformanceFragment extends ElementFragment{}
+class SecurityFragment extends ElementFragment{}
+class TestabilityFragment extends ElementFragment{}
+class UsabilityFragment extends ElementFragment{}
+class TacticAvailabilityFragment extends ElementFragment{}
+class TacticInteroperabilityFragment extends ElementFragment{}
+class TacticModifiabilityFragment extends ElementFragment{}
+class TacticPerformanceFragment extends ElementFragment{}
+class TacticSecurityFragment extends ElementFragment{}
+class TacticTestabilityFragment extends ElementFragment{}
+class TacticUsabilityFragment extends ElementFragment{}

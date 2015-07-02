@@ -11,6 +11,16 @@
 	    <link rel="stylesheet" href="/chosen/docsupport/style.css"></link>
 	    <link rel="stylesheet" href="/chosen/docsupport/prism.css"></link>
 	    <link rel="stylesheet" href="/chosen/chosen.css"></link>
+
+       <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"></link>
+
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 	</head>
 	<body>
 		<div style="text-align: center; background-color: yellow;">
@@ -18,7 +28,26 @@
 		<a th:href="${doc.url}" th:text="${doc.url}"></a>
 	</div>
     <div> <span id="article" th:utext="${doc.content}" ></span> </div>
-
+    <!-- modal -->
+    <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="padding-right:15px;">
+      <div class="modal-dialog modal-lg" role="document" style="width: inherit; margin: 0px;">
+        <div class="modal-content">
+          <div class="modal-header" style="margin-right:15px;">
+            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button> -->
+            <h4 class="modal-title" id="tacticsTitle"></h4>
+          </div>
+          <div class="modal-body" id="tacticsBody">
+          </div>
+          <div class="modal-footer" style="margin-right: 15px;">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveTactic">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end of modal -->
     <script type="text/javascript" th:inline="javascript">
    	  var content = $('#article').annotator();
       content.annotator('addPlugin', 'Store', {

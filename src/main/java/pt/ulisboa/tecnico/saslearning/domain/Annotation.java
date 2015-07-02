@@ -6,12 +6,6 @@ public class Annotation extends Annotation_Base {
 		super();
 	}
 
-	public boolean hasScenarioElement() {
-		return getSrcOfStimulus() != null || getStimulus() != null
-				|| getArtifact() != null || getEnvironment() != null
-				|| getResponse() != null || getResponseMeasure() != null;
-	}
-
 	@Override
 	public String toString() {
 		return getAnnotation();

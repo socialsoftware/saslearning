@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Manage Scenarios</title>
+    <title>Manage Fragments</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- jQuery -->
@@ -55,25 +55,50 @@
             <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
             <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
             <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+            <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
           </li>
         </ul>
 
-        <ul class="list-group" th:each="frag : ${frags}" th:if="${!frag.getExternalId().equals(current.getExternalId())} and ${frag.getName().equals(current.getName())}">
-          <li class="list-group-item list-group-item-info">
-            Fragment Chain:
-            <a href="#" th:href="@{/linkFragment/}+ ${docId} +'/' + ${current.getExternalId()} + '/' + ${frag.getExternalId()}" style="float: right;">Link Annotation to this chain</a>
-          </li>
-          <li class="list-group-item" th:with="ann=${frag.getAnnotationJson()}">
-            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-            <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-            <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-          </li>
-          <li class="list-group-item" th:each="child : ${frag.getChildren()}" th:with="ann=${child.getAnnotationJson()}">
-            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-            <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-            <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-          </li>
-        </ul>
+        <!-- handling tactics -->
+        <div th:if="${current.getName().contains('Tactic')}">
+          <ul class="list-group" th:each="frag : ${frags}" th:if="${!frag.getExternalId().equals(current.getExternalId())} and ${frag.getName().equals(current.getName())} and ${frag.getAnnotationJson().getTactic() != null} and ${frag.getAnnotationJson().getTactic().equals(current.getAnnotationJson().getTactic())}">
+            <li class="list-group-item list-group-item-info">
+              Fragment Chain:
+              <a href="#" th:href="@{/linkFragment/}+ ${docId} +'/' + ${current.getExternalId()} + '/' + ${frag.getExternalId()}" style="float: right;">Link Annotation to this chain</a>
+            </li>
+            <li class="list-group-item" th:with="ann=${frag.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+            </li>
+            <li class="list-group-item" th:each="child : ${frag.getChildren()}" th:with="ann=${child.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              <p><b>Tactic: </b><span th:text="${ann.tactic}"></span></p>
+            </li>
+          </ul>
+        </div>
+        <!-- -->
+
+        <div th:if="${!current.getName().contains('Tactic')}">
+          <ul class="list-group" th:each="frag : ${frags}" th:if="${!frag.getExternalId().equals(current.getExternalId())} and ${frag.getName().equals(current.getName())}">
+            <li class="list-group-item list-group-item-info">
+              Fragment Chain:
+              <a href="#" th:href="@{/linkFragment/}+ ${docId} +'/' + ${current.getExternalId()} + '/' + ${frag.getExternalId()}" style="float: right;">Link Annotation to this chain</a>
+            </li>
+            <li class="list-group-item" th:with="ann=${frag.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+            </li>
+            <li class="list-group-item" th:each="child : ${frag.getChildren()}" th:with="ann=${child.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+            </li>
+          </ul>
+        </div>
     </div>
 
   </div>
