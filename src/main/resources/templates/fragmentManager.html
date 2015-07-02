@@ -70,6 +70,7 @@
               <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
               <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
               <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              <p><b>Tactic: </b><span th:text="${ann.tactic}"></span></p>
             </li>
             <li class="list-group-item" th:each="child : ${frag.getChildren()}" th:with="ann=${child.getAnnotationJson()}">
               <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
