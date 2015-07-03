@@ -116,3 +116,13 @@ class TacticPerformanceFragment extends ElementFragment{}
 class TacticSecurityFragment extends ElementFragment{}
 class TacticTestabilityFragment extends ElementFragment{}
 class TacticUsabilityFragment extends ElementFragment{}
+
+relation stimulusFragmentHasScenarioFragment{
+	ScenarioFragment playsRole scenario{
+		multiplicity 0..1;
+	}
+	
+	StimulusFragment playsRole stimulus{
+		multiplicity 0..1;
+	}
+}

@@ -1,5 +1,11 @@
 package pt.ulisboa.tecnico.saslearning.scenarios;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +23,31 @@ import pt.ulisboa.tecnico.saslearning.utils.Utils;
 @Controller
 public class ElementFragmentsController {
 	Utils utils = new Utils();
-
+	
+	@RequestMapping(value="/linkManager/{docId}/{fragId}/")
+	public String linkManager(@PathVariable String docId, @PathVariable String fragId) {
+		ElementFragment e = FenixFramework.getDomainObject(fragId);
+		Document d = FenixFramework.getDomainObject(docId);
+		Set<ElementFragment> heads = d.getFragmentSet();
+		Map<String, List<ElementFragment>> possibleLinks = new HashMap<String, List<ElementFragment>>();
+		List<String> possibilities = e.possibleConnections();
+		for(String tag : possibilities) {
+			for(ElementFragment elem : heads) {
+				if(elem.getName().equals(tag) && !elem.hasConnections()) {
+					if(possibleLinks.get(tag) != null) {
+						possibleLinks.get(tag).add(elem);
+					}else {
+						List<ElementFragment> list = new ArrayList<ElementFragment>();
+						list.add(elem);
+						possibleLinks.put(tag, list);
+					}
+				}
+			}
+		}
+		//INCOMPLETO!		
+		return "linksManager";
+	}
+	
 	@RequestMapping(value = "/fragmentManager/{docId}/{annotationId}")
 	public String srcStimulusFragmentManager(Model m,
 			@PathVariable String docId, @PathVariable String annotationId) {
