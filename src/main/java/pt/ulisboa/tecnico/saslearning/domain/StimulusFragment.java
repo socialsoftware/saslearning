@@ -50,4 +50,36 @@ public class StimulusFragment extends StimulusFragment_Base {
     public void removeConnections() {
     	setScenario(null);
     }
+    
+    @Override
+    public void connect(ElementFragment e) {
+    	if(e instanceof ScenarioFragment) {
+    		addScenario((ScenarioFragment) e);
+    	}
+    }
+
+	private void addScenario(ScenarioFragment e) {
+		setScenario(e);
+		e.setStimulus(this);
+		setLinked(true);
+		e.setLinked(true);
+	}
+	
+	@Override
+	public void unlink(ElementFragment e) {
+		if(e instanceof ScenarioFragment) {
+			ScenarioFragment s = (ScenarioFragment) e;
+			setScenario(null);
+			s.setStimulus(null);
+			if(getChild() == null && getParent() == null) {
+				setLinked(false);
+			}
+			if(s.getChild() == null && s.getParent() == null) {
+				s.setLinked(false);
+			}
+			
+		}
+	}
+	
+	
 }

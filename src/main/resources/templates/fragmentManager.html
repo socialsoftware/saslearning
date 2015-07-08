@@ -31,7 +31,7 @@
        <ul class="list-group">
           <li class="list-group-item list-group-item-info">
             Fragment Chain including this Annotation:
-            <a href="#" style="float: right;">Link this chain to other element types</a>
+            <a href="#" style="float: right;" th:href="@{/linkManager/} + ${docId} + '/' + ${current.getExternalId()}">Link this chain to other element types</a>
           </li>
           <li class="list-group-item" th:with="ann=${head.getAnnotationJson()}">
             <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>

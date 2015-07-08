@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
@@ -24,14 +25,33 @@ import pt.ulisboa.tecnico.saslearning.utils.Utils;
 public class ElementFragmentsController {
 	Utils utils = new Utils();
 	
-	@RequestMapping(value="/linkManager/{docId}/{fragId}/")
-	public String linkManager(@PathVariable String docId, @PathVariable String fragId) {
+	@RequestMapping(value="/removeSyntax/{docId}/{frag}/{toUnlink}")
+	public RedirectView removeFragmentSyntax(@PathVariable String docId, @PathVariable String frag, @PathVariable String toUnlink) {
+		ElementFragment src = FenixFramework.getDomainObject(frag);
+		ElementFragment unlink = FenixFramework.getDomainObject(toUnlink);
+		unlinkDifferentFragments(src, unlink);
+		RedirectView rv = new RedirectView("/linkManager/" + docId + "/" + frag);
+		return rv;
+	}
+	
+	@RequestMapping(value="/addFragmentSyntax/{docId}/{toLink}/{linked}")
+	public RedirectView addFragmentSyntax(@PathVariable String docId, @PathVariable String toLink, @PathVariable String linked) {
+		ElementFragment fragToLink = FenixFramework.getDomainObject(toLink);
+		ElementFragment destFrag = FenixFramework.getDomainObject(linked);
+		linkDifferentFragments(fragToLink, destFrag);
+		RedirectView rv = new RedirectView("/linkManager/" + docId + "/" + toLink);
+		return rv;
+	}
+	
+	@RequestMapping(value="/linkManager/{docId}/{fragId}", method=RequestMethod.GET)
+	public String linkManager(@PathVariable String docId, @PathVariable String fragId, Model m) {
 		ElementFragment e = FenixFramework.getDomainObject(fragId);
 		Document d = FenixFramework.getDomainObject(docId);
 		Set<ElementFragment> heads = d.getFragmentSet();
 		Map<String, List<ElementFragment>> possibleLinks = new HashMap<String, List<ElementFragment>>();
 		List<String> possibilities = e.possibleConnections();
-		for(String tag : possibilities) {
+		m.addAttribute("chainToLink", e);
+		for(String tag : possibilities) { //preencher o mapa com as possiveis ligaçoes
 			for(ElementFragment elem : heads) {
 				if(elem.getName().equals(tag) && !elem.hasConnections()) {
 					if(possibleLinks.get(tag) != null) {
@@ -44,12 +64,14 @@ public class ElementFragmentsController {
 				}
 			}
 		}
-		//INCOMPLETO!		
+		m.addAttribute("possibleLinks", possibleLinks);
+		m.addAttribute("docId", docId);
+		m.addAttribute("annId", e.getAnnotation().getExternalId());
 		return "linksManager";
 	}
 	
 	@RequestMapping(value = "/fragmentManager/{docId}/{annotationId}")
-	public String srcStimulusFragmentManager(Model m,
+	public String fragmentManager(Model m,
 			@PathVariable String docId, @PathVariable String annotationId) {
 		Document d = FenixFramework.getDomainObject(docId);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
@@ -71,13 +93,24 @@ public class ElementFragmentsController {
 	}
 	
 	@RequestMapping(value = "unlinkFragment/{docId}/{fragToUnlink}/{chainHead}")
-	public RedirectView ulinkAnnotationFromChain(@PathVariable String docId,
+	public RedirectView unlinkAnnotationFromChain(@PathVariable String docId,
 			@PathVariable String fragToUnlink, @PathVariable String chainHead) {
 		ElementFragment toUnlink = FenixFramework.getDomainObject(fragToUnlink);
 		ElementFragment head = FenixFramework.getDomainObject(chainHead);
 		unlinkFragments(toUnlink, head);
 		RedirectView rv = new RedirectView("/fragmentManager/" + docId+"/" + toUnlink.getAnnotation().getExternalId());
 		return rv;
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void unlinkDifferentFragments(ElementFragment src,
+			ElementFragment unlink) {
+		src.unlink(unlink);
+	}
+
+	@Atomic(mode=TxMode.WRITE)
+	private void linkDifferentFragments(ElementFragment fragToLink, ElementFragment destFrag) {
+		fragToLink.connect(destFrag);
 	}
 
 	@Atomic(mode=TxMode.WRITE)

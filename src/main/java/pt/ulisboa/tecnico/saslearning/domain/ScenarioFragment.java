@@ -14,7 +14,7 @@ public class ScenarioFragment extends ScenarioFragment_Base {
     public List<String> possibleConnections() {
     	List<String> conns = new ArrayList<String>(1);
     	if(getStimulus() == null) {
-    		conns.add("Scenario");
+    		conns.add("Stimulus");
     	}
     	return conns;
     }
@@ -47,5 +47,24 @@ public class ScenarioFragment extends ScenarioFragment_Base {
     @Override
     public void removeConnections() {
     	setStimulus(null);
+    }
+    
+    @Override
+    public void connect(ElementFragment e) {
+    	if(e instanceof StimulusFragment) {
+    		StimulusFragment s = (StimulusFragment) e;
+    		setStimulus(s);
+    		s.setScenario(this);
+    		setLinked(true);
+    		s.setLinked(true);
+    	}
+    }
+    
+    @Override
+    public void unlink(ElementFragment e) {
+    	if(e instanceof StimulusFragment) {
+    		StimulusFragment s = (StimulusFragment) e;
+    		s.unlink(this);
+    	}
     }
 }

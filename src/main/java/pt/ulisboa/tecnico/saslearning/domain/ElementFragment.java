@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
+
+import com.google.gson.Gson;
 
 public class ElementFragment extends ElementFragment_Base {
 
@@ -45,7 +45,7 @@ public class ElementFragment extends ElementFragment_Base {
 		}
 		return null;
 	}
-
+	
 	public void delete() {
 		if (getParent() != null) { //tem um pai (nao é cabeça)
 			if (getChild() != null) { //tem filhos (esta no meio da chain)
@@ -73,7 +73,8 @@ public class ElementFragment extends ElementFragment_Base {
 		setAnnotation(null);
 		deleteDomainObject();
 	}
-
+	
+	// ---------------------- TO OVERRIDE -------------------------------
 	public void removeConnections() {
 	}
 
@@ -87,7 +88,23 @@ public class ElementFragment extends ElementFragment_Base {
 		return null;
 	}
 	
+	
 	public boolean hasConnections() {
 		return false;
 	}
+	
+	@SuppressWarnings("unused")
+	public void connect(ElementFragment e) {}
+	
+	@SuppressWarnings("unused")
+	public void unlink(ElementFragment unlink) {
+	}
+	
+	//-------------------------------------------------------
+	@Override
+	public String toString() {
+		return getName() + " " + getExternalId();
+	}
+
+
 }

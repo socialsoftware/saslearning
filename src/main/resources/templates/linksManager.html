@@ -20,7 +20,7 @@
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
   <div class="panel panel-default" style="margin-top: -20px; height: 30px;">
     <div class="panel-body" style="margin-top: -10px;">
-      <a href="#" th:href="@{/selectDoc/} + ${docId}">
+      <a href="#" th:href="@{/fragmentManager/} + ${docId} +'/'+ ${annId}">
         <span class="glyphicon glyphicon-arrow-left"></span> 
         Back
       </a>
@@ -46,29 +46,65 @@
           </li>
         </ul>
     </div> <!-- End of Chain to Link-->
-    <h5>Entities this chain is linked to: </h5>
-    <div th:each=" entry : ${chainToLink.connectedFragments()} == false">
-      <ul class="list-group">
-          <li class="list-group-item list-group-item-info">
-            <span th:text="${entry.getKey()}"></span>
-            <a href="#">Unlink\</a>
-          </li>
-          <li class="list-group-item" th:with="ann=${entry.getValue().getAnnotationJson()}">
-            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-            <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-            <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-            <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
-          </li>
-          <li class="list-group-item" th:each="frag : ${entry.getValue().getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
-            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-            <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-            <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-            <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
-          </li>
-        </ul>
-    </div>
 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <b>Entities this chain is linked to: </b>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <div th:each=" entry : ${chainToLink.connectedFragments()}">
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-info">
+              <b><span th:text="${entry.getKey()}"></span></b>
+              <a href="#" style="float: right;" th:href="@{/removeSyntax/} + ${docId} + '/' + ${chainToLink.getExternalId()} + '/' + ${entry.getValue().getExternalId()}">Unlink</a>
+            </li>
+            <li class="list-group-item" th:with="ann=${entry.getValue().getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
+            </li>
+            <li class="list-group-item" th:each="frag : ${entry.getValue().getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <b>Can link this chain to:</b>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <div th:each="entry : ${possibleLinks}">
+          <ul class="list-group" th:each="fragHead : ${entry.getValue()} ">
+            <li class="list-group-item list-group-item-info">
+              <b><span th:text="${entry.getKey()}"></span></b>
+              <a href="#" style="float: right;" th:href="@{/addFragmentSyntax/} +${docId}+'/'+ ${chainToLink.getExternalId()} + '/' + ${fragHead.getExternalId()}">Link to this fragment chain</a>
+            </li>
+            <li class="list-group-item" th:with="ann=${fragHead.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
+            </li>
+            <li class="list-group-item" th:each="frag : ${fragHead.getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
+              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              <p th:if="${ann.getTactic() != null}"><b>Tactic: </b><span th:text=" ${ann.getTactic()}"></span></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-  
 </body>
 </html>
