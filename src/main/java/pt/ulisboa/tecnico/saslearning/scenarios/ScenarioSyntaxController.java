@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.Atomic.TxMode;
+import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.ElementFragment;
+import pt.ulisboa.tecnico.saslearning.domain.StimulusFragment;
 
 @Controller
 public class ScenarioSyntaxController {
@@ -66,6 +67,21 @@ public class ScenarioSyntaxController {
 		m.addAttribute("annId", e.getAnnotation().getExternalId());
 		return "linksManager";
 	}
+	
+	@RequestMapping(value="/viewStructuredRepresentation/{docId}")
+	public String viewStructuredRepresentation(@PathVariable String docId, Model m) {
+		Document d = FenixFramework.getDomainObject(docId);
+		List<StimulusFragment> scens = new ArrayList<StimulusFragment>();
+		for(ElementFragment e : d.getFragmentSet()) {
+			if(e instanceof StimulusFragment) {
+				scens.add((StimulusFragment) e);
+			}
+		}
+		m.addAttribute("scens", scens);
+		m.addAttribute("docId", docId);
+		return "structuredRepresentation";
+	}
+	
 	@Atomic(mode=TxMode.WRITE)
 	private void unlinkDifferentFragments(ElementFragment src,
 			ElementFragment unlink) {

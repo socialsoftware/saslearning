@@ -15,7 +15,7 @@ import pt.ulisboa.tecnico.saslearning.domain.ElementFragment;
 import pt.ulisboa.tecnico.saslearning.utils.Utils;
 
 @Controller
-public class ElementFragmentsController {
+public class ScenarioFragmentsController {
 	Utils utils = new Utils();
 	
 	@RequestMapping(value = "/fragmentManager/{docId}/{annotationId}")

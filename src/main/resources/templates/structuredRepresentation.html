@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Manage Fragments</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<section layout:include="@{/headerFragment} :: headerFragment"></section>
+	<div class="panel panel-default" style="margin-top: -20px; height: 30px;">
+		<div class="panel-body" style="margin-top: -10px;">
+	  		<a href="#" th:href="@{/selectDoc/} + ${docId}">
+	  			<span class="glyphicon glyphicon-arrow-left"></span> Back
+	  		</a>
+	  	</div>
+	  </div>
+	  <div class="well" style="margin-top: -20px;">
+	  	<div class="panel panel-default" th:each="head, stat : ${scens}">
+	  		<div class="panel-heading">
+    <h3 class="panel-title"><b>Scenario #<span th:text="${stat.count}"></span></b></h3>
+  </div>
+  <div class="panel-body">
+  	<div th:with="scenario=${head.getScenario()}">
+  		Ipsis verbis el pluribus unum <a href="#">edit text</a>
+  		<ul class="list-group" style="margin-top:10px" th:if="${scenario != null}">
+  			<li class="list-group-item" th:with="ann=${scenario.getAnnotationJson()}">
+  				<p>
+  					<b>Document Quote: </b>
+  					<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+  				</p>
+            	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+            	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+          	</li>
+          <li class="list-group-item" th:each="frag : ${scenario.getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
+            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+            <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+            <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+          </li>
+  		</ul>
+  	</div>
+  	<div>
+  		<div>
+  			<div class="element-title">
+  				<h4><b>Quality Attribute</b></h4>
+  			</div>
+  			Ipsis verbis el pluribus unum
+  		</div>
+  		<div>
+  			<div class="element-title">
+  			<h4><b>Source of Stimulus</b></h4>
+  		</div>
+  		Ipsis verbis el pluribus unum
+  		<ul class="list-group" style="margin-top:10px">
+  			<li class="list-group-item">
+  				<p><b>Quote: </b>"Ipsis verbis el pluribus unum"</p>
+  				<p><b>Comment: 	</b>"Ipsis verbis el pluribus unum"</p>
+  				<p><b>Tag: </b>"Ipsis verbis el pluribus unum"</p>
+  			</li>
+  			<li class="list-group-item">
+  				<p><b>Quote: </b>"Ipsis verbis el pluribus unum"</p>
+  				<p><b>Comment: 	</b>"Ipsis verbis el pluribus unum"</p>
+  				<p><b>Tag: </b>"Ipsis verbis el pluribus unum"</p>
+  			</li>
+  			<li class="list-group-item">
+  				<p><b>Quote: </b>"Ipsis verbis el pluribus unum"</p>
+  				<p><b>Comment: 	</b>"Ipsis verbis el pluribus unum"</p>
+  				<p><b>Tag: </b>"Ipsis verbis el pluribus unum"</p>
+  			</li>
+  		</ul> 
+  		</div>
+  		<div>
+  			<div class="element-title"><h4><b>Stimulus</b></h4></div>
+  			Texto a ser editado futuramente 
+  			<ul class="list-group" style="margin-top:10px">
+  				<li class="list-group-item" th:with="ann=${head.getAnnotationJson()}">
+  					<p>
+  						<b>Document Quote: </b>
+  						<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+  					</p>
+  					<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+  					<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+  				</li>
+				<li class="list-group-item" th:each="frag : ${head.getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
+					<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+					<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+					<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+				</li>
+			</ul>
+  		</div>
+
+  		<div>
+  			<div class="element-title"><h4><b>Artifact</b></h4></div>
+  			Ipsis verbis el pluribus unum 
+  		</div>
+  		<div>
+  			<div class="element-title"><h4><b>Environment</b></h4></div>
+  			Ipsis verbis el pluribus unum 
+  		</div>
+  		<div>
+  			<div class="element-title"><h4><b>Response</b></h4></div>
+  			Ipsis verbis el pluribus unum 
+  		</div>
+  		<div>
+  			<div class="element-title"><h4><b>Response Measure</b></h4></div>
+  			Ipsis verbis el pluribus unum 
+  		</div>
+
+  		<div>
+  			<div class="element-title"><h4><b>Tactic</b></h4></div>
+  			Ipsis verbis el pluribus unum
+  		</div>
+  	</div>
+  </div>
+</div>
+	  </div>
+<style type="text/css">
+	.element-title{
+		margin-top: 20px;
+		margin-bottom: 10px;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #C8C8C8;
+
+	}
+</style>
+</body>
+</html>
