@@ -20,4 +20,8 @@ public class Annotation extends Annotation_Base {
 		deleteDomainObject();
 		
 	}
+	
+	public boolean isConnected() {
+		return getScenario() != null || getScenarioElement() != null;
+	}
 }

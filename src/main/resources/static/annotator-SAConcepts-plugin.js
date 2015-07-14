@@ -81,7 +81,7 @@ Annotator.Plugin.SAConcepts = function (element, options) {
           load: function(field, annotation){
             console.log("loading viewer fragment manager field");
             if(annotation.tag != undefined){
-              if(annotation.tag != undefined && annotation.tag.indexOf("Tactic") != -1 && annotation.tactic == undefined){
+              /*if(annotation.tag != undefined && annotation.tag.indexOf("Tactic") != -1 && annotation.tactic == undefined){
                 var tag = annotation.tag;
                 var a = $("<a>");
                 a.attr("href", "#");
@@ -152,13 +152,13 @@ Annotator.Plugin.SAConcepts = function (element, options) {
                   });
                 });
                 $(field).append(a);
-              }else{
+              }else{*/
                 var a = $("<a>");
-                a.attr("href", "/fragmentManager/" + options.docId + "/" + annotation.id);
+                a.attr("href", "/templateEditor/" + options.docId + "/" + annotation.id);
                 a.attr("target", "_parent");
                 a.append("fragment manager");
                 $(field).append(a);
-              }
+              //}
             }
           }
         });

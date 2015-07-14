@@ -25,100 +25,190 @@
 	  	</div>
 	  </div>
 	  <div class="well" style="margin-top: -20px;">
-	  	<div class="panel panel-default" th:each="head, stat : ${scens}">
+      <div class="annotation">
+        <div class="element-title">
+          <h3 th:if="${!annotData.isConnected()}"><b>Annotation to add:</b></h3>
+          <h3 th:if="${annotData.isConnected()}"><b>About this annotation:</b>
+            <small><a th:href="'#' + ${annotData.getExternalId()}">See Annotation in the template</a></small>
+          </h3>
+        </div>
+        <div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <p>
+                <b>Document Quote: </b>
+                <i><span th:text="'(...)' + ${annotation.quote} + '(...)'"></span></i>
+              </p>
+              <p><b>Comment: </b><span th:text="${annotation.text}"></span></p>
+              <p><b>Tag: </b><span th:text="${annotation.tag}"></span></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="clearfix element-title">
+        <h3>
+          <b>Scenarios</b>
+          <a class="pull-right" href="#" th:href="@{/addNewScenario/} + ${docId}+'/'+${annotation.id}" style="font-size: 50%; padding-top:15px;">(Add new Scenario)</a>
+        </h3>
+        
+      </div>
+	  	<div class="panel panel-default" th:each="scenario : ${scenarios}">
 	  		<div class="panel-heading">
-    <h3 class="panel-title"><b>Scenario #<span th:text="${stat.count}"></span></b></h3>
-  </div>
-  <div class="panel-body">
-  	<div th:with="scenario=${head.getScenario()}">
-  		Ipsis verbis el pluribus unum <a href="#">edit text</a>
-  		<ul class="list-group" style="margin-top:10px" th:if="${scenario != null}">
-  			<li class="list-group-item" th:with="ann=${scenario.getAnnotationJson()}">
-  				<p>
-  					<b>Document Quote: </b>
-  					<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-  				</p>
-            	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-            	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-          	</li>
-          <li class="list-group-item" th:each="frag : ${scenario.getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
-            <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-            <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-            <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-          </li>
-  		</ul>
-  	</div>
-  	<div>
-  		<div>
-  			<div class="element-title">
-  				<h4><b>Quality Attribute</b></h4>
-  			</div>
-  			Ipsis verbis el pluribus unum
-  		</div>
-  		<div>
-  			<div class="element-title">
-  			<h4><b>Source of Stimulus</b></h4>
-  		</div>
-  		Ipsis verbis el pluribus unum
-  		<ul class="list-group" style="margin-top:10px">
-  			<li class="list-group-item">
-  				<p><b>Quote: </b>"Ipsis verbis el pluribus unum"</p>
-  				<p><b>Comment: 	</b>"Ipsis verbis el pluribus unum"</p>
-  				<p><b>Tag: </b>"Ipsis verbis el pluribus unum"</p>
-  			</li>
-  			<li class="list-group-item">
-  				<p><b>Quote: </b>"Ipsis verbis el pluribus unum"</p>
-  				<p><b>Comment: 	</b>"Ipsis verbis el pluribus unum"</p>
-  				<p><b>Tag: </b>"Ipsis verbis el pluribus unum"</p>
-  			</li>
-  			<li class="list-group-item">
-  				<p><b>Quote: </b>"Ipsis verbis el pluribus unum"</p>
-  				<p><b>Comment: 	</b>"Ipsis verbis el pluribus unum"</p>
-  				<p><b>Tag: </b>"Ipsis verbis el pluribus unum"</p>
-  			</li>
-  		</ul> 
-  		</div>
-  		<div>
-  			<div class="element-title"><h4><b>Stimulus</b></h4></div>
-  			Texto a ser editado futuramente 
-  			<ul class="list-group" style="margin-top:10px">
-  				<li class="list-group-item" th:with="ann=${head.getAnnotationJson()}">
-  					<p>
-  						<b>Document Quote: </b>
-  						<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-  					</p>
-  					<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-  					<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-  				</li>
-				<li class="list-group-item" th:each="frag : ${head.getChildren()}" th:with="ann=${frag.getAnnotationJson()}">
-					<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-					<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-					<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-				</li>
-			</ul>
-  		</div>
-
-  		<div>
-  			<div class="element-title"><h4><b>Artifact</b></h4></div>
-  			Ipsis verbis el pluribus unum 
-  		</div>
-  		<div>
-  			<div class="element-title"><h4><b>Environment</b></h4></div>
-  			Ipsis verbis el pluribus unum 
-  		</div>
-  		<div>
-  			<div class="element-title"><h4><b>Response</b></h4></div>
-  			Ipsis verbis el pluribus unum 
-  		</div>
-  		<div>
-  			<div class="element-title"><h4><b>Response Measure</b></h4></div>
-  			Ipsis verbis el pluribus unum 
-  		</div>
-
-  		<div>
-  			<div class="element-title"><h4><b>Tactic</b></h4></div>
-  			Ipsis verbis el pluribus unum
-  		</div>
+          <h3 class="panel-title">
+            <b>Scenario for <!--<span th:text="${scenario.getQualityAttribute().getName()}"></span>--></b>
+            <a href="#" th:href="@{/removeScenario/} + ${docId}+'/'+${scenario.getExternalId()}+'/'+${annotation.id}">Remove</a>
+          </h3>
+          <a href="#" th:href="@{/linkAnnotationToScenario/}+${docId}+'/'+${annotation.id}+'/'+${scenario.getExternalId()}" th:if="${annotation.tag.equals('Scenario')} and ${!annotData.isConnected()}">Link Annotation</a>
+        </div>
+        <div class="panel-body">
+        	<div>
+        		<a href="#">edit text</a>
+        		<ul class="list-group" style="margin-top:10px">
+        			<li class="list-group-item" th:each=" ann : ${scenario.getJsonAnnotations()}">
+                <a href="" th:name="${ann.id}"></a>
+                <a href="#" th:href="@{/removeAnnotationFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}" style="float:right;" >(Remove)</a>
+        				<p>
+        					<b>Document Quote: </b>
+        					<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+        				</p>
+                  	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                  	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                	</li>
+        		</ul>
+        	</div>
+          <div class="scenarioElements">
+        		<div >
+        			<div class="element-title">
+        				<h4><b>Quality Attribute</b></h4>
+        			</div>
+        		</div>
+            <div th:each="entry : ${scenario.getElements()}">
+              <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
+                <div>
+                  <div class="element-title">
+                    <h4><b><span th:text="${name}"></span></b></h4>
+                    <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
+                  </div>
+                  Ipsis verbis el pluribus unum
+                  <div th:if="${elem != null}">
+                    <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                      <li class="list-group-item">
+                        <a href="" th:name="${ann.id}"></a>
+                        <a href="#" th:href="@{/removeAnnotationFromScenarioElement/}+${docId}+'/'+${ann.id}+'/'+${elem.getExternalId()}" style="float:right;">(Remove)</a>
+                        <p>
+                          <b>Document Quote: </b>
+                          <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                        </p>
+                        <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                        <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--<div th:with="name='Stimulus',elem=${scenario.getStimulus()},annotation=${annotation}">
+              <div class="element-title">
+                <h4><b><span th:text="${name}">Default</span></b></h4>
+                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
+              </div>
+              Ipsis verbis el pluribus unum
+              <div th:if="${elem != null}">
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                  <li class="list-group-item">
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div th:with="name='Artifact',elem=${scenario.getArtifact()},annotation=${annotation}">
+              <div class="element-title">
+                <h4><b><span th:text="${name}">Default</span></b></h4>
+                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
+              </div>
+              Ipsis verbis el pluribus unum
+              <div th:if="${elem != null}">
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                  <li class="list-group-item">
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div th:with="name='Environment',elem=${scenario.getEnvironment()},annotation=${annotation}">
+              <div class="element-title">
+                <h4><b><span th:text="${name}">Default</span></b></h4>
+                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
+              </div>
+              Ipsis verbis el pluribus unum
+              <div th:if="${elem != null}">
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                  <li class="list-group-item">
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div th:with="name='Response',elem=${scenario.getResponse()},annotation=${annotation}">
+              <div class="element-title">
+                <h4><b><span th:text="${name}">Default</span></b></h4>
+                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
+              </div>
+              Ipsis verbis el pluribus unum
+              <div th:if="${elem != null}">
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                  <li class="list-group-item">
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div th:with="name='Response Measure',elem=${scenario.getResponseMeasure()},annotation=${annotation}">
+              <div class="element-title">
+                <h4><b><span th:text="${name}">Default</span></b></h4>
+                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
+              </div>
+              Ipsis verbis el pluribus unum
+              <div th:if="${elem != null}">
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                  <li class="list-group-item">
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>                                                           
+            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Stimulus',elem=${scenario.getStimulus()},annotation=${annotation}"></section>
+            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Artifact',elem=${scenario.getArtifact()},annotation=${annotation}"></section>
+            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Environment',elem=${scenario.getEnvironment()},annotation=${annotation}"></section>
+            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Response',elem=${scenario.getResponse()},annotation=${annotation}"></section>
+            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Response Measure',elem=${scenario.getResponseMeasure()},annotation=${annotation}"></section>-->
+            
   	</div>
   </div>
 </div>

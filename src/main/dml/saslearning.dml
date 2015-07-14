@@ -126,3 +126,146 @@ relation stimulusFragmentHasScenarioFragment{
 		multiplicity 0..1;
 	}
 }
+
+class Scenario {
+	String name;
+}
+
+relation documentHasScenarios {
+	Document playsRole document {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 0..*;
+	}
+}
+
+class ScenarioElement {
+	String name;
+}
+
+relation scenarioElementHasAnnotations {
+	ScenarioElement playsRole scenarioElement {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+class SrcOfStimulus extends ScenarioElement {
+}
+
+
+relation scenarioHasSrcOfStimulus {
+	SrcOfStimulus playsRole srcOfStimulus {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Stimulus extends ScenarioElement {
+}
+
+relation scenarioaHasStimulus {
+	Stimulus playsRole Stimulus {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario { 
+		multiplicity 1..1;
+	}
+}
+
+class Artifact extends ScenarioElement {
+}
+
+relation scenarioHasArtifact {
+	Artifact playsRole artifact {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class ResponseMeasure extends ScenarioElement {
+}
+
+relation scenarioHasResponseMeasure {
+	ResponseMeasure playsRole responseMeasure {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Response extends ScenarioElement {
+}
+
+relation scenarioHasResponse {
+	Response playsRole response {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Environment extends ScenarioElement {
+}
+
+relation scenarioHasEnvironment {
+	Environment playsRole environment {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+relation scenarioHasAnnotations {
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 0..1;
+	}
+}
+
+class QualityAttribute extends ScenarioElement {
+}
+
+relation scenarioHasQualityAttribute {
+	QualityAttribute playsRole qualityAttribute {
+		multiplicity 0..1;
+	}
+	
+	Scenario playsRole scenario {
+		multiplicity 1..1;
+	}
+}
+
+class Tactic extends ScenarioElement{
+}
+
+relation qualityAttributeHasTactic {
+	QualityAttribute playsRole qualityAttribute {
+		multiplicity 0..1;
+	}
+	
+	Tactic playsRole tactic {
+		multiplicity 0..*;
+	}
+}
