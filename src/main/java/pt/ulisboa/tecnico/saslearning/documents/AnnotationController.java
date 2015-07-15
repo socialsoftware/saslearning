@@ -18,7 +18,6 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
-import pt.ulisboa.tecnico.saslearning.domain.ElementFragment;
 import pt.ulisboa.tecnico.saslearning.domain.User;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.Tactic;
@@ -154,18 +153,6 @@ public class AnnotationController {
 		ann.setTag(jsonObject.getTag());
 		d.addAnnotation(ann);
 		u.addAnnotation(ann);
-		Class<?> fragClass = utils.getFragClass(ann.getTag());
-		if(fragClass != null) {
-			try {
-				ElementFragment o = (ElementFragment) fragClass.newInstance();
-				o.setName(ann.getTag());
-				o.setLinked(false);
-				d.addFragment(o);
-				o.setAnnotation(ann);
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
 		return annId;
 	}
 	

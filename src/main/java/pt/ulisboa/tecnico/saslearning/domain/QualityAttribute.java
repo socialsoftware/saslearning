@@ -6,4 +6,8 @@ public class QualityAttribute extends QualityAttribute_Base {
         super();
     }
     
+    @Override
+    public void removeScenario() {
+    	setScenario(null);
+    }
 }

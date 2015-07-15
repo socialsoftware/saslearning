@@ -3,6 +3,7 @@
 <head>
 	<title>Manage Fragments</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
 
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -29,7 +30,7 @@
         <div class="element-title">
           <h3 th:if="${!annotData.isConnected()}"><b>Annotation to add:</b></h3>
           <h3 th:if="${annotData.isConnected()}"><b>About this annotation:</b>
-            <small><a th:href="'#' + ${annotData.getExternalId()}">See Annotation in the template</a></small>
+            <small><a th:href="'#' + ${annotData.getExternalId()}" style="float: right; padding-top: 15px; font-size: 90%;">See Annotation in the template</a></small>
           </h3>
         </div>
         <div>
@@ -45,25 +46,25 @@
           </ul>
         </div>
       </div>
-      
       <div class="clearfix element-title">
         <h3>
           <b>Scenarios</b>
-          <a class="pull-right" href="#" th:href="@{/addNewScenario/} + ${docId}+'/'+${annotation.id}" style="font-size: 50%; padding-top:15px;">(Add new Scenario)</a>
+          <!--<a class="pull-right" href="#" th:href="@{/addNewScenario/} + ${docId}+'/'+${annotation.id}" style="font-size: 50%; padding-top:15px;">(Add new Scenario)</a>-->
+          <a class="pull-right" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" style="font-size: 50%; padding-top:15px;">(Add new Scenario)</a>
         </h3>
-        
       </div>
 	  	<div class="panel panel-default" th:each="scenario : ${scenarios}">
 	  		<div class="panel-heading">
           <h3 class="panel-title">
-            <b>Scenario for <!--<span th:text="${scenario.getQualityAttribute().getName()}"></span>--></b>
-            <a href="#" th:href="@{/removeScenario/} + ${docId}+'/'+${scenario.getExternalId()}+'/'+${annotation.id}">Remove</a>
+            <b>Scenario for <span th:text="${scenario.getQualityAttribute().getName()}"></span></b>
+            <div style="float:right;">
+              <a href="#" th:href="@{/linkAnnotationToScenario/}+${docId}+'/'+${annotation.id}+'/'+${scenario.getExternalId()}" th:if="${annotation.tag.equals('Scenario')} and ${!annotData.isConnected()}" style="color: #337ab7; font-size: 80%;">(Link Annotation)</a>
+              <a href="#" th:href="@{/removeScenario/} + ${docId}+'/'+${scenario.getExternalId()}+'/'+${annotation.id}" style="color: #337ab7; font-size: 80%;">(Remove)</a>
+            </div>  
           </h3>
-          <a href="#" th:href="@{/linkAnnotationToScenario/}+${docId}+'/'+${annotation.id}+'/'+${scenario.getExternalId()}" th:if="${annotation.tag.equals('Scenario')} and ${!annotData.isConnected()}">Link Annotation</a>
         </div>
         <div class="panel-body">
         	<div>
-        		<a href="#">edit text</a>
         		<ul class="list-group" style="margin-top:10px">
         			<li class="list-group-item" th:each=" ann : ${scenario.getJsonAnnotations()}">
                 <a href="" th:name="${ann.id}"></a>
@@ -72,156 +73,108 @@
         					<b>Document Quote: </b>
         					<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
         				</p>
-                  	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                  	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                	</li>
+                <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              </li>
         		</ul>
         	</div>
-          <div class="scenarioElements">
-        		<div >
-        			<div class="element-title">
-        				<h4><b>Quality Attribute</b></h4>
-        			</div>
-        		</div>
-            <div th:each="entry : ${scenario.getElements()}">
-              <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
-                <div>
-                  <div class="element-title">
-                    <h4><b><span th:text="${name}"></span></b></h4>
-                    <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
-                  </div>
-                  Ipsis verbis el pluribus unum
-                  <div th:if="${elem != null}">
-                    <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                      <li class="list-group-item">
-                        <a href="" th:name="${ann.id}"></a>
-                        <a href="#" th:href="@{/removeAnnotationFromScenarioElement/}+${docId}+'/'+${ann.id}+'/'+${elem.getExternalId()}" style="float:right;">(Remove)</a>
-                        <p>
-                          <b>Document Quote: </b>
-                          <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                        </p>
-                        <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                        <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                      </li>
-                    </ul>
-                  </div>
+          <div class="scenarioElements" th:with="qattr=${scenario.getQualityAttribute()}">
+            <div class="element-title">
+              <h4><b>Quality Attribute: <span th:text="${qattr.getName()}"></span></b>
+                <a href="#" th:if="${annotation.tag.equals(qattr.getName())} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+ ${qattr.getExternalId()}" style="float: right; font-size: 80%; padding-top: 10px;"> Link Annotation</a>
+              </h4>
+              <div th:if="${qattr != null}">
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${qattr.getJsonAnnotations()}">
+                  <li class="list-group-item">
+                    <a href="" th:name="${ann.id}"></a>
+                    <a href="#" th:href="@{/removeAnnotationFromScenarioElement/}+${docId}+'/'+${ann.id}+'/'+${qattr.getExternalId()}" style="float:right;">(Remove)</a>
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div th:each="entry : ${scenario.getElements()}">
+            <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
+              <div>
+                <div class="element-title">
+                  <h4><b><span th:text="${name}"></span></b>
+                    <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" style="float: right; font-size: 80%; padding-top: 10px;"> Link Annotation</a>
+                  </h4>
+                </div>
+                <div th:if="${elem != null}">
+                  <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                    <li class="list-group-item">
+                      <a href="" th:name="${ann.id}"></a>
+                      <a href="#" th:href="@{/removeAnnotationFromScenarioElement/}+${docId}+'/'+${ann.id}+'/'+${elem.getExternalId()}" style="float:right;">(Remove)</a>
+                      <p>
+                        <b>Document Quote: </b>
+                        <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                      </p>
+                      <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                      <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
-            <!--<div th:with="name='Stimulus',elem=${scenario.getStimulus()},annotation=${annotation}">
-              <div class="element-title">
-                <h4><b><span th:text="${name}">Default</span></b></h4>
-                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
-              </div>
-              Ipsis verbis el pluribus unum
-              <div th:if="${elem != null}">
-                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                  <li class="list-group-item">
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div th:with="name='Artifact',elem=${scenario.getArtifact()},annotation=${annotation}">
-              <div class="element-title">
-                <h4><b><span th:text="${name}">Default</span></b></h4>
-                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
-              </div>
-              Ipsis verbis el pluribus unum
-              <div th:if="${elem != null}">
-                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                  <li class="list-group-item">
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div th:with="name='Environment',elem=${scenario.getEnvironment()},annotation=${annotation}">
-              <div class="element-title">
-                <h4><b><span th:text="${name}">Default</span></b></h4>
-                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
-              </div>
-              Ipsis verbis el pluribus unum
-              <div th:if="${elem != null}">
-                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                  <li class="list-group-item">
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div th:with="name='Response',elem=${scenario.getResponse()},annotation=${annotation}">
-              <div class="element-title">
-                <h4><b><span th:text="${name}">Default</span></b></h4>
-                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
-              </div>
-              Ipsis verbis el pluribus unum
-              <div th:if="${elem != null}">
-                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                  <li class="list-group-item">
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div th:with="name='Response Measure',elem=${scenario.getResponseMeasure()},annotation=${annotation}">
-              <div class="element-title">
-                <h4><b><span th:text="${name}">Default</span></b></h4>
-                <a href="#" th:if="${annotation != null} and ${elem != null} and ${annotation.tag.equals(name)} and ${!annotation.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+${elem.getExternalId()}" > Link Annotation</a>
-              </div>
-              Ipsis verbis el pluribus unum
-              <div th:if="${elem != null}">
-                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                  <li class="list-group-item">
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-            </div>                                                           
-            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Stimulus',elem=${scenario.getStimulus()},annotation=${annotation}"></section>
-            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Artifact',elem=${scenario.getArtifact()},annotation=${annotation}"></section>
-            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Environment',elem=${scenario.getEnvironment()},annotation=${annotation}"></section>
-            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Response',elem=${scenario.getResponse()},annotation=${annotation}"></section>
-            <section layout:include="@{/getElementFragment} :: scenarioElement" th:with="name='Response Measure',elem=${scenario.getResponseMeasure()},annotation=${annotation}"></section>-->
-            
-  	</div>
-  </div>
-</div>
-	  </div>
-<style type="text/css">
-	.element-title{
-		margin-top: 20px;
-		margin-bottom: 10px;
-		border-bottom-width: 1px;
-		border-bottom-style: solid;
-		border-bottom-color: #C8C8C8;
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Choose Scenario's Quality Attribute</h4>
+          </div>
+          <div class="modal-body">
+                <select id="qualityAttributes" tabindex="7">
+                  <option th:each="attr : ${qualityAttributes}" th:text="${attr}"></option>
+                </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="submitAttr" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <style type="text/css">
+    	.element-title{
+    		margin-top: 20px;
+    		margin-bottom: 10px;
+    		border-bottom-width: 1px;
+    		border-bottom-style: solid;
+    		border-bottom-color: #C8C8C8;
+    	}
 
-	}
-</style>
+      .chosen-container{
+        width: 300px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+    <script type="text/javascript" th:inline="javascript">
+      $(document).ready(function(){
+        $("#submitAttr").click(function(){
+          var attr = document.getElementById("qualityAttributes").value;
+          var loc = /*[[@{/addNewScenario/} + ${docId}+'/'+${annotation.id}+'/']]*/
+          loc+=attr;
+          $.ajax(loc).done(function(data){
+            location.reload();
+          });
+          docu
+        });
+      });
+
+    </script>
 </body>
 </html>

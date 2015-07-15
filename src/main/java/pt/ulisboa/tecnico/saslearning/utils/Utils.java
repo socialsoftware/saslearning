@@ -1,29 +1,5 @@
 package pt.ulisboa.tecnico.saslearning.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import pt.ulisboa.tecnico.saslearning.domain.ArtifactFragment;
-import pt.ulisboa.tecnico.saslearning.domain.AvailabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.EnvironmentFragment;
-import pt.ulisboa.tecnico.saslearning.domain.InteroperabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.ModifiabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.PerformanceFragment;
-import pt.ulisboa.tecnico.saslearning.domain.ResponseFragment;
-import pt.ulisboa.tecnico.saslearning.domain.ResponseMeasureFragment;
-import pt.ulisboa.tecnico.saslearning.domain.ScenarioFragment;
-import pt.ulisboa.tecnico.saslearning.domain.SecurityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.SrcOfStimulusFragment;
-import pt.ulisboa.tecnico.saslearning.domain.StimulusFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticAvailabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticInteroperabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticModifiabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticPerformanceFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticSecurityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticTestabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TacticUsabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.TestabilityFragment;
-import pt.ulisboa.tecnico.saslearning.domain.UsabilityFragment;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TacticsTags;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagGroup;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.Tags;
@@ -32,7 +8,6 @@ import com.google.gson.Gson;
 
 public class Utils {
 	private static Gson g = new Gson();
-	private Map<String, Class<?>> map = new HashMap<String, Class<?>>();
 	private static String[] scenarios = {"Scenario", "Source Of Stimulus", "Stimulus", "Artifact",
 			"Environment", "Response", "Response Measure"};
 	private static String[] qualityAttrs = {"Availability", "Interoperability", "Modifiability",
@@ -40,33 +15,8 @@ public class Utils {
 	private static String[] tactics  = {"Tactic for Availability","Tactic for Interoperability",
 			"Tactic for Modifiability", "Tactic for Performance", "Tactic for Security",
 			  "Tactic for Testability", "Tactic for Usability"};
-	public Utils() {
-		map.put("Scenario", ScenarioFragment.class);
-		map.put("Source Of Stimulus", SrcOfStimulusFragment.class);
-		map.put("Stimulus", StimulusFragment.class);
-		map.put("Artifact", ArtifactFragment.class);
-		map.put("Environment", EnvironmentFragment.class);
-		map.put("Response", ResponseFragment.class);
-		map.put("Response Measure", ResponseMeasureFragment.class);
-		map.put("Availability", AvailabilityFragment.class);
-		map.put("Interoperability", InteroperabilityFragment.class);
-		map.put("Modifiability", ModifiabilityFragment.class);
-		map.put("Performance", PerformanceFragment.class);
-		map.put("Security", SecurityFragment.class);
-		map.put("Testability", TestabilityFragment.class);
-		map.put("Usability", UsabilityFragment.class);
-		map.put("Tactic for Availability", TacticAvailabilityFragment.class);
-		map.put("Tactic for Interoperability", TacticInteroperabilityFragment.class);
-		map.put("Tactic for Modifiability", TacticModifiabilityFragment.class);
-		map.put("Tactic for Performance", TacticPerformanceFragment.class);
-		map.put("Tactic for Security", TacticSecurityFragment.class);
-		map.put("Tactic for Testability", TacticTestabilityFragment.class);
-		map.put("Tactic for Usability", TacticUsabilityFragment.class);
-	}
+	
 
-	public Class<?> getFragClass(String name) {
-		return map.get(name);
-	}
 	public static String getJsonTags() {
 		TagGroup scenarioTags = new TagGroup();
 		scenarioTags.setName("Scenarios");
