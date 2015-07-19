@@ -13,7 +13,6 @@ public class AnnotationJ {
 	private String user;
 	private String[] tags;
 	private String tag;
-	private String tactic;
 	
 	public String getId() {
 		return id;
@@ -83,24 +82,9 @@ public class AnnotationJ {
 		this.tag = tag;
 	}
 	
-	public String getQuoteIntro() {
-		String[] words = quote.split(" ");
-		if(words.length > 5) {
-			String intro = "";
-			for(int i = 0; i< 4; i++) {
-				intro += words[i] + " ";
-			}
-			intro += words[4];
-			return intro;
-		}
-		return quote;
+	public boolean isTacticForAttribute(String qualityAttribute) {
+		String[] spl = tag.split(" ");
+		return spl.length == 3 && spl[0].equals("Tactic") && spl[2].equals(qualityAttribute);
 	}
-	public String getTactic() {
-		return tactic;
-	}
-	public void setTactic(String tactic) {
-		this.tactic = tactic;
-	}
-	
-	
+
 }

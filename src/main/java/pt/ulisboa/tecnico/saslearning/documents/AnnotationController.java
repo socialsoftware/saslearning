@@ -20,7 +20,6 @@ import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.User;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
-import pt.ulisboa.tecnico.saslearning.jsonsupport.Tactic;
 import pt.ulisboa.tecnico.saslearning.utils.Utils;
 
 import com.google.gson.Gson;
@@ -72,41 +71,10 @@ public class AnnotationController {
 		deleteDocumentAnnotation(annId);
 		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 	}
-	
-	
-	//TACTICS
-	@RequestMapping(value = "/selectDoc/{docId}/store/addTactic/{annId}", method=RequestMethod.POST)
-	public RedirectView addTactic(
-			@PathVariable String docId, @PathVariable String annId,
-			@RequestBody String body){
-		Gson g = new Gson();
-		Tactic t = g.fromJson(body, Tactic.class);
-		Annotation a = FenixFramework.getDomainObject(annId);
-		addTacticToAnnotation(a, t.getTactic());
-		RedirectView rv = new RedirectView("/selectDoc/" + docId
-				+ "/store/annotations/" + annId);
-		rv.setStatusCode(HttpStatus.SEE_OTHER);
-		return rv;
-		
-	}
-	
-	@Atomic(mode=TxMode.WRITE)
-	private void addTacticToAnnotation(Annotation a, String tactic) {
-		Gson g = new Gson();
-		AnnotationJ ann = g.fromJson(a.getAnnotation(), AnnotationJ.class);
-		ann.setTactic(tactic);
-		String json = g.toJson(ann);
-		a.setAnnotation(json);
-	}
 
 	@RequestMapping(value = "/annotator/getTags")
 	public String getTags(){
 		return Utils.getJsonTags();
-	}
-	
-	@RequestMapping(value = "getDoc/getTactics/{type}")
-	public String getTactics(@PathVariable String type) {
-		return Utils.getTactics(type);
 	}
 	
 	@Atomic

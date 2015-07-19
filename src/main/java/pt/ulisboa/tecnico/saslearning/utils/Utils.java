@@ -1,13 +1,14 @@
 package pt.ulisboa.tecnico.saslearning.utils;
 
-import pt.ulisboa.tecnico.saslearning.jsonsupport.TacticsTags;
+import java.util.HashMap;
+import java.util.Map;
+
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagGroup;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.Tags;
 
 import com.google.gson.Gson;
 
 public class Utils {
-	private static Gson g = new Gson();
 	private static String[] scenarios = {"Scenario", "Source Of Stimulus", "Stimulus", "Artifact",
 			"Environment", "Response", "Response Measure"};
 	private static String[] qualityAttrs = {"Availability", "Interoperability", "Modifiability",
@@ -36,24 +37,22 @@ public class Utils {
 		return obj;
 	}
 	
-	private static String availabilityTactics() {
-		TagGroup a1 = new TagGroup();
-		a1.setName("Detect Faults");
+	private static Map<String, String[]> availabilityTactics() {
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		String n1 = "Detect Faults";
 		String[] detectFaults = {"Ping/Echo", "Monitor", "Heartbeat", "Timestamp", 
 				"Sanity Checking", "Condition Monitoring", "Voting", 
 				"Exception Detection", "Self-Test"};
-		a1.setTags(detectFaults);
+		map.put(n1, detectFaults);
 		String[] prepRep = {"Active Redundancy", "Passive Redundancy", "Spare", 
 				"Exception Handling", "Rollback", "Software Upgrade", "Retry",
 				"Ignore Faulty Behavior", "Degradation", "Reconfiguration"};
-		TagGroup a2 = new TagGroup();
-		a2.setName("Recover from Faults - Preparation and Repair");
-		a2.setTags(prepRep);
+		String n2 = "Recover from Faults - Preparation and Repair";
+		map.put(n2, prepRep);
 		String[] reint = {"Shadow", "State Resynchronization", "Escalating Restart",
 				"Non-Stop Forwarding"};
-		TagGroup a3 = new TagGroup();
-		a3.setName("Recover from Faults - Reintroduction");
-		a3.setTags(reint);
+		String n3 = "Recover from Faults - Reintroduction";
+		map.put(n3, reint);
 		String[] prev = {
 				"Removal from Service",
 				"Transactions",
@@ -61,77 +60,48 @@ public class Utils {
 				"Exception Prevention",
 				"Increase Competence Set"
 		};
-		TagGroup a4 = new TagGroup();
-		a4.setName("Prevent Faults");
-		a4.setTags(prev);
-		TagGroup[] tactics = {a1,a2,a3,a4};
-		String avail = getTacts(tactics);
-		return avail;
+		String n4 = "Prevent Faults";
+		map.put(n4,prev);
+		return map;
 	}
 	
-	public static String interoperabilityTactics() {
-		TagGroup i1 = new TagGroup();
+	public static Map<String, String[]> interoperabilityTactics() {
+		Map<String, String[]> map = new HashMap<String, String[]>();
 		String[] loc = {"Discover Service"};
-		i1.setName("Locate");
-		i1.setTags(loc);
-		
-		TagGroup i2 = new TagGroup();
+		String n1 = "Locate";
+		map.put(n1,loc);
 		String[] mif = {"Orchestrate", "Tailor Interface"};
-		i2.setName("Manage Interfaces");
-		i2.setTags(mif);
-		
-		TagGroup[] tacs = {i1, i2};
-		String inter = getTacts(tacs);
-		return inter;
-	}
-	
-	private static String getTacts(TagGroup[] tacs) {
-		TacticsTags t = new TacticsTags();
-		t.setTacticGroups(tacs);
-		String inter = g.toJson(t);
-		return inter;
-	}
-	
-	public static String getTactics(String type) {
-		switch(type) {
-		case "Tactic for Availability":
-			return availabilityTactics();
-		case "Tactic for Interoperability":
-			return interoperabilityTactics();
-		case "Tactic for Modifiability":
-			return modifiabilityTactics();
-		case "Tactic for Performance":
-			return performanceTactics();
-		case "Tactic for Security":
-			return securityTactics();
-		case "Tactic for Testability":
-			return testabilityTactics();
-		case "Tactic for Usability":
-			return usabilityTactics();
-		default:
-			return null;
-		}
+		map.put("Manage Interfaces",mif);
+		return map;
 	}
 
-	private static String usabilityTactics() {
+	
+	public static Map<String, Map<String, String[]>> getTactics() {
+		Map<String, Map<String, String[]>> map = new HashMap<String, Map<String,String[]>>(); 
+		map.put("Availability", availabilityTactics());
+		map.put("Interoperability", interoperabilityTactics());
+		map.put("Usability", usabilityTactics());
+		map.put("Testability", testabilityTactics());
+		map.put("Security", securityTactics());
+		map.put("Performance", performanceTactics());
+		map.put("Modifiability", modifiabilityTactics());
+		return map;
+	}
+
+	private static Map<String, String[]> usabilityTactics() {
 		String n1 = "Support User Initiative";
 		String[] t1 = {"Cancel", "Undo", "Pause/Resume", "Aggregate"};
 		String n2 = "Support System Initiative";
 		String[] t2 = {"Maintain Task Model", "Maintain User Model",
 				"Maintain System Model"
 		};
-		TagGroup g1 = new TagGroup();
-		TagGroup g2 = new TagGroup();
-		g1.setName(n1);
-		g2.setName(n2);
-		g1.setTags(t1);
-		g2.setTags(t2);
-		TagGroup[] grps = {g1,g2};
-		String tacts = getTacts(grps);
-		return tacts;
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put(n1,t1);
+		map.put(n2,t2);
+		return map;
 	}
 
-	private static String testabilityTactics() {
+	private static Map<String, String[]> testabilityTactics() {
 		String n1 = "Control and Observe System State";
 		String[] t1 = {"Specialized Interfaces", "Record/Playback", 
 				"Localize State Storage", "Abstract Data Sources",
@@ -139,18 +109,13 @@ public class Utils {
 		};
 		String n2 = "Limit Complexity";
 		String[] t2 = {"Limit Structural Complexity", "Limit Nondeterminism"};
-		TagGroup g1 = new TagGroup();
-		g1.setName(n1);
-		g1.setTags(t1);
-		TagGroup g2 = new TagGroup();
-		g2.setName(n2);
-		g2.setTags(t2);
-		TagGroup[] grps = {g1,g2};
-		String tacts = getTacts(grps);
-		return tacts;
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put(n1, t1);
+		map.put(n2, t2);
+		return map;
 	}
 
-	private static String securityTactics() {
+	private static Map<String, String[]> securityTactics() {
 		String n1 = "Detect Attacks";
 		String[] t1 = {"Detect Intrusion", "Detect Service Denial",
 				"Verify Message Integrity", "Detect Message Delay"};
@@ -164,32 +129,16 @@ public class Utils {
 		String[] t4 = {"Maintain Audit Trail"};
 		String n5 = "Recover from Attacks - Restore";
 		String[] t5 = {"See Availability"};
-		TagGroup g1 = new TagGroup();
-		g1.setName(n1);
-		g1.setTags(t1);
-		
-		TagGroup g2 = new TagGroup();
-		g2.setName(n2);
-		g2.setTags(t2);
-		
-		TagGroup g3 = new TagGroup();
-		g3.setName(n3);
-		g3.setTags(t3);
-		
-		TagGroup g4 = new TagGroup();
-		g4.setName(n4);
-		g4.setTags(t4);
-		
-		TagGroup g5 = new TagGroup();
-		g5.setName(n5);
-		g5.setTags(t5);
-		
-		TagGroup[] grps = {g1,g2,g3,g4,g5};
-		String tacts = getTacts(grps);
-		return tacts;
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put(n1, t1);
+		map.put(n2, t2);
+		map.put(n3, t3);
+		map.put(n4, t4);
+		map.put(n5, t5);
+		return map;
 	}
 
-	private static String performanceTactics() {
+	private static Map<String, String[]> performanceTactics() {
 		String n1 = "Control Resource Demand";
 		String[] t1 = {"Manage Sampling Rate", "Limit Event Response", 
 				"Prioritize Events", "Reduce Overhead", 
@@ -199,18 +148,13 @@ public class Utils {
 				"Maintain Multiple Copies of Computations",
 				"Maintain Multiple Copies of Data",
 				"Bound Queue Sizes", "Schedule Resources"};
-		TagGroup g1 = new TagGroup();
-		g1.setName(n1);
-		g1.setTags(t1);
-		TagGroup g2 = new TagGroup();
-		g2.setName(n2);
-		g2.setTags(t2);
-		TagGroup[] grps = {g1,g2};
-		String tacts = getTacts(grps);
-		return tacts;
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put(n1, t1);
+		map.put(n2, t2);
+		return map;
 	}
 
-	private static String modifiabilityTactics() {
+	private static Map<String, String[]> modifiabilityTactics() {
 		String n1 = "Reduce Size of a Module";
 		String[] t1 = {"Split Module"};
 		String n2 = "Increase Cohesion";
@@ -221,21 +165,12 @@ public class Utils {
 				"Abstract Common Services"};
 		String n4 = "Defer Binding";
 		String[] t4 = {"Defer Binding"};
-		TagGroup g1 = new TagGroup();
-		g1.setName(n1);
-		g1.setTags(t1);
-		TagGroup g2 = new TagGroup();
-		g2.setName(n2);
-		g2.setTags(t2);
-		TagGroup g3 = new TagGroup();
-		g3.setName(n3);
-		g3.setTags(t3);
-		TagGroup g4 = new TagGroup();
-		g4.setName(n4);
-		g4.setTags(t4);
-		TagGroup[] grps = {g1,g2,g3,g4};
-		String tacts = getTacts(grps);
-		return tacts;
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put(n1, t1);
+		map.put(n2, t2);
+		map.put(n3, t3);
+		map.put(n4, t4);
+		return map;
 	}
 
 }
