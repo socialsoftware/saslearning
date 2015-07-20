@@ -161,7 +161,9 @@ public class ScenarioController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void linkAnnotationToElement(String elemId, String annotationId) {
+		System.out.println("linkning annotation to tactic");
 		ScenarioElement elem = FenixFramework.getDomainObject(elemId);
+		System.out.println(elem);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
 		elem.addAnnotation(a);
 	}

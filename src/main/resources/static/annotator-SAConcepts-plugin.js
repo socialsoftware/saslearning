@@ -156,7 +156,7 @@ Annotator.Plugin.SAConcepts = function (element, options) {
                 var a = $("<a>");
                 a.attr("href", "/templateEditor/" + options.docId + "/" + annotation.id);
                 a.attr("target", "_parent");
-                a.append("fragment manager");
+                a.append("Add/Remove from Structured Representation");
                 $(field).append(a);
               //}
             }

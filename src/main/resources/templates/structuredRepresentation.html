@@ -137,13 +137,10 @@
   <!--   Tactics  -->
   <div class="element-title" th:with="qattr=${scenario.getQualityAttribute().getName()}">
     <h4><b>Tactics: </b>
-      <!--<a href="#" th:if="${annotation.isTacticForAttribute(scenario.getQualityAttribute.getName())} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+ ${qattr.getExternalId()}" style="float: right; font-size: 80%; padding-top: 10px;"> Link Annotation</a>-->
-      <a class="pull-right" href="#" data-toggle="modal" data-target=".tactics-modal" style="float: right; font-size: 80%; padding-top: 10px;">(Add new Tactic)</a>
-      <span th:text="${scenario.getQualityAttribute().getTacticSet().isEmpty()}"></span>
+      <a class="pull-right" href="#" data-toggle="modal" th:attr="data-target='#'+${scenario.getExternalId()}" style="float: right; font-size: 80%; padding-top: 10px;">(Add new Tactic)</a>
     </h4>
-
     <!-- modal for tactics-->
-    <div class="modal fade tactics-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal fade tactics-modal" th:id="${scenario.getExternalId()}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -164,9 +161,13 @@
       </div>
     </div>
     <!--  -->
+  </div>
+    <!-- tactic annotations -->
     <div th:each="tactic : ${scenario.getQualityAttribute().getTacticSet()}">
-      <h4><span th:text="${tactic.getName()}"></span></h4>
-      <a href="#" th:if="${annotation.isTacticForAttribute(scenario.getQualityAttribute().getName())} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+ ${tactic.getExternalId()}" style="float: right; font-size: 80%; padding-top: 10px;"> Link Annotation</a>
+      <div style=" border-bottom-style: dotted; border-bottom-width: 1px; border-bottom-color: rgb(206, 206, 206); margin-left: 10px; margin-bottom: 10px;">
+        <span class="h4" th:text="${tactic.getName()}"></span>
+        <a href="#" th:if="${annotation.isTacticForAttribute(scenario.getQualityAttribute().getName())} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+ ${tactic.getExternalId()}" style="float: right; font-size: 80%;"> Link Annotation</a>
+      </div>
       <div th:if="${tactic != null}">
         <ul class="list-group" style="margin-top:10px" th:each=" ann : ${tactic.getJsonAnnotations()}">
           <li class="list-group-item">
@@ -182,8 +183,7 @@
         </ul>
       </div>
     </div>
-
-  </div>
+    <!-- -->
   <!-- end tactics-->
 </div>
 </div>
