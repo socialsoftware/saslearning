@@ -61,6 +61,7 @@ relation UserHasAnnotations {
 
 class Scenario {
 	String name;
+	String identifier;
 }
 
 relation documentHasScenarios {

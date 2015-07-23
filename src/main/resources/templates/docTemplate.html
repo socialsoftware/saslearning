@@ -1,45 +1,111 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>View Document</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>View Document</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <!-- jQuery -->
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+  <!-- jQuery -->
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <!-- Annotator -->
+  <script src="http://assets.annotateit.org/annotator/v1.2.10/annotator-full.js"></script>
+  <script src="/annotator-SAConcepts-plugin.js"></script>
+  <link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.2.10/annotator.css"></link>
 
 </head>
 <body>
+  <!-- Modal -->
+  <div class="modal fade" id="syntax" style="width: 900px; left: 40%; position: relative;">
+    <div class="modal-dialog modal-lg" style="margin-top: 0px; margin-bottom: 0px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+        </div>
+        <div class="modal-body" id="elements">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button>Boom.</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
+  <!-- end of modal-->
+  <!-- header -->
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
+  <!-- end of header -->
+  <!-- options bar -->
   <nav id="docHeader" class="navbar navbar-default">
-     <div class="container">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" th:href="@{/viewStructuredRepresentation/} + ${docId}">View Structured Representation</a></li>
-        <!--<li><a href="#" th:href="@{/addSyntax/} + ${docId}">Add Syntax</a></li>-->
-      </ul>
-     </div>
-  </nav>
-  <iframe th:src="@{/getDoc/} + ${docId}"></iframe>
-  <style>
-    iframe,body,html{
+   <div class="container">
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <a href="#" th:href="@{/viewStructuredRepresentation/} + ${docId}">View Structured Representation</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!-- end of options bar -->
+<!--<iframe th:src="@{/getDoc/} + ${docId}"></iframe>-->
+<div style="text-align: center; background-color: yellow;">
+  Article extracted from 
+  <a th:href="${doc.url}" th:text="${doc.url}"></a>
+</div>
+<div>
+  <span id="article" th:utext="${doc.content}" ></span>
+</div>
+<script type="text/javascript" th:inline="javascript">
+var content = $('#article').annotator();
+content.annotator('addPlugin', 'Store', {
+  prefix: /*[[@{/selectDoc/} + ${doc.id} + '/store']]*/
+});
+var opts ={
+  tagsLocation: /*[[@{/annotator/getTags}]]*/,
+  docId: /*[[${doc.id}]]*/
+};
+content.annotator('addPlugin', 'SAConcepts', opts);
+</script>
+<style>
+    /*iframe,body,html{
       height: 100%;
       width: 100%;
-    }
-    iframe{
+      }*/
+    /*iframe{
       width: 100%;
       margin-top: -20px;
-    }
+      }*/
+      .annotator-item .chosen-container{width: 100% !important;}
+      .search-choice-close{border: none !important; padding: 0 !important;}
+      .search-choice-close::after{background: none !important;}
+      .offset1 { margin-left: 100px !important;}
+      .span10 {   width: 970px !important;}
+      body{
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+      }
 
-    #docHeader{
-      margin-top: -20px;
-    }
-  </style>
-</body>
-</html>
+      div#content {
+        border: none !important;
+      }
+
+      p{
+        max-width: none !important;
+      }
+
+      a.chosen-single::after{
+        background: none !important;
+      }
+
+      #docHeader{
+        margin-top: -20px;
+      }
+      </style>
+    </body>
+    </html>

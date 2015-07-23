@@ -69,6 +69,8 @@ public class DocumentController {
 //		m.addAttribute("article", doc.getContent());
 //		m.addAttribute("source", doc.getUrl());
 		m.addAttribute("docId", id);
+		DocUrl doc = getDocumentById(id);
+		m.addAttribute("doc", doc);
 		return "docTemplate";
 	}
 	

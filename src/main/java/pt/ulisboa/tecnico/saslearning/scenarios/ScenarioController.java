@@ -32,6 +32,8 @@ import com.google.gson.Gson;
 @Controller
 public class ScenarioController {
 
+	
+	
 	@RequestMapping(value = "/templateEditor/{docId}/{annotationId}")
 	public String templateEditor(Model m, @PathVariable String docId,
 			@PathVariable String annotationId) {
@@ -45,7 +47,7 @@ public class ScenarioController {
 		m.addAttribute("docId", docId);
 		m.addAttribute("qualityAttributes", getQualityAttributes());
 		m.addAttribute("tactics", Utils.getTactics());
-		return "structuredRepresentation";
+		return "elementsModal";
 	}
 
 	@RequestMapping(value = "/addNewScenario/{docId}/{annotationId}/{qualityAttribute}")
@@ -161,9 +163,7 @@ public class ScenarioController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void linkAnnotationToElement(String elemId, String annotationId) {
-		System.out.println("linkning annotation to tactic");
 		ScenarioElement elem = FenixFramework.getDomainObject(elemId);
-		System.out.println(elem);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
 		elem.addAnnotation(a);
 	}

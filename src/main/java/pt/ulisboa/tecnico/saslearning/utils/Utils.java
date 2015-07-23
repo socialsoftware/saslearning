@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.saslearning.utils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagGroup;
@@ -38,7 +38,7 @@ public class Utils {
 	}
 	
 	private static Map<String, String[]> availabilityTactics() {
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		String n1 = "Detect Faults";
 		String[] detectFaults = {"Ping/Echo", "Monitor", "Heartbeat", "Timestamp", 
 				"Sanity Checking", "Condition Monitoring", "Voting", 
@@ -66,7 +66,7 @@ public class Utils {
 	}
 	
 	public static Map<String, String[]> interoperabilityTactics() {
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		String[] loc = {"Discover Service"};
 		String n1 = "Locate";
 		map.put(n1,loc);
@@ -77,7 +77,7 @@ public class Utils {
 
 	
 	public static Map<String, Map<String, String[]>> getTactics() {
-		Map<String, Map<String, String[]>> map = new HashMap<String, Map<String,String[]>>(); 
+		Map<String, Map<String, String[]>> map = new LinkedHashMap<String, Map<String,String[]>>(); 
 		map.put("Availability", availabilityTactics());
 		map.put("Interoperability", interoperabilityTactics());
 		map.put("Usability", usabilityTactics());
@@ -95,7 +95,7 @@ public class Utils {
 		String[] t2 = {"Maintain Task Model", "Maintain User Model",
 				"Maintain System Model"
 		};
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		map.put(n1,t1);
 		map.put(n2,t2);
 		return map;
@@ -109,7 +109,7 @@ public class Utils {
 		};
 		String n2 = "Limit Complexity";
 		String[] t2 = {"Limit Structural Complexity", "Limit Nondeterminism"};
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		map.put(n1, t1);
 		map.put(n2, t2);
 		return map;
@@ -129,7 +129,7 @@ public class Utils {
 		String[] t4 = {"Maintain Audit Trail"};
 		String n5 = "Recover from Attacks - Restore";
 		String[] t5 = {"See Availability"};
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		map.put(n1, t1);
 		map.put(n2, t2);
 		map.put(n3, t3);
@@ -148,7 +148,7 @@ public class Utils {
 				"Maintain Multiple Copies of Computations",
 				"Maintain Multiple Copies of Data",
 				"Bound Queue Sizes", "Schedule Resources"};
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		map.put(n1, t1);
 		map.put(n2, t2);
 		return map;
@@ -165,7 +165,7 @@ public class Utils {
 				"Abstract Common Services"};
 		String n4 = "Defer Binding";
 		String[] t4 = {"Defer Binding"};
-		Map<String, String[]> map = new HashMap<String, String[]>();
+		Map<String, String[]> map = new LinkedHashMap<String, String[]>();
 		map.put(n1, t1);
 		map.put(n2, t2);
 		map.put(n3, t3);
