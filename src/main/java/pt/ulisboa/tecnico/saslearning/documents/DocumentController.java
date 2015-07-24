@@ -23,7 +23,11 @@ import pt.ulisboa.tecnico.saslearning.domain.Document;
 
 @Controller
 public class DocumentController {
-
+	
+	@RequestMapping(value= "/headerFrame")
+	public String headerFrame() {
+		return "headerFrame";
+	}
 	@RequestMapping(value = "/manageDocs")
 	public String manageDocuments(Model m) {
 		List<DocUrl> docs = getUrls();
