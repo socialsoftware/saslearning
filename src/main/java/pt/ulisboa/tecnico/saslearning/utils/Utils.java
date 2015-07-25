@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.saslearning.utils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagGroup;
@@ -17,6 +19,27 @@ public class Utils {
 			"Tactic for Modifiability", "Tactic for Performance", "Tactic for Security",
 			  "Tactic for Testability", "Tactic for Usability"};
 	
+	public static List<String> allScenarioConcepts(){
+		List<String> concepts = new ArrayList<String>();
+		for(String i : scenarios) {
+			concepts.add(i);
+		}
+		for(String j : qualityAttrs) {
+			concepts.add(j);
+		}
+		for(String k : tactics) {
+			concepts.add(k);
+		}
+		return concepts;
+	}
+	
+	public static List<String> qualityAttributes(){
+		List<String> qattrs = new ArrayList<String>();
+		for(String i : qualityAttrs) {
+			qattrs.add(i);
+		}
+		return qattrs;
+	}
 
 	public static String getJsonTags() {
 		TagGroup scenarioTags = new TagGroup();

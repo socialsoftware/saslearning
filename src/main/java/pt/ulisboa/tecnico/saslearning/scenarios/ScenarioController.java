@@ -49,13 +49,75 @@ public class ScenarioController {
 		m.addAttribute("tactics", Utils.getTactics());
 		return "elementsModal";
 	}
+	
+	@RequestMapping(value="/linkToScenario/{docId}/{annotationId}/{scenarioId}")
+	public RedirectView addAnnotationToScenario(@PathVariable String docId,
+			@PathVariable String annotationId,
+			@PathVariable String scenarioId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		addAnnotationToScenario(s,a);
+		RedirectView rv = new RedirectView("/templateEditor/" + docId + "/"
+				+ annotationId);
+		return rv;
+	}
+	
+	@RequestMapping(value="/unlinkFromScenario/{docId}/{annotationId}/{scenarioId}")
+	public RedirectView unlinkAnnotationFromScenario(@PathVariable String docId,
+			@PathVariable String annotationId,
+			@PathVariable String scenarioId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		removeAnnotationFromScenario(s, a);
+		RedirectView rv = new RedirectView("/templateEditor/" + docId + "/"
+				+ annotationId);
+		return rv;
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void addAnnotationToScenario(Scenario s, Annotation a) {
+		String tag = a.getTag();
+		if(s.getName().equals(tag)) {
+			s.addAnnotation(a);
+		}
+		if(s.getElements().get(tag) != null) {
+			s.getElements().get(tag).addAnnotation(a);
+		}
+		if(Utils.qualityAttributes().contains(tag)) {
+			s.getQualityAttribute().addAnnotation(a);
+		}
+		if(tag.contains("Tactic")) {
+			System.out.println("[NOTE]: Anntation should be added to Tactic but this is not available yet");
+			//TODO
+		}
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeAnnotationFromScenario(Scenario s, Annotation a) {
+		String tag = a.getTag();
+		if(s.getName().equals(tag)) {
+			s.removeAnnotation(a);
+		}
+		if(s.getElements().get(tag) != null) {
+			s.getElements().get(tag).removeAnnotation(a);
+		}
+		if(Utils.qualityAttributes().contains(tag)) {
+			s.getQualityAttribute().removeAnnotation(a);
+		}
+		if(tag.contains("Tactic")) {
+			System.out.println("[NOTE]: Anntation should be added to Tactic but this is not available yet");
+			//TODO
+		}
+	}
+	
 
-	@RequestMapping(value = "/addNewScenario/{docId}/{annotationId}/{qualityAttribute}")
+	@RequestMapping(value = "/addNewScenario/{docId}/{annotationId}/{qualityAttribute}/{scenarioName}")
 	public RedirectView addNewScenario(@PathVariable String docId,
 			@PathVariable String annotationId,
-			@PathVariable String qualityAttribute) {
+			@PathVariable String qualityAttribute,
+			@PathVariable String scenarioName) {
 		Document d = FenixFramework.getDomainObject(docId);
-		addScenarioToDocument(d, qualityAttribute);
+		addScenarioToDocument(d, qualityAttribute, scenarioName);
 		RedirectView rv = new RedirectView("/templateEditor/" + docId + "/"
 				+ annotationId);
 		return rv;
@@ -176,9 +238,10 @@ public class ScenarioController {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	private void addScenarioToDocument(Document d, String qualityAttribute) {
+	private void addScenarioToDocument(Document d, String qualityAttribute, String scenarioName) {
 		Scenario s = new Scenario();
 		s.setName("Scenario");
+		s.setIdentifier(scenarioName);
 		SrcOfStimulus src = new SrcOfStimulus();
 		src.setName("Source Of Stimulus");
 		Stimulus stim = new Stimulus();

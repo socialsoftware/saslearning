@@ -109,7 +109,6 @@
     <div th:each="tactic : ${scenario.getQualityAttribute().getTacticSet()}">
       <div style=" border-bottom-style: dotted; border-bottom-width: 1px; border-bottom-color: rgb(206, 206, 206); margin-left: 10px; margin-bottom: 10px;">
         <span class="h4" th:text="${tactic.getName()}"></span>
-        <a href="#" th:if="${annotation.isTacticForAttribute(scenario.getQualityAttribute().getName())} and ${!annotData.isConnected()}" th:href="@{/linkAnnotationToScenElement/} + ${docId} + '/'+${annotation.id}+'/'+ ${tactic.getExternalId()}" style="float: right; font-size: 80%;"> Link Annotation</a>
       </div>
       <div th:if="${tactic != null}">
         <ul class="list-group" style="margin-top:10px" th:each=" ann : ${tactic.getJsonAnnotations()}">
@@ -162,32 +161,5 @@
 }
 
 </style>
-<script type="text/javascript" th:inline="javascript">
-$(document).ready(function(){
-  $("#submitAttr").click(function(){
-    var attr = document.getElementById("qualityAttributes").value;
-    var loc = /*[[@{/addNewScenario/} + ${docId}+'/'+${annotation.id}+'/']]*/
-    loc+=attr;
-    $.ajax(loc).done(function(data){
-      location.reload();
-    });
-  });
-
-  $("#submitTactic").click(function(){
-    var attr = document.getElementById("tactics").value;
-    console.log(attr);
-    var scen = document.getElementById("tactics").name;
-    console.log(scen);
-    var loc = /*[[@{/addTactic/} + ${docId}+'/'+${annotation.id}+'/']]*/;
-    loc = loc + scen;
-    loc = loc + "/" + attr;
-    console.log(loc);
-    $.ajax(loc).done(function(data){
-      location.reload();
-    });
-  });
-});
-
-</script>
 </body>
 </html>

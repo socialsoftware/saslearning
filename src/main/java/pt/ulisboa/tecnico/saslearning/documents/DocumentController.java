@@ -92,6 +92,14 @@ public class DocumentController {
 		return "documentHeader";
 	}
 	
+	@RequestMapping("/viewStructuredRepresentation/{docId}")
+	public String viewStructuredRepresentation(@PathVariable String docId, Model m) {
+		Document d = FenixFramework.getDomainObject(docId);
+		m.addAttribute("scenarios", d.getScenarioSet());
+		m.addAttribute("docId", docId);
+		return "structuredRepresentation";
+	}
+	
 	@Atomic
 	private void removeDocumentById(String id) {
 		Document d = FenixFramework.getDomainObject(id);

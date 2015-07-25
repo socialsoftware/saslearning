@@ -22,7 +22,7 @@
 
 </head>
 <body>
-    <div class="modal fade" id="syntax" style="width: 900px; left: 40%; position: relative;">
+  <div class="modal fade" id="syntax" style="width: 900px; margin-left: -450px">
     <div class="modal-dialog modal-lg" style="margin-top: 0px; margin-bottom: 0px;">
       <div class="modal-content">
 
@@ -41,16 +41,18 @@
   </div>
     <!-- end of modal-->
   <!--<section layout:include="@{/headerFragment} :: headerFragment"></section>-->
-  <iframe th:src="@{/headerFrame}"></iframe>
+  <!-- header -->
+  <iframe style="height: 52px; border: 0px;" th:src="@{/headerFrame}"></iframe>
+  <!-- header -->
+  <!-- tools -->
   <nav id="docHeader" class="navbar navbar-default">
      <div class="container">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" th:href="@{/viewStructuredRepresentation/} + ${docId}">View Structured Representation</a></li>
-        <!--<li><a href="#" th:href="@{/addSyntax/} + ${docId}">Add Syntax</a></li>-->
+      <ul style="margin-right: -15px; margin-top: 7.5px;" class="nav navbar-nav navbar-right">
+        <li><a id="toolBoxLink" href="#" th:href="@{/viewStructuredRepresentation/} + ${docId}">View Structured Representation</a></li>
       </ul>
      </div>
   </nav>
-  <!--<iframe th:src="@{/getDoc/} + ${docId}"></iframe>-->
+  <!-- tools -->
   <div style="text-align: center; background-color: yellow;">
     Article extracted from 
     <a th:href="${doc.url}" th:text="${doc.url}"></a>
@@ -77,7 +79,7 @@
     }
 
     #docHeader{
-      margin-top: -20px;
+      margin: 0px;
     }
     .annotator-item .chosen-container{width: 100% !important;}
     .search-choice-close{border: none !important; padding: 0 !important;}
@@ -98,6 +100,13 @@
 
     a.chosen-single::after{
       background: none !important;
+    }
+
+    #toolBoxLink{
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      font-size: 14px;
+      color: #777;
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
     }
   </style>
 </body>
