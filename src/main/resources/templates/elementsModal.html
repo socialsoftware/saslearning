@@ -44,22 +44,23 @@
         </div>  
       </h3>
     </div>
-    <div class="panel-body">
-      <b>Name: </b><span th:text="${scenario.getIdentifier()}"></span>
+    <div class="panel-body" style="font-size:115%;">
+      <b class="h4">Name: </b>
+      <p th:text="${scenario.getIdentifier()}" style="margin-left:10px;"></p>
       <a th:id="'linkAnnotation'+${scenario.getExternalId()}" href="#" th:if="${!annotData.getTag().contains('Tactic')} and ${!annotData.isConnected()} and ${annotData.isScenarioAnnotation()} and ${annotData.canBeAddedToScenario(scenario)}" style="float:right;">(Link Annotation)</a>
       <a href="#" th:id="'unlinkAnnotation' + ${scenario.getExternalId()}" th:if="${annotData.isConnected()} and ${annotData.belongsToScenario(scenario)}" style="float:right;">(Unlink Annotation)</a>
-      <div th:if="${!annotData.isConnected()} and ${annotData.getTag().contains('Tactic')}">
-        <p>Tactics</p>
-        <a href="#" data-toggle="collapse" data-target="#addTactic">(add Tactic)</a>
-        
+      <div th:if="${!annotData.isConnected()} and ${annotData.canBeAddedToScenario(scenario)} and ${annotData.getTag().contains('Tactic')}" style="margin-top:10px;">
+        <div style=" border-bottom: 1px solid rgb(215, 215, 215);">
+        <b class="h4">Tactics: </b>
+        <a href="#" data-toggle="collapse" data-target="#addTactic" style="float:right;">(add Tactic)</a>
+        </div>
         <!--add tactic-->
-        <div class="collapse" id="addTactic">
-          <div style="margin-bottom: 5px;"><b>Select Tactic:</b></div>
-          <ul class="list-group" th:each="tacticSet : ${tactics.get(scenario.getQualityAttribute().getName())}">
-            <li class="list-group-item list-group-item-info" th:with="title=${tacticSet.getKey()}">
-              <span th:text="${title}"></span>
+        <div class="collapse" id="addTactic" style="margin-top: 10px; border: 1px dashed rgb(212, 206, 206); padding-right: 10px; border-radius: 7px;">
+          <ul class="list-group" style="  font-size: 90%; margin-top: 5px" th:each="tacticSet : ${tactics.get(scenario.getQualityAttribute().getName())}">
+            <li class="list-group-item list-title" style="  padding: 5px 15px 5px 15px;" th:with="title=${tacticSet.getKey()}">
+              <b><span th:text="${title}"></span></b>
             </li>
-            <li class="list-group-item" th:each="tac : ${tacticSet.getValue()}">
+            <li class="list-group-item" th:each="tac : ${tacticSet.getValue()}" style="  padding: 5px 15px 5px 15px;">
               <span th:text="${tac}"></span>
               <a href="#" th:id="tactic" th:class="${tac}">(add New Tactic)</a>
             </li>
@@ -68,7 +69,7 @@
         </div>
         <!--add tactic-->
 
-        <div th:each="tactic : ${scenario.getQualityAttribute().getTacticSet()}">
+        <div th:each="tactic : ${scenario.getQualityAttribute().getTacticSet()}" style="margin-top: 5px; margin-left: 10px;">
           <span th:text="${tactic.getName()}"></span>
           <a href="#" th:id="'linkToTactic' + ${tactic.getExternalId()}">(Link Annotation)</a>
           <a href="#" th:id="'removeTactic'+${tactic.getExternalId()}">(remove tactic)</a>
@@ -160,5 +161,9 @@ $("#createScenario").click(function(){
   border-bottom-style: solid;
   border-bottom-color: #C8C8C8;
   margin-bottom: 10px;
+}
+
+.list-title{
+    background-color: rgb(233, 229, 229);
 }
 </style>
