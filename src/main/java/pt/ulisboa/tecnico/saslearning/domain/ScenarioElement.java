@@ -32,9 +32,14 @@ public class ScenarioElement extends ScenarioElement_Base {
     		removeAnnotation(a);
     	}
     	removeScenario();
+    	removeQualityAttribute();
     	deleteDomainObject();
     }
 
 	public void removeScenario() {
+	}
+	
+	public void removeQualityAttribute() {
+		
 	}
 }

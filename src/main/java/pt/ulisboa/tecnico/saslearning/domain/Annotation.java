@@ -65,7 +65,21 @@ public class Annotation extends Annotation_Base {
 			return s.getExternalId().equals(getScenario().getExternalId());
 		}else if(getScenarioElement() != null) {
 			ScenarioElement elem = getScenarioElement();
-			return elem.getExternalId().equals(s.getExternalId());
+			for(ScenarioElement e : s.getElements().values()) {
+				if(e.getExternalId().equals(elem.getExternalId())) {
+					return true;
+				}
+			}
+			if(elem instanceof QualityAttribute) {
+				return elem.getExternalId().equals(s.getQualityAttribute().getExternalId());
+			}else if(elem instanceof Tactic) {
+				for(Tactic t : s.getQualityAttribute().getTacticSet()) {
+					if(t.getExternalId().equals(elem.getExternalId())) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}else {
 			return false;
 		}
