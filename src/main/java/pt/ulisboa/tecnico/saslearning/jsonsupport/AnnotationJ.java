@@ -13,6 +13,7 @@ public class AnnotationJ {
 	private String user;
 	private String[] tags;
 	private String tag;
+	private String connectedId;
 	
 	public String getId() {
 		return id;
@@ -85,6 +86,12 @@ public class AnnotationJ {
 	public boolean isTacticForAttribute(String qualityAttribute) {
 		String[] spl = tag.split(" ");
 		return spl.length == 3 && spl[0].equals("Tactic") && spl[2].equals(qualityAttribute);
+	}
+	public String getConnectedId() {
+		return connectedId;
+	}
+	public void setConnectedId(String connectedId) {
+		this.connectedId = connectedId;
 	}
 
 }

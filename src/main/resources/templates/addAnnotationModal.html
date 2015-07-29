@@ -23,10 +23,6 @@
       
     </h3>
     <div class="collapse" id="addScenario">
-      <!--<div style="margin-bottom: 5px;"><b>Select Scenario's Quality Attribute:</b></div>
-      <select id="qualityAttributes" class="form-control">
-        <option th:each="attr : ${qualityAttributes}" th:text="${attr}"></option>
-      </select>-->
       <div style="margin-bottom: 5px;"><b>Scenario's Name:</b></div>
       <input id="scenarioName" type="text" class="form-control" placeholder="Add a name to the Scenario"/>
       <button id="createScenario" type="button" class="btn btn-default" data-dismiss="collapse" disabled="true">Add Scenario</button>
@@ -37,20 +33,8 @@
   <div class="panel panel-default" th:each="scenario : ${scenarios}">
     <div class="panel-body" style="font-size:115%;">
       <b class="h4">Scenario: </b> <span th:text="${scenario.getIdentifier()}"></span>
-      <!--<p th:text="${scenario.getIdentifier()}" style="margin-left:10px; font-size:inherit;"></p>-->
       <a th:id="'linkAnnotation'+${scenario.getExternalId()}" href="#" th:if="${!annotData.isConnected()} and ${annotData.isScenarioAnnotation()}" style="float:right;" th:href="@{/linkToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}">(Add annotation to this Scenario)</a>
-
-      <!--<a href="#" th:id="'unlinkAnnotation' + ${scenario.getExternalId()}" th:if="${annotData.isConnected()} and ${annotData.belongsToScenario(scenario)}" style="float:right;">(Unlink Annotation)</a> -->
     </div>
-   <!-- <script type="text/javascript" th:inline="javascript">
-    /*<![CDATA[*/
-    $("#linkAnnotation"+ /*[[${scenario.getExternalId()}]]*/).click(function(){
-      var loc = /*[[@{/linkToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}]]*/;
-      $("#elements").load(loc);
-    });
-    /*]]>*/
-    </script>-->
-    <!-- end of scenario header -->
   </div>
 </div>
 
@@ -64,10 +48,8 @@ $('#scenarioName').bind('keyup', function() {
 });
 $("#createScenario").click(function(){
   $("#addScenario").collapse('toggle');
-  //var attr = document.getElementById("qualityAttributes").value;
   var name = encodeURIComponent($("#scenarioName").val());
   var loc = /*[[@{/addNewScenario/} + ${docId}+'/'+${annotation.id}+'/']]*/;
-  //loc+=attr;
   loc+= name;
   $("#elements").load(loc);
 
