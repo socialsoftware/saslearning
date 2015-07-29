@@ -11,4 +11,9 @@ public class SrcOfStimulus extends SrcOfStimulus_Base {
     	setScenario(null);
     }
     
+    @Override
+    public Scenario getEnclosingScenario() {
+    	return getScenario();
+    }
+    
 }

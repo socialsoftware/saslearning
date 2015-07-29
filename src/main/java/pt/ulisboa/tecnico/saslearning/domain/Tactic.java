@@ -6,9 +6,6 @@ public class Tactic extends Tactic_Base {
         super();
     }
     
-    @Override
-    public void removeQualityAttribute() {
-    	setQualityAttribute(null);
-    }
+
     
 }

@@ -11,4 +11,9 @@ public class ResponseMeasure extends ResponseMeasure_Base {
     	setScenario(null);
     }
     
+    @Override
+    public Scenario getEnclosingScenario() {
+    	return getScenario();
+    }
+    
 }

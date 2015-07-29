@@ -177,24 +177,11 @@ relation scenarioHasAnnotations {
 	}
 }
 
-class QualityAttribute extends ScenarioElement {
-}
-
-relation scenarioHasQualityAttribute {
-	QualityAttribute playsRole qualityAttribute {
-		multiplicity 0..1;
-	}
-	
-	Scenario playsRole scenario {
-		multiplicity 1..1;
-	}
-}
-
 class Tactic extends ScenarioElement{
 }
 
-relation qualityAttributeHasTactic {
-	QualityAttribute playsRole qualityAttribute {
+relation scenarioHasTactic {
+	Scenario playsRole scenario {
 		multiplicity 0..1;
 	}
 	

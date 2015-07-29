@@ -11,49 +11,47 @@ import pt.ulisboa.tecnico.saslearning.jsonsupport.Tags;
 import com.google.gson.Gson;
 
 public class Utils {
-	private static String[] scenarios = {"Scenario", "Source Of Stimulus", "Stimulus", "Artifact",
+	private static String[] scenarios = {"Scenario Description", "Source Of Stimulus", "Stimulus", "Artifact",
 			"Environment", "Response", "Response Measure"};
-	private static String[] qualityAttrs = {"Availability", "Interoperability", "Modifiability",
-			  "Performance", "Security", "Testability", "Usability"};
-	private static String[] tactics  = {"Tactic for Availability","Tactic for Interoperability",
-			"Tactic for Modifiability", "Tactic for Performance", "Tactic for Security",
-			  "Tactic for Testability", "Tactic for Usability"};
+	/*private static String[] qualityAttrs = {"Availability", "Interoperability", "Modifiability",
+			  "Performance", "Security", "Testability", "Usability"};*/
+	private static String[] tactics  = {"Tactic"};
 	
 	public static List<String> allScenarioConcepts(){
 		List<String> concepts = new ArrayList<String>();
 		for(String i : scenarios) {
 			concepts.add(i);
 		}
-		for(String j : qualityAttrs) {
-			concepts.add(j);
-		}
+//		for(String j : qualityAttrs) {
+//			concepts.add(j);
+//		}
 		for(String k : tactics) {
 			concepts.add(k);
 		}
 		return concepts;
 	}
 	
-	public static List<String> qualityAttributes(){
-		List<String> qattrs = new ArrayList<String>();
-		for(String i : qualityAttrs) {
-			qattrs.add(i);
-		}
-		return qattrs;
-	}
+//	public static List<String> qualityAttributes(){
+//		List<String> qattrs = new ArrayList<String>();
+//		for(String i : qualityAttrs) {
+//			qattrs.add(i);
+//		}
+//		return qattrs;
+//	}
 
 	public static String getJsonTags() {
 		TagGroup scenarioTags = new TagGroup();
 		scenarioTags.setName("Scenarios");
 		scenarioTags.setTags(scenarios);
-		TagGroup qualityAttrTags = new TagGroup();
-		qualityAttrTags.setName("Quality Attributes");
-		qualityAttrTags.setTags(qualityAttrs);
+//		TagGroup qualityAttrTags = new TagGroup();
+//		qualityAttrTags.setName("Quality Attributes");
+//		qualityAttrTags.setTags(qualityAttrs);
 		TagGroup tacticsTags = new TagGroup();
 		tacticsTags.setName("Tactics");
 		tacticsTags.setTags(tactics);
 		Tags t = new Tags();
 		t.setScenarios(scenarioTags);
-		t.setQualityAttrs(qualityAttrTags);
+//		t.setQualityAttrs(qualityAttrTags);
 		t.setTactics(tacticsTags);
 		Gson g = new Gson();
 		String obj = g.toJson(t);

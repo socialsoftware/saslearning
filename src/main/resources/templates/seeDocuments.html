@@ -21,7 +21,7 @@
     <div class="well">
         <h2>Available Documents: </h2>
     	<div class="list-group" th:each="doc : ${docs}">
-    		<a class="list-group-item" th:href="@{/selectDoc/} + ${doc.id}" th:text="${doc.title}"></a>
+    		<a class="list-group-item" th:href="@{/selectDoc/} + ${doc.getExternalId()}" th:text="${doc.getTitle()}"></a>
     	</div>
     </div>
 </body>

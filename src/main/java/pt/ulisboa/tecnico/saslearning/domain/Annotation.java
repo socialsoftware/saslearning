@@ -1,6 +1,9 @@
 package pt.ulisboa.tecnico.saslearning.domain;
 
+import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 import pt.ulisboa.tecnico.saslearning.utils.Utils;
+
+import com.google.gson.Gson;
 
 public class Annotation extends Annotation_Base {
 
@@ -16,8 +19,16 @@ public class Annotation extends Annotation_Base {
 	public void delete() {
 		setDocument(null);
 		setOwner(null);
+		setScenario(null);
+		setScenarioElement(null);
 		deleteDomainObject();
 		
+	}
+	
+	public AnnotationJ getJsonVersion() {
+		Gson g = new Gson();
+		AnnotationJ ann = g.fromJson(getAnnotation(), AnnotationJ.class);
+		return ann;
 	}
 	
 	public boolean isConnected() {
@@ -29,59 +40,61 @@ public class Annotation extends Annotation_Base {
 	}
 	
 	public boolean canBeAddedToScenario(Scenario s) {
-		String tag = getTag();
-		System.out.println("can " + tag + " be added to scenario?");
-		if(isScenarioAnnotation()) {
-			System.out.println(tag  + " is a scenario annotation");
-			String[] split = getTag().split(" ");
-			if(getTag().contains("Tactic")) {
-				System.out.println(tag + "is a tactic");
-				if(split[2].equals(s.getQualityAttribute().getName())) {
-					System.out.println("it's THE tactic");
-					return true;
-				}
-				System.out.println("its not the tactic.");
-				return false;
-				
-			}
-			else if(Utils.qualityAttributes().contains(tag)) {
-				if(tag.equals(s.getQualityAttribute().getName())) {
-					System.out.println("is the quality attribute");
-					return true;
-				}
-				System.out.println("its nt the quality attribute");
-				return false;
-			}else {
-				System.out.println("just a simple scenario annotation");
-				return true;				
-			}
-		}
-		System.out.println(tag + " does not belong to scenarios");
+//		String tag = getTag();
+//		if(isScenarioAnnotation()) {
+//			String[] split = getTag().split(" ");
+//			if(getTag().contains("Tactic")) {
+//				if(split[2].equals(s.getQualityAttribute().getName())) {
+//					return true;
+//				}
+//				return false;
+//				
+//			}
+//			else if(Utils.qualityAttributes().contains(tag)) {
+//				if(tag.equals(s.getQualityAttribute().getName())) {
+//					return true;
+//				}
+//				return false;
+//			}else {
+//				return true;				
+//			}
+//		}
 		return false;
 	}
 	
-	public boolean belongsToScenario(Scenario s) {
-		if(getScenario() != null) {
-			return s.getExternalId().equals(getScenario().getExternalId());
-		}else if(getScenarioElement() != null) {
-			ScenarioElement elem = getScenarioElement();
-			for(ScenarioElement e : s.getElements().values()) {
-				if(e.getExternalId().equals(elem.getExternalId())) {
-					return true;
-				}
+	public Scenario getEnclosingScenario() {
+		if(isScenarioAnnotation()) {
+			if(getScenario() != null) {
+				return getScenario();
 			}
-			if(elem instanceof QualityAttribute) {
-				return elem.getExternalId().equals(s.getQualityAttribute().getExternalId());
-			}else if(elem instanceof Tactic) {
-				for(Tactic t : s.getQualityAttribute().getTacticSet()) {
-					if(t.getExternalId().equals(elem.getExternalId())) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}else {
-			return false;
+			return getScenarioElement().getEnclosingScenario();
 		}
+		return null;
+	}
+	
+	public boolean belongsToScenario(Scenario s) {
+//		if(getScenario() != null) {
+//			return s.getExternalId().equals(getScenario().getExternalId());
+//		}else if(getScenarioElement() != null) {
+//			ScenarioElement elem = getScenarioElement();
+//			for(ScenarioElement e : s.getElements().values()) {
+//				if(e.getExternalId().equals(elem.getExternalId())) {
+//					return true;
+//				}
+//			}
+//			if(elem instanceof QualityAttribute) {
+//				return elem.getExternalId().equals(s.getQualityAttribute().getExternalId());
+//			}else if(elem instanceof Tactic) {
+//				for(Tactic t : s.getQualityAttribute().getTacticSet()) {
+//					if(t.getExternalId().equals(elem.getExternalId())) {
+//						return true;
+//					}
+//				}
+//			}
+//			return false;
+//		}else {
+//			return false;
+//		}
+		return false;
 	}
 }

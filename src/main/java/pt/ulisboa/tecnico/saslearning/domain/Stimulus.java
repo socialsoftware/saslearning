@@ -10,4 +10,9 @@ public class Stimulus extends Stimulus_Base {
     public void removeScenario() {
     	setScenario(null);
     }
+    
+    @Override
+    public Scenario getEnclosingScenario() {
+    	return getScenario();
+    }
 }

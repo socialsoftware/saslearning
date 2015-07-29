@@ -46,7 +46,8 @@
 <!-- end of modal-->
 <!--<section layout:include="@{/headerFragment} :: headerFragment"></section>-->
 <!-- header -->
-<iframe style="height: 52px; border: 0px;" th:src="@{/headerFrame}"></iframe>
+<!--<iframe style="height: 52px; border: 0px;" th:src="@{/headerFrame}"></iframe>-->
+<section layout:include="@{/headerFragment} :: headerFragment"></section>
 <!-- header -->
 <!-- tools -->
 <nav id="docHeader" class="navbar navbar-default">
@@ -59,18 +60,18 @@
 <!-- tools -->
 <div style="text-align: center; background-color: yellow;">
   Article extracted from 
-  <a th:href="${doc.url}" th:text="${doc.url}"></a>
+  <a th:href="${doc.getUrl()}" th:text="${doc.getUrl()}"></a>
 </div>
-<div> <span id="article" th:utext="${doc.content}" ></span> </div>
+<div> <span id="article" th:utext="${doc.getContent()}" ></span> </div>
 
 <script type="text/javascript" th:inline="javascript">
 var content = $('#article').annotator();
 content.annotator('addPlugin', 'Store', {
-  prefix: /*[[@{/selectDoc/} + ${doc.id} + '/store']]*/
+  prefix: /*[[@{/selectDoc/} + ${doc.getExternalId()} + '/store']]*/
 });
 var opts ={
   tagsLocation: /*[[@{/annotator/getTags}]]*/,
-  docId: /*[[${doc.id}]]*/
+  docId: /*[[${doc.getExternalId()}]]*/
 };
 content.annotator('addPlugin', 'SAConcepts', opts);
 </script>
@@ -112,6 +113,7 @@ a.chosen-single::after{
   color: #777;
   text-shadow: 0 1px 0 rgba(255,255,255,.25);
 }
+
 </style>
 </body>
 </html>

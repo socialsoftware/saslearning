@@ -22,8 +22,8 @@
         <h1>Existant Documents</h1>
     <table>
         <tr th:each="doc:${docs}">
-            <td th:text="${doc.title}"></td>
-            <td><a th:href="@{/removeDoc/} + ${doc.id}">(remove)</a></td>
+            <td th:text="${doc.getTitle()}"></td>
+            <td><a th:href="@{/removeDoc/} + ${doc.getExternalId()}">(remove)</a></td>
         </tr>
     </table>
     <h1>Add new Document</h1>

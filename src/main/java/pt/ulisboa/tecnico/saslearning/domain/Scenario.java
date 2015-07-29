@@ -45,7 +45,11 @@ public class Scenario extends Scenario_Base {
 		getEnvironment().delete();
 		getResponse().delete();
 		getResponseMeasure().delete();
-		getQualityAttribute().delete();
+		Iterator<Tactic> it = getTacticSet().iterator();
+		while(it.hasNext()) {
+			Tactic t = it.next();
+			t.delete();
+		}
 		Iterator<Annotation> i = getAnnotationSet().iterator();
     	while(i.hasNext()) {
     		Annotation a = i.next();

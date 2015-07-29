@@ -40,6 +40,10 @@ public class ScenarioElement extends ScenarioElement_Base {
 	}
 	
 	public void removeQualityAttribute() {
-		
+	}
+
+	public Scenario getEnclosingScenario() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

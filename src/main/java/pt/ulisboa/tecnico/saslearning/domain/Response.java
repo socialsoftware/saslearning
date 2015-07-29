@@ -10,5 +10,8 @@ public class Response extends Response_Base {
     public void removeScenario() {
     	setScenario(null);
     }
-    
+    @Override
+    public Scenario getEnclosingScenario() {
+    	return getScenario();
+    }
 }

@@ -10,4 +10,9 @@ public class Environment extends Environment_Base {
     public void removeScenario() {
     	setScenario(null);
     }
+    
+    @Override
+    public Scenario getEnclosingScenario() {
+    	return getScenario();
+    }
 }

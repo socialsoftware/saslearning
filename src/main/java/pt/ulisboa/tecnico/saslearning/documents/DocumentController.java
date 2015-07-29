@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.saslearning.documents;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -30,38 +28,30 @@ public class DocumentController {
 	}
 	@RequestMapping(value = "/manageDocs")
 	public String manageDocuments(Model m) {
-		List<DocUrl> docs = getUrls();
-		m.addAttribute("docs", docs);
+		m.addAttribute("docs", FenixFramework.getDomainRoot().getDocumentSet());
 		m.addAttribute("newDoc", new DocUrl());
 		return "manageDocs";
 	}
 
 	@RequestMapping(value = "/removeDoc/{id}", method = RequestMethod.GET)
-	public RedirectView removeDocument(Model m, @PathVariable String id) {
+	public RedirectView removeDocument(@PathVariable String id) {
 		removeDocumentById(id);
-		List<DocUrl> docs = getUrls();
-		m.addAttribute("docs", docs);
-		m.addAttribute("newDoc", new DocUrl());
 		RedirectView rv = new RedirectView("/manageDocs");
 		return rv;
 	}
 
 
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
-	public RedirectView addDocument(@ModelAttribute DocUrl doc, Model m)
+	public RedirectView addDocument(@ModelAttribute DocUrl doc)
 			throws IOException {
 		addNewDocument(doc.getUrl());
-		m.addAttribute("newDoc", new DocUrl());
-		List<DocUrl> docs = getUrls();
-		m.addAttribute("docs", docs);
 		RedirectView rv = new RedirectView("/manageDocs");
 		return rv;
 	}
 
 	@RequestMapping(value = "seeDocs", method = RequestMethod.GET)
 	public String listDocumentsAvailable(Model m) {
-		List<DocUrl> docs = getUrls();
-		m.addAttribute("docs", docs);
+		m.addAttribute("docs", FenixFramework.getDomainRoot().getDocumentSet());
 		m.addAttribute("docSelected", new DocUrl());
 		return "seeDocuments";
 	}
@@ -69,27 +59,10 @@ public class DocumentController {
 	@RequestMapping(value = "/selectDoc/{id}", method = RequestMethod.GET)
 	public String showDocument(@PathVariable String id, Model m)
 			throws IOException {
-//		DocUrl doc = getDocumentById(id);
-//		m.addAttribute("article", doc.getContent());
-//		m.addAttribute("source", doc.getUrl());
 		m.addAttribute("docId", id);
-		DocUrl doc = getDocumentById(id);
-		m.addAttribute("doc", doc);
+		Document d = FenixFramework.getDomainObject(id);
+		m.addAttribute("doc", d);
 		return "docTemplate";
-	}
-	
-	@RequestMapping(value = "/getDoc/{id}")
-	public String getDocument(@PathVariable String id, Model m){
-		DocUrl doc = getDocumentById(id);
-//		m.addAttribute("article", doc.getContent());
-//		m.addAttribute("source", doc.getUrl());
-		m.addAttribute("doc", doc);
-		return "document";
-	}
-	
-	@RequestMapping(value="/documentHeader")
-	public String getDocumentHeader(){
-		return "documentHeader";
 	}
 	
 	@RequestMapping("/viewStructuredRepresentation/{docId}")
@@ -97,17 +70,17 @@ public class DocumentController {
 		Document d = FenixFramework.getDomainObject(docId);
 		m.addAttribute("scenarios", d.getScenarioSet());
 		m.addAttribute("docId", docId);
+		m.addAttribute("title", d.getTitle());
 		return "structuredRepresentation";
 	}
 	
-	@Atomic
+	@Atomic(mode=TxMode.WRITE)
 	private void removeDocumentById(String id) {
 		Document d = FenixFramework.getDomainObject(id);
 		d.delete();
 	}
 
 	private void checkForAttributePath(Element e, String attr) {
-		
 		if (e.hasAttr(attr)) {
 			if(e.attr(attr).charAt(0) != '#'){
 				String path = e.absUrl(attr);
@@ -115,17 +88,6 @@ public class DocumentController {
 				e.attr(attr, path);
 			}
 		}
-	}
-
-	@Atomic(mode = TxMode.READ)
-	private DocUrl getDocumentById(String id) {
-		Document d = FenixFramework.getDomainObject(id);
-		DocUrl doc = new DocUrl();
-		doc.setId(id);
-		doc.setTitle(d.getTitle());
-		doc.setUrl(d.getUrl());
-		doc.setContent(d.getContent());
-		return doc;
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -163,19 +125,19 @@ public class DocumentController {
 		return false;
 	}
 
-	@Atomic
-	private List<DocUrl> getUrls() {
-		List<DocUrl> docs = new ArrayList<DocUrl>();
-		DomainRoot d = FenixFramework.getDomainRoot();
-		for (Document doc : d.getDocumentSet()) {
-			DocUrl url = new DocUrl();
-			url.setId(doc.getExternalId());
-			url.setUrl(doc.getUrl());
-			url.setTitle(doc.getTitle());
-			url.setContent(doc.getContent());
-			docs.add(url);
-		}
-		return docs;
-	}
+//	@Atomic
+//	private List<DocUrl> getUrls() {
+//		List<DocUrl> docs = new ArrayList<DocUrl>();
+//		DomainRoot d = FenixFramework.getDomainRoot();
+//		for (Document doc : d.getDocumentSet()) {
+//			DocUrl url = new DocUrl();
+//			url.setId(doc.getExternalId());
+//			url.setUrl(doc.getUrl());
+//			url.setTitle(doc.getTitle());
+//			url.setContent(doc.getContent());
+//			docs.add(url);
+//		}
+//		return docs;
+//	}
 
 }

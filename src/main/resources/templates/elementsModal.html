@@ -23,10 +23,10 @@
       
     </h3>
     <div class="collapse" id="addScenario">
-      <div style="margin-bottom: 5px;"><b>Select Scenario's Quality Attribute:</b></div>
+      <!--<div style="margin-bottom: 5px;"><b>Select Scenario's Quality Attribute:</b></div>
       <select id="qualityAttributes" class="form-control">
         <option th:each="attr : ${qualityAttributes}" th:text="${attr}"></option>
-      </select>
+      </select>-->
       <div style="margin-bottom: 5px;"><b>Scenario's Name:</b></div>
       <input id="scenarioName" type="text" class="form-control" placeholder="Add a name to the Scenario"/>
       <button id="createScenario" type="button" class="btn btn-default" data-dismiss="collapse" disabled="true">Add Scenario</button>
@@ -35,94 +35,21 @@
 
   <!-- Start of Scenarios -->
   <div class="panel panel-default" th:each="scenario : ${scenarios}">
-    <!-- header -->
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <b>Scenario for <span th:text="${scenario.getQualityAttribute().getName()}"></span></b>
-        <div style="float:right;">
-          <a href="#" th:id="'removeScenario' + ${scenario.getExternalId()}" style="color: #337ab7; font-size: 80%;">(Remove Scenario)</a>
-        </div>  
-      </h3>
-    </div>
     <div class="panel-body" style="font-size:115%;">
-      <b class="h4">Name: </b>
-      <p th:text="${scenario.getIdentifier()}" style="margin-left:10px;"></p>
-      <a th:id="'linkAnnotation'+${scenario.getExternalId()}" href="#" th:if="${!annotData.getTag().contains('Tactic')} and ${!annotData.isConnected()} and ${annotData.isScenarioAnnotation()} and ${annotData.canBeAddedToScenario(scenario)}" style="float:right;">(Link Annotation)</a>
-      <a href="#" th:id="'unlinkAnnotation' + ${scenario.getExternalId()}" th:if="${annotData.isConnected()} and ${annotData.belongsToScenario(scenario)}" style="float:right;">(Unlink Annotation)</a>
-      <div th:if="${!annotData.isConnected()} and ${annotData.canBeAddedToScenario(scenario)} and ${annotData.getTag().contains('Tactic')}" style="margin-top:10px;">
-        <div style=" border-bottom: 1px solid rgb(215, 215, 215);">
-        <b class="h4">Tactics: </b>
-        <a href="#" data-toggle="collapse" data-target="#addTactic" style="float:right;">(add Tactic)</a>
-        </div>
-        <!--add tactic-->
-        <div class="collapse" id="addTactic" style="margin-top: 10px; border: 1px dashed rgb(212, 206, 206); padding-right: 10px; border-radius: 7px;">
-          <ul class="list-group" style="  font-size: 90%; margin-top: 5px" th:each="tacticSet : ${tactics.get(scenario.getQualityAttribute().getName())}">
-            <li class="list-group-item list-title" style="  padding: 5px 15px 5px 15px;" th:with="title=${tacticSet.getKey()}">
-              <b><span th:text="${title}"></span></b>
-            </li>
-            <li class="list-group-item" th:each="tac : ${tacticSet.getValue()}" style="  padding: 5px 15px 5px 15px;">
-              <span th:text="${tac}"></span>
-              <a href="#" th:id="tactic" th:class="${tac}">(add New Tactic)</a>
-            </li>
-          </ul>
-          
-        </div>
-        <!--add tactic-->
+      <b class="h4">Scenario: </b> <span th:text="${scenario.getIdentifier()}"></span>
+      <!--<p th:text="${scenario.getIdentifier()}" style="margin-left:10px; font-size:inherit;"></p>-->
+      <a th:id="'linkAnnotation'+${scenario.getExternalId()}" href="#" th:if="${!annotData.isConnected()} and ${annotData.isScenarioAnnotation()}" style="float:right;" th:href="@{/linkToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}">(Add annotation to this Scenario)</a>
 
-        <div th:each="tactic : ${scenario.getQualityAttribute().getTacticSet()}" style="margin-top: 5px; margin-left: 10px;">
-          <span th:text="${tactic.getName()}"></span>
-          <a href="#" th:id="'linkToTactic' + ${tactic.getExternalId()}">(Link Annotation)</a>
-          <a href="#" th:id="'removeTactic'+${tactic.getExternalId()}">(remove tactic)</a>
-          <script type="text/javascript" th:inline="javascript">
-          /*<![CDATA[*/
-          $("#linkToTactic" + /*[[${tactic.getExternalId()}]]*/).click(function(){
-            var loc = /*[[@{/linkAnnotationToTactic/} + ${docId}+'/'+${tactic.getExternalId()}+'/'+${annotation.id}]]*/;
-            $("#elements").load(loc);
-          });
-
-          $("#removeTactic"+/*[[${tactic.getExternalId()}]]*/).click(function(){
-            var loc = /*[[@{/removeTactic/} + ${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}+'/'+${annotation.id}]]*/;
-            $("#elements").load(loc);
-          });
-          /*]]>*/
-          </script>
-        </div>
-      </div>
+      <!--<a href="#" th:id="'unlinkAnnotation' + ${scenario.getExternalId()}" th:if="${annotData.isConnected()} and ${annotData.belongsToScenario(scenario)}" style="float:right;">(Unlink Annotation)</a> -->
     </div>
-    <script type="text/javascript" th:inline="javascript">
+   <!-- <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
-      $("#linkAnnotation"+ /*[[${scenario.getExternalId()}]]*/).click(function(){
-      console.log("click");
+    $("#linkAnnotation"+ /*[[${scenario.getExternalId()}]]*/).click(function(){
       var loc = /*[[@{/linkToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}]]*/;
-      console.log(loc);
       $("#elements").load(loc);
     });
-    $("#unlinkAnnotation"+ /*[[${scenario.getExternalId()}]]*/).click(function(){
-      console.log("click");
-      var loc = /*[[@{/unlinkFromScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}]]*/;
-      console.log(loc);
-      $("#elements").load(loc);
-    });
-    $("#removeScenario" + /*[[${scenario.getExternalId()}]]*/).click(function(){
-      var loc = /*[[@{/removeScenario/} + ${docId}+'/'+${scenario.getExternalId()}+'/'+${annotation.id}]]*/;
-      $("#elements").load(loc);
-    });
-    console.log("processing links");
-    var links = $("a#tactic");
-    for(var i=0; i<links.length; i++){
-      var elem = $("a#tactic")[i];
-      console.log(elem);
-      $(elem).click(function(){
-        console.log("inside:");
-            var tactic = this.className;
-            console.log(tactic);
-            var loc = /*[[@{/addTacticToScenario/} + ${docId}+'/'+${annotation.id}+'/'+${scenario.getExternalId()}]]*/;
-            loc+='?tactic='+encodeURIComponent(tactic);
-            $("#elements").load(loc);
-     });
-    }
     /*]]>*/
-    </script>
+    </script>-->
     <!-- end of scenario header -->
   </div>
 </div>
@@ -131,16 +58,17 @@
 $('#scenarioName').bind('keyup', function() {
   if($("#scenarioName").val() != ''){
     $('#createScenario').removeAttr('disabled');
-  } 
+  }else{
+    $('#createScenario').attr('disabled', 'true');
+  }
 });
 $("#createScenario").click(function(){
   $("#addScenario").collapse('toggle');
-  var attr = document.getElementById("qualityAttributes").value;
+  //var attr = document.getElementById("qualityAttributes").value;
   var name = encodeURIComponent($("#scenarioName").val());
-  console.log(name);
   var loc = /*[[@{/addNewScenario/} + ${docId}+'/'+${annotation.id}+'/']]*/;
-  loc+=attr;
-  loc+= '/'+name;
+  //loc+=attr;
+  loc+= name;
   $("#elements").load(loc);
 
 });
@@ -164,6 +92,6 @@ $("#createScenario").click(function(){
 }
 
 .list-title{
-    background-color: rgb(233, 229, 229);
+  background-color: rgb(233, 229, 229);
 }
 </style>
