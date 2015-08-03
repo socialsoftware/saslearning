@@ -30,7 +30,7 @@
   </div>
 
   <!-- Start of Scenarios -->
-  <div class="panel panel-default" th:each="scenario : ${scenarios}" th:if="${scenario.getExternalId().equals(annotation.connectedId)}">
+  <div class="panel panel-default" th:each="scenario : ${scenarios}" th:if="${!scenario.getExternalId().equals(annotData.getEnclosingScenario().getExternalId())}">
     <div class="panel-body" style="font-size:115%;">
       <b class="h4">Scenario: </b> <span th:text="${scenario.getIdentifier()}"></span>
       <a href="#" style="float:right;" th:href="@{/moveToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}">(Move annotation to this Scenario)</a>
