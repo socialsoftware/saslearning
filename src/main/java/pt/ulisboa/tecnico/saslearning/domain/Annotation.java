@@ -48,4 +48,11 @@ public class Annotation extends Annotation_Base {
 		}
 		return null;
 	}
+	
+	public void updateConnection(String connectedId) {
+		Gson g = new Gson();
+		AnnotationJ ann = g.fromJson(getAnnotation(), AnnotationJ.class);
+		ann.setConnectedId(connectedId);
+		setAnnotation(g.toJson(ann));
+	}
 }

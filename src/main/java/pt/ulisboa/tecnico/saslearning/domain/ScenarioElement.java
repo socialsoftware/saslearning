@@ -28,22 +28,19 @@ public class ScenarioElement extends ScenarioElement_Base {
     	Iterator<Annotation> i = getAnnotationSet().iterator();
     	while(i.hasNext()) {
     		Annotation a = i.next();
+    		a.updateConnection(null);
     		a.setScenarioElement(null);
     		removeAnnotation(a);
     	}
     	removeScenario();
-    	removeQualityAttribute();
     	deleteDomainObject();
     }
 
 	public void removeScenario() {
 	}
 	
-	public void removeQualityAttribute() {
-	}
 
 	public Scenario getEnclosingScenario() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

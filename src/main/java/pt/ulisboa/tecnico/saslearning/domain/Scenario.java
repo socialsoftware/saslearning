@@ -53,6 +53,7 @@ public class Scenario extends Scenario_Base {
 		Iterator<Annotation> i = getAnnotationSet().iterator();
     	while(i.hasNext()) {
     		Annotation a = i.next();
+    		a.updateConnection(null);
     		a.setScenarioElement(null);
     		removeAnnotation(a);
     	}
