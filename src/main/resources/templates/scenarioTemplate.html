@@ -52,14 +52,10 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
             <li th:each="entry : ${tactics}" role="presentation" ><a th:href="'#'+${entry.getKey()}" th:attr="aria-controls=${entry.getKey()}" role="tab" data-toggle="tab" th:text="${entry.getKey()}"></a></li>
-            <!--<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-            <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>-->
           </ul>
-
           <!-- Tab panes -->
           <div class="tab-content">
-            <div th:each="entry : ${tactics}" role="tabpanel" class="tab-pane" th:id="${entry.getKey()}" th:with="set=${entry.getValue()}"> <!--set = mapa <string, string[]>-->
+            <div th:each="entry : ${tactics}" role="tabpanel" class="tab-pane" th:id="${entry.getKey()}" th:with="set=${entry.getValue()}">
               <ul class="list-group" th:each="tacticGroup : ${set}">
                 <li class="list-group-item" style="background-color:#F2F2F2;">
                   <b><span th:text="${tacticGroup.getKey()}"></span></b>
@@ -70,9 +66,6 @@
                 </li>
               </ul>
             </div>
-            <!--<div role="tabpanel" class="tab-pane" id="profile">profile</div>
-            <div role="tabpanel" class="tab-pane" id="messages">etc</div>
-            <div role="tabpanel" class="tab-pane" id="settings">settings</div>-->
           </div>
         </div>
       </div><!-- /.modal-content -->
@@ -95,8 +88,11 @@
         <div class="panel-heading">
           <span class="h4">
             <b>Scenario: <span th:text="${scenario.getIdentifier()}"></span></b> 
+            <a href="" name="Scenario"></a>
           </span>
-          <a href="#" th:href="@{/removeScenario/}+${docId}+'/'+${scenario.getExternalId()}" style="float:right;">(Remove Scenario)</a>
+          <a href="#" th:href="@{/removeScenario/}+${docId}+'/'+${scenario.getExternalId()}" style="float:right;">
+            <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Scenario"></span>
+          </a>
         </div>
         <!-- end of scenario header -->
         <div class="panel-body">
@@ -105,11 +101,15 @@
             <ul class="list-group" style="margin-top:10px">
               <li class="list-group-item" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Scenario Description')}">
                 <a href="" th:name="${ann.id}"></a>
-                <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}">
-                  <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span></a>
+                <p style="float:right;margin-left: 10px;">
+                  <a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}">
+                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
+                  </a>
                   <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
                     <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
-                  </a></p>  
+                  </a>
+
+                </p>  
                   <p>
                     <b>Document Quote: </b>
                     <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
@@ -133,7 +133,10 @@
               <div th:each="entry : ${scenario.getElements()}">
                 <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
                   <div class="element-title">
-                    <h4><b><span th:text="${name}"></span></b></h4>
+                    <h4>
+                      <b><span th:text="${name}"></span></b>
+                    </h4>
+                    <a href="" th:name="${name}"></a>
                   </div>
                   <div th:if="${elem != null}">
                     <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
@@ -145,67 +148,109 @@
                             <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
                           </a>
                         </p> 
-                          <script type="text/javascript" th:inline="javascript">
-                          $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                            $("#elements").load(/*@{/moveAnnotation/}+${docId}+'/'+${ann.id}*/);
-                          });
-                          </script>
-                          <p>
-                            <b>Document Quote: </b>
-                            <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                          </p>
-                          <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                          <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                        </li>
-                      </ul>
-                    </div>
+                        <script type="text/javascript" th:inline="javascript">
+                        $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+                          $("#elements").load(/*@{/moveAnnotation/}+${docId}+'/'+${ann.id}*/);
+                        });
+                        </script>
+                        <p>
+                          <b>Document Quote: </b>
+                          <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                        </p>
+                        <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                        <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-                <!-- -->
-                <!--   Tactics  -->
-                <div class="element-title"><h4><b>Tactics: </b></h4>
-                  <a href="#" data-toggle="modal" data-target="#tactic">(Add Specific Tactic)</a>
-                </div>
-                <div>
-                  <ul class="list-group" style="margin-top:10px" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Tactic')}">
-                    <li class="list-group-item">
+              </div>
+              <!-- -->
+              <!--   Tactics  -->
+              <div class="element-title">
+                <p>
+                  <span class="h4">
+                    <b>Tactics:</b>
+                    <a href="" name="Tactics"></a>
+                  </span>
+                  <a href="#" data-toggle="modal" data-target="#tactic" style="float:right;">
+                    <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add a Specific Tactic"></span>
+                  </a>
+                </p>
+              </div>
+              <div>
+                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Tactic')}">
+                  <li class="list-group-item">
+                    <a href="" th:name="${ann.id}"></a>
+                    <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span></a>
+                      <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
+                        <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
+                      </a>
+
+                      <a href="#" data-toggle="modal" data-target="#linkToTactic">
+                        <span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Add Annotation to a specific Tactic"></span>
+                      </a>
+                      <!---->
+                      <div class="modal fade" id="linkToTactic">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content" >
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">x</span>
+                              </button>
+                              <h4 class="modal-title">Tactics</h4>
+                            </div>
+                            <div class="modal-body" id="elements">
+                              <ul class="list-group">
+                                <li class="list-group-item" th:each="tactic : ${scenario.getTacticSet()}">
+                                  <span th:text="${tactic.getName()}"></span>
+                                  <a href="#" th:href="@{/linkToTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}+'/'+ ${ann.id}">select</a>
+
+                                </li>
+                              </ul>
+                            </div>
+                          </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                      </div>
+                      <!---->
+                    </p>
+                    <script type="text/javascript" th:inline="javascript">
+                    $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+                      $("#elements").load(/*@{/moveAnnotation/}+${docId}+'/'+${ann.id}*/);
+                    });
+                    </script>
+
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+              <!-- tactic annotations -->
+              <div th:if="${!scenario.getTacticSet().isEmpty()}">
+                <div th:each="tactic : ${scenario.getTacticSet()}">
+                  <b>
+                    <span th:text="'- '+${tactic.getName()}" style="font-size:17px;">
+                    </span>
+                  </b>
+                  <a href="#" th:href="@{/removeTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}" style="float:right;">
+                    <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Tactic"></span>
+                  </a>
+                  <ul class="list-group">
+                    <li class="list-group-item" th:each="ann : ${tactic.getJsonAnnotations()}">
                       <a href="" th:name="${ann.id}"></a>
-                      <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span></a>
+                      <p style="float:right;margin-left: 10px;">
+                      <a href="#" th:href="@{/unlinkFromTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()} + '/' + ${ann.id}">
+                        <span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Remove annotation from this tactic"></span></a>
+                      </p>
+                      <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}">
+                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation from Scenario"></span></a>
                         <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
                           <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
                         </a>
-
-                        <a href="#" data-toggle="modal" data-target="#linkToTactic">link to specific tactic...</a>
-                        <!---->
-                        <div class="modal fade" id="linkToTactic">
-                          <div class="modal-dialog modal-lg">
-                            <div class="modal-content" >
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">x</span>
-                                </button>
-                                <h4 class="modal-title">Tactics</h4>
-                              </div>
-                              <div class="modal-body" id="elements">
-                                <ul class="list-group">
-                                  <li class="list-group-item" th:each="tactic : ${scenario.getTacticSet()}">
-                                    <span th:text="${tactic.getName()}"></span>
-                                    <a href="#" th:href="@{/linkToTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}+'/'+ ${ann.id}">select</a>
-
-                                  </li>
-                                </ul>
-                              </div>
-                            </div><!-- /.modal-content -->
-                          </div><!-- /.modal-dialog -->
-                        </div>
-                        <!---->
                       </p>
-                      <script type="text/javascript" th:inline="javascript">
-                      $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                        $("#elements").load(/*@{/moveAnnotation/}+${docId}+'/'+${ann.id}*/);
-                      });
-                      </script>
-
                       <p>
                         <b>Document Quote: </b>
                         <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
@@ -215,52 +260,29 @@
                     </li>
                   </ul>
                 </div>
-                <!-- tactic annotations -->
-                <div th:if="${!scenario.getTacticSet().isEmpty()}">
-                  <div th:each="tactic : ${scenario.getTacticSet()}">
-                    <span th:text="${tactic.getName()}">
-                    </span>
-                    <ul class="list-group">
-                      <li class="list-group-item" th:each="ann : ${tactic.getJsonAnnotations()}">
-                        <a href="#" th:href="@{/unlinkFromTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()} + '/' + ${ann.id}">Remove from tactic</a>
-                        <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}">
-                          <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span></a>
-                          <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                            <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
-                          </a>
-                        </p>
-                        <p>
-                        <b>Document Quote: </b>
-                        <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                      </p>
-                      <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                      <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <!-- -->
-                <!-- end tactics-->
               </div>
+              <!-- -->
+              <!-- end tactics-->
             </div>
           </div>
         </div>
       </div>
-      <script type="text/javascript">
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-      });
-      </script>
-      <style type="text/css">
-      .element-title{
-        margin-top: 20px;
-        margin-bottom: 10px;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        border-bottom-color: #C8C8C8;
-      }
+    </div>
+    <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+    </script>
+    <style type="text/css">
+    .element-title{
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: #C8C8C8;
+    }
 
-      </style>
+    </style>
 
-    </body>
-    </html>
+  </body>
+  </html>

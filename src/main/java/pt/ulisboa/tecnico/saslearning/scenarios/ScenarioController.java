@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.saslearning.scenarios;
 
+import java.util.Iterator;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -132,8 +134,33 @@ public class ScenarioController {
 		Scenario s = FenixFramework.getDomainObject(scenarioId);
 		addTactic(s, tactic);
 		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
-				+ scenarioId);
+				+ scenarioId+"#Tactics");
 		return rv;
+	}
+	
+	@RequestMapping(value = "/removeTactic/{docId}/{scenarioId}/{tacticId}")
+	public RedirectView removeTacticFromScenario(@PathVariable String docId,
+			@PathVariable String scenarioId, @PathVariable String tacticId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		Tactic t = FenixFramework.getDomainObject(tacticId);
+		removeTactic(s, t);
+		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
+				+ scenarioId+"#Tactics");
+		return rv;
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeTactic(Scenario s, Tactic t) {
+		if(!t.getAnnotationSet().isEmpty()) {
+			Iterator<Annotation> it = t.getAnnotationSet().iterator();
+			while(it.hasNext()) {
+				Annotation a = it.next();
+				t.removeAnnotation(a);
+				s.addAnnotation(a);
+			}
+		}
+		s.removeTactic(t);
+		t.delete();
 	}
 
 	@RequestMapping(value = "/linkToTactic/{docId}/{scenarioId}/{tacticId}/{annotationId}")
