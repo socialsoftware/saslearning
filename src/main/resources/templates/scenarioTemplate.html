@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="'Structured Representation - ' + ${title}"></title>
+  <title> View Scenarios</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 
@@ -127,6 +127,36 @@
                 </li>
               </ul>
             </div>
+            <div id="EditText">
+                <a th:id="'showEditor'+${scenario.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+scenario.getExternalId()}">
+                  <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+                </a>
+              <div th:id="'textViewer'+${scenario.getExternalId()}" th:text="${scenario.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${scenario.getText() != null} and ${!scenario.getText().equals('')}"></div>
+              <div class="collapse" th:id="'editorCollapse'+${scenario.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+                <textarea class="form-control" th:id="'text'+${scenario.getExternalId()}" th:text="${scenario.getText()}" style="margin-bottom:10px;"></textarea>
+                <button th:id="'submitText'+${scenario.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+              </div>
+            </div>
+            
+            <script type="text/javascript" th:inline="javascript">
+              
+              $("#submitText"+/*[[${scenario.getExternalId()}]]*/).click(function(){
+                var elemtext = document.getElementById("text"+/*[[${scenario.getExternalId()}]]*/).value;
+                var loc = /*[[@{/setScenarioText/} + ${docId} + '/'+${scenario.getExternalId()}]]*/;
+                var content = {text: elemtext}
+                $.ajax(loc,{
+                  method: "POST",
+                  data: content
+                }).done(function(data, textStatus, jqXHR){
+                  console.log(data);
+                  console.log(textStatus);
+                  console.log(jqXHR);
+                  window.location.hash="#Scenario";
+                  window.location.reload(true);
+                });
+              });
+            </script>
+
             <!-- -->
             <!-- scenario Elements -->
             <div class="scenarioElements">
@@ -162,6 +192,35 @@
                       </li>
                     </ul>
                   </div>
+                  <div id="EditText">
+                <a th:id="'showEditor'+${elem.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+elem.getExternalId()}">
+                  <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+                </a>
+              <div th:id="'textViewer'+${elem.getExternalId()}" th:text="${elem.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${elem.getText() != null} and ${!elem.getText().equals('')}"></div>
+              <div class="collapse" th:id="'editorCollapse'+${elem.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+                <textarea class="form-control" th:id="'text'+${elem.getExternalId()}" th:text="${elem.getText()}" style="margin-bottom:10px;"></textarea>
+                <button th:id="'submitText'+${elem.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+              </div>
+            </div>
+            
+            <script type="text/javascript" th:inline="javascript">
+              $("#submitText"+/*[[${elem.getExternalId()}]]*/).click(function(){
+                var elemtext = document.getElementById("text"+/*[[${elem.getExternalId()}]]*/).value;
+                var loc = /*[[@{/setElementText/} + ${docId} +'/'+${scenario.getExternalId()}+ '/'+${elem.getExternalId()}]]*/;
+                var content = {text: elemtext}
+                $.ajax(loc,{
+                  method: "POST",
+                  data: content
+                }).done(function(data, textStatus, jqXHR){
+                  console.log(data);
+                  console.log(textStatus);
+                  console.log(jqXHR);
+                  window.location.hash="#"+/*[[${name}]]*/;
+                  window.location.reload(true);
+                });
+              });
+            </script>
+
                 </div>
               </div>
               <!-- -->
@@ -234,6 +293,7 @@
                   <b>
                     <span th:text="'- '+${tactic.getName()}" style="font-size:17px;">
                     </span>
+                    <a href="" th:name="${tactic.getName()}"></a>
                   </b>
                   <a href="#" th:href="@{/removeTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}" style="float:right;">
                     <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Tactic"></span>
@@ -259,6 +319,35 @@
                       <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
                     </li>
                   </ul>
+
+                                    <div id="EditText">
+                <a th:id="'showEditor'+${tactic.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+tactic.getExternalId()}">
+                  <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+                </a>
+              <div th:id="'textViewer'+${tactic.getExternalId()}" th:text="${tactic.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${tactic.getText() != null} and ${!tactic.getText().equals('')}"></div>
+              <div class="collapse" th:id="'editorCollapse'+${tactic.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+                <textarea class="form-control" th:id="'text'+${tactic.getExternalId()}" th:text="${tactic.getText()}" style="margin-bottom:10px;"></textarea>
+                <button th:id="'submitText'+${tactic.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+              </div>
+            </div>
+            
+            <script type="text/javascript" th:inline="javascript">
+              $("#submitText"+/*[[${tactic.getExternalId()}]]*/).click(function(){
+                var elemtext = document.getElementById("text"+/*[[${tactic.getExternalId()}]]*/).value;
+                var loc = /*[[@{/setElementText/} + ${docId} + '/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}]]*/;
+                var content = {text: elemtext}
+                $.ajax(loc,{
+                  method: "POST",
+                  data: content
+                }).done(function(data, textStatus, jqXHR){
+                  console.log(data);
+                  console.log(textStatus);
+                  console.log(jqXHR);
+                  window.location.hash="#"+/*[[${tactic.getName()}]]*/;
+                  window.location.reload(true);
+                });
+              });
+            </script>
                 </div>
               </div>
               <!-- -->

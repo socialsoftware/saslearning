@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -134,10 +135,10 @@ public class ScenarioController {
 		Scenario s = FenixFramework.getDomainObject(scenarioId);
 		addTactic(s, tactic);
 		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
-				+ scenarioId+"#Tactics");
+				+ scenarioId + "#Tactics");
 		return rv;
 	}
-	
+
 	@RequestMapping(value = "/removeTactic/{docId}/{scenarioId}/{tacticId}")
 	public RedirectView removeTacticFromScenario(@PathVariable String docId,
 			@PathVariable String scenarioId, @PathVariable String tacticId) {
@@ -145,15 +146,73 @@ public class ScenarioController {
 		Tactic t = FenixFramework.getDomainObject(tacticId);
 		removeTactic(s, t);
 		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
-				+ scenarioId+"#Tactics");
+				+ scenarioId + "#Tactics");
+		return rv;
+	}
+
+	@RequestMapping(value = "/linkToTactic/{docId}/{scenarioId}/{tacticId}/{annotationId}")
+	public RedirectView addAnnotationToTactic(@PathVariable String docId,
+			@PathVariable String scenarioId, @PathVariable String tacticId,
+			@PathVariable String annotationId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		Tactic t = FenixFramework.getDomainObject(tacticId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		linkAnnotationToTactic(s, t, a);
+		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
+				+ scenarioId + "#" + annotationId);
+		return rv;
+	}
+
+	@RequestMapping(value = "/unlinkFromTactic/{docId}/{scenarioId}/{tacticId}/{annotationId}")
+	public RedirectView unlinkFromTactic(@PathVariable String docId,
+			@PathVariable String scenarioId, @PathVariable String tacticId,
+			@PathVariable String annotationId) {
+		Scenario s = FenixFramework.getDomainObject(scenarioId);
+		Tactic t = FenixFramework.getDomainObject(tacticId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		unlinkAnnotationFromTactic(s, t, a);
+		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
+				+ scenarioId + "#" + annotationId);
+		return rv;
+	}
+
+	@RequestMapping(value = "/setElementText/{docId}/{scenarioId}/{elementId}", method = RequestMethod.POST)
+	public RedirectView setElementText(@RequestParam String text,
+			@PathVariable String docId, @PathVariable String elementId,
+			@PathVariable String scenarioId) {
+		ScenarioElement elem = FenixFramework.getDomainObject(elementId);
+		updateText(elem, text);
+		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
+				+ scenarioId + "#" + elem.getName() );
+		return rv;
+	}	
+	
+	@RequestMapping(value = "/setScenarioText/{docId}/{scenarioId}", method = RequestMethod.POST)
+	public RedirectView setScenarioText(@RequestParam String text,
+			@PathVariable String docId, @PathVariable String scenarioId) {
+		System.out.println("Text: " + text);
+		Scenario scen = FenixFramework.getDomainObject(scenarioId);
+		updateText(scen, text);
+		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
+				+ scenarioId + "#" + scen.getName() );
 		return rv;
 	}
 	
 	@Atomic(mode=TxMode.WRITE)
+	private void updateText(Scenario scen, String text) {
+		scen.setText(text);
+	}
+
+	@Atomic(mode=TxMode.WRITE)
+	private void updateText(ScenarioElement elem, String text) {
+		elem.setText(text);
+	}
+
+	@Atomic(mode = TxMode.WRITE)
 	private void removeTactic(Scenario s, Tactic t) {
-		if(!t.getAnnotationSet().isEmpty()) {
+		if (!t.getAnnotationSet().isEmpty()) {
 			Iterator<Annotation> it = t.getAnnotationSet().iterator();
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				Annotation a = it.next();
 				t.removeAnnotation(a);
 				s.addAnnotation(a);
@@ -163,43 +222,17 @@ public class ScenarioController {
 		t.delete();
 	}
 
-	@RequestMapping(value = "/linkToTactic/{docId}/{scenarioId}/{tacticId}/{annotationId}")
-	public RedirectView addAnnotationToTactic(@PathVariable String docId,
-			@PathVariable String scenarioId, @PathVariable String tacticId, @PathVariable String annotationId) {
-		Scenario s = FenixFramework.getDomainObject(scenarioId);
-		Tactic t = FenixFramework.getDomainObject(tacticId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		linkAnnotationToTactic(s,t,a);
-		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
-				+ scenarioId+"#"+annotationId);
-		return rv;
-	}
-	
-	@RequestMapping(value = "/unlinkFromTactic/{docId}/{scenarioId}/{tacticId}/{annotationId}")
-	public RedirectView unlinkFromTactic(@PathVariable String docId,
-			@PathVariable String scenarioId, @PathVariable String tacticId, @PathVariable String annotationId) {
-		Scenario s = FenixFramework.getDomainObject(scenarioId);
-		Tactic t = FenixFramework.getDomainObject(tacticId);
-		Annotation a = FenixFramework.getDomainObject(annotationId);
-		unlinkAnnotationFromTactic(s,t,a);
-		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
-				+ scenarioId+"#"+annotationId);
-		return rv;
-	}
-
-	@Atomic(mode=TxMode.WRITE)
+	@Atomic(mode = TxMode.WRITE)
 	private void unlinkAnnotationFromTactic(Scenario s, Tactic t, Annotation a) {
 		t.removeAnnotation(a);
 		s.addAnnotation(a);
 	}
 
-	@Atomic(mode=TxMode.WRITE)
+	@Atomic(mode = TxMode.WRITE)
 	private void linkAnnotationToTactic(Scenario s, Tactic t, Annotation a) {
 		s.removeAnnotation(a);
 		t.addAnnotation(a);
 	}
-	
-	
 
 	@Atomic(mode = TxMode.WRITE)
 	private void addTactic(Scenario s, String tactic) {
@@ -247,20 +280,18 @@ public class ScenarioController {
 			s.removeAnnotation(a);
 			a.setScenario(null);
 			updateAnnotation(null, a);
-		}
-		else if(tag.equals("Tactic")) {
-			if(a.getScenarioElement() != null) {
+		} else if (tag.equals("Tactic")) {
+			if (a.getScenarioElement() != null) {
 				ScenarioElement elem = a.getScenarioElement();
 				elem.removeAnnotation(a);
 				a.setScenarioElement(null);
 				updateAnnotation(null, a);
-			}else {
+			} else {
 				s.removeAnnotation(a);
 				a.setScenario(null);
 				updateAnnotation(null, a);
 			}
-		}
-		else if (s.getElements().get(tag) != null) {
+		} else if (s.getElements().get(tag) != null) {
 			s.getElements().get(tag).removeAnnotation(a);
 			a.setScenarioElement(null);
 			updateAnnotation(null, a);
@@ -298,4 +329,5 @@ public class ScenarioController {
 		s.setResponseMeasure(rm);
 		d.addScenario(s);
 	}
+
 }
