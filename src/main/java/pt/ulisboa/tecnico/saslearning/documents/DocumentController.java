@@ -17,15 +17,18 @@ import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.DomainRoot;
 import pt.ist.fenixframework.FenixFramework;
+import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
+import pt.ulisboa.tecnico.saslearning.utils.Utils;
 
 @Controller
 public class DocumentController {
-	
-	@RequestMapping(value= "/headerFrame")
+
+	@RequestMapping(value = "/headerFrame")
 	public String headerFrame() {
 		return "headerFrame";
 	}
+
 	@RequestMapping(value = "/manageDocs")
 	public String manageDocuments(Model m) {
 		m.addAttribute("docs", FenixFramework.getDomainRoot().getDocumentSet());
@@ -39,7 +42,6 @@ public class DocumentController {
 		RedirectView rv = new RedirectView("/manageDocs");
 		return rv;
 	}
-
 
 	@RequestMapping(value = "/addDoc", method = RequestMethod.POST)
 	public RedirectView addDocument(@ModelAttribute DocUrl doc)
@@ -64,17 +66,45 @@ public class DocumentController {
 		m.addAttribute("doc", d);
 		return "docTemplate";
 	}
-	
+
 	@RequestMapping("/viewStructuredRepresentation/{docId}")
-	public String viewStructuredRepresentation(@PathVariable String docId, Model m) {
+	public String viewStructuredRepresentation(@PathVariable String docId,
+			Model m) {
 		Document d = FenixFramework.getDomainObject(docId);
 		m.addAttribute("scenarios", d.getScenarioSet());
 		m.addAttribute("docId", docId);
 		m.addAttribute("title", d.getTitle());
 		return "structuredRepresentation";
 	}
-	
-	@Atomic(mode=TxMode.WRITE)
+
+	@RequestMapping("/viewTemplate/{docId}/{connectedId}/{annotationId}")
+	public RedirectView viewTemplate(@PathVariable String docId,
+			@PathVariable String connectedId, @PathVariable String annotationId) {
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		RedirectView rv = new RedirectView();
+		if(a.isScenarioAnnotation()) {
+			rv.setUrl("/viewScenario/"+docId+"/"+connectedId+"#"+annotationId);
+		}else if( a.isModuleViewtypeAnnotation()) {
+			
+		}
+		return rv;
+	}
+
+	@RequestMapping(value = "/addAnnotationToStructure/{docId}/{annotationId}/{tag}")
+	public RedirectView addAnnotationModal(@PathVariable String docId,
+			@PathVariable String annotationId, String tag) {
+		RedirectView rv = new RedirectView();
+		if (Utils.allScenarioConcepts().contains(tag)) {
+			rv.setUrl("/addAnnotationToScenarioStructure/" + docId + "/"
+					+ annotationId);
+		} else if (Utils.moduleVTConcepts().contains(tag)) {
+			rv.setUrl("/addAnnotationToModuleVTStructure/" + docId + "/"
+					+ annotationId);
+		}
+		return rv;
+	}
+
+	@Atomic(mode = TxMode.WRITE)
 	private void removeDocumentById(String id) {
 		Document d = FenixFramework.getDomainObject(id);
 		d.delete();
@@ -82,7 +112,7 @@ public class DocumentController {
 
 	private void checkForAttributePath(Element e, String attr) {
 		if (e.hasAttr(attr)) {
-			if(e.attr(attr).charAt(0) != '#'){
+			if (e.attr(attr).charAt(0) != '#') {
 				String path = e.absUrl(attr);
 				e.removeAttr(attr);
 				e.attr(attr, path);
@@ -92,7 +122,7 @@ public class DocumentController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void addNewDocument(String url) throws IOException {
-		if (!documentExists(url)){
+		if (!documentExists(url)) {
 			Document doc = new Document();
 			org.jsoup.nodes.Document document = Jsoup.connect(url).get();
 			for (Element e : document.getAllElements()) {
@@ -111,7 +141,7 @@ public class DocumentController {
 			doc.setTitle(title);
 			doc.setContent(document.children().toString());
 			FenixFramework.getDomainRoot().addDocument(doc);
-			}
+		}
 	}
 
 	@Atomic
@@ -124,20 +154,5 @@ public class DocumentController {
 		}
 		return false;
 	}
-
-//	@Atomic
-//	private List<DocUrl> getUrls() {
-//		List<DocUrl> docs = new ArrayList<DocUrl>();
-//		DomainRoot d = FenixFramework.getDomainRoot();
-//		for (Document doc : d.getDocumentSet()) {
-//			DocUrl url = new DocUrl();
-//			url.setId(doc.getExternalId());
-//			url.setUrl(doc.getUrl());
-//			url.setTitle(doc.getTitle());
-//			url.setContent(doc.getContent());
-//			docs.add(url);
-//		}
-//		return docs;
-//	}
 
 }

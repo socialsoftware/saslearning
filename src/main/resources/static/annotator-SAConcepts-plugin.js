@@ -99,20 +99,17 @@ var loadViewerLink = function(field, annotation, ann, options){
     a.attr("target", "_parent");
     if(annotation.connectedId != undefined){
       a.append("View Annotation");
-      a.attr("href","/viewScenario/"+options.docId+"/"+annotation.connectedId+"#"+annotation.id);
+      a.attr("href","/viewTemplate/"+options.docId+"/"+annotation.connectedId+"/"+annotation.docId);
     }else{
       a.attr("data-toggle","modal");
           a.attr("data-target","#syntax");
       a.append("Add/Remove from Structured Representation");
       a.click(function(){
         ann.viewer.hide();
-        $(parent.document.getElementById("elements")).load("/addAnnotationToStructure/"+options.docId+"/"+annotation.id);
+        $(parent.document.getElementById("elements")).load("/addAnnotationToStructure/"+options.docId+"/"+annotation.id + "/"+annotation.tag);
     });
           
     }
-    
-
-
     $(field).append(a);
   }
 }

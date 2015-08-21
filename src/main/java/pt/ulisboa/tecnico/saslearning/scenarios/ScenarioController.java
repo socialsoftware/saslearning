@@ -32,7 +32,7 @@ import com.google.gson.Gson;
 @Controller
 public class ScenarioController {
 
-	@RequestMapping(value = "/addAnnotationToStructure/{docId}/{annotationId}")
+	@RequestMapping(value = "/addAnnotationToScenarioStructure/{docId}/{annotationId}")
 	public String addAnnotationModal(Model m, @PathVariable String docId,
 			@PathVariable String annotationId) {
 		Document d = FenixFramework.getDomainObject(docId);
@@ -43,10 +43,10 @@ public class ScenarioController {
 		m.addAttribute("annotation", ann);
 		m.addAttribute("annotData", a);
 		m.addAttribute("docId", docId);
-		return "addAnnotationModal";
+		return "addAnnotationScenarioModal";
 	}
 
-	@RequestMapping(value = "/moveAnnotation/{docId}/{annotationId}")
+	@RequestMapping(value = "/moveAnnotationScenario/{docId}/{annotationId}")
 	public String moveAnnotationModal(Model m, @PathVariable String docId,
 			@PathVariable String annotationId) {
 		Document d = FenixFramework.getDomainObject(docId);
@@ -57,7 +57,7 @@ public class ScenarioController {
 		m.addAttribute("annotation", ann);
 		m.addAttribute("annotData", a);
 		m.addAttribute("docId", docId);
-		return "moveAnnotationModal";
+		return "moveAnnotationScenarioModal";
 	}
 
 	@RequestMapping(value = "/addNewScenario/{docId}/{annotationId}/{scenarioName}")

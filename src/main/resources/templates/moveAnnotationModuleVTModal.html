@@ -1,0 +1,80 @@
+<div id="templateContents" class="well">
+  <div class="annotation">
+    <div class="element-title">
+      <h3><b>Annotation:</b></h3>
+    </div>
+    <div>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <p>
+            <b>Document Quote: </b>
+            <i><span th:text="'(...)' + ${annotation.quote} + '(...)'"></span></i>
+          </p>
+          <p><b>Comment: </b><span th:text="${annotation.text}"></span></p>
+          <p><b>Tag: </b><span th:text="${annotation.tag}"></span></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="clearfix element-title">
+    <h3>
+      <b>Module Viewtypes</b>
+      <a class="pull-right" href="#" data-toggle="collapse" data-target="#addViewtype" style="font-size: 50%;">(Add new Viewtype)</a>
+      
+    </h3>
+    <div class="collapse" id="addViewtype">
+      <div style="margin-bottom: 5px;"><b>Viewtype's Name:</b></div>
+      <input id="viewtypeName" type="text" class="form-control" placeholder="Add a name to the Viewtype"/>
+      <button id="createViewtype" type="button" class="btn btn-default" data-dismiss="collapse" disabled="true">Add Viewtype</button>
+    </div>  
+  </div>
+
+  <!-- Start of Viewtypes -->
+  <div class="panel panel-default" th:each="vt : ${viewtypes}" th:if="${!vt.getExternalId().equals(annotData.getEnclosingModuleViewtype().getExternalId())}">
+    <div class="panel-body" style="font-size:115%;">
+      <b class="h4">Viewtype: </b> <span th:text="${vt.getIdentifier()}"></span>
+      <a href="#" style="float:right;" th:href="@{/moveToModuleViewtype/} + ${docId} + '/' + ${annotation.id} + '/' + ${vt.getExternalId()}">(Move annotation to this Viewtype)</a>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript" th:inline="javascript">
+$('#viewtypeName').bind('keyup', function() {
+  if($("#viewtypeName").val() != ''){
+    $('#createViewtype').removeAttr('disabled');
+  }else{
+    $('#createViewtype').attr('disabled', 'true');
+  }
+});
+$("#createViewtype").click(function(){
+  $("#addViewtype").collapse('toggle');
+  var name = encodeURIComponent($("#viewtypeName").val());
+  var loc = /*[[@{/addNewModuleViewtype/} + ${docId}+'/'+${annotation.id}+'/']]*/;
+  loc+= name+"?move=yes";
+  $("#elements").load(loc);
+
+});
+
+
+</script>
+<style type="text/css">
+#addViewtype {
+  border: 1px dashed;
+  padding: 10px; 
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border-color: rgb(166, 162, 162);
+}
+
+.element-title {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #C8C8C8;
+  margin-bottom: 10px;
+}
+
+.list-title{
+  background-color: rgb(233, 229, 229);
+}
+</style>

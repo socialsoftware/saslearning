@@ -119,7 +119,7 @@
                   <script type="text/javascript" th:inline="javascript">
                   $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
                     console.log("click");
-                    var loc = /*[[@{/moveAnnotation/}+${docId}+'/'+${ann.id}]]*/;
+                    var loc = /*[[@{/moveAnnotationScenario/}+${docId}+'/'+${ann.id}]]*/;
                     console.log(loc);
                     $("#elements").load(loc);
                   });
