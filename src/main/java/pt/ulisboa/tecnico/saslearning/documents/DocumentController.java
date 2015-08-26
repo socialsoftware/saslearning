@@ -85,20 +85,22 @@ public class DocumentController {
 		if(a.isScenarioAnnotation()) {
 			rv.setUrl("/viewScenario/"+docId+"/"+connectedId+"#"+annotationId);
 		}else if( a.isModuleViewtypeAnnotation()) {
-			
+			rv.setUrl("/viewModuleViewType/"+docId+"/"+connectedId+"#"+annotationId);
 		}
 		return rv;
 	}
 
 	@RequestMapping(value = "/addAnnotationToStructure/{docId}/{annotationId}/{tag}")
 	public RedirectView addAnnotationModal(@PathVariable String docId,
-			@PathVariable String annotationId, String tag) {
-		RedirectView rv = new RedirectView();
+			@PathVariable String annotationId, @PathVariable String tag) {
+		RedirectView rv = null;
 		if (Utils.allScenarioConcepts().contains(tag)) {
-			rv.setUrl("/addAnnotationToScenarioStructure/" + docId + "/"
+			System.out.println("Is scenario tag");
+			rv= new RedirectView("/addAnnotationToScenarioStructure/" + docId + "/"
 					+ annotationId);
 		} else if (Utils.moduleVTConcepts().contains(tag)) {
-			rv.setUrl("/addAnnotationToModuleVTStructure/" + docId + "/"
+			System.out.println("Is mvt tag");
+			rv = new RedirectView("/addAnnotationToModuleVTStructure/" + docId + "/"
 					+ annotationId);
 		}
 		return rv;

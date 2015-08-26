@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.saslearning.viewtypes;
 
+import java.util.Iterator;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +15,8 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
+import pt.ulisboa.tecnico.saslearning.domain.Module;
 import pt.ulisboa.tecnico.saslearning.domain.ModuleViewType;
-import pt.ulisboa.tecnico.saslearning.domain.Scenario;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 
 import com.google.gson.Gson;
@@ -42,7 +44,7 @@ public class ModuleViewtypeController {
 		ModuleViewType mvt = FenixFramework.getDomainObject(viewtypeId);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
 		addAnnotationToModuleViewType(mvt, a);
-		RedirectView rv = new RedirectView("/viewModuleViewtype/" + docId + "/"
+		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
 				+ viewtypeId + "#" + annotationId);
 		return rv;
 	}
@@ -50,9 +52,9 @@ public class ModuleViewtypeController {
 	@RequestMapping(value = "/addNewModuleViewtype/{docId}/{annotationId}/{viewtypeName}")
 	public RedirectView addNewModuleViewType(@PathVariable String docId,
 			@PathVariable String annotationId,
-			@PathVariable String scenarioName, @RequestParam String move) {
+			@PathVariable String viewtypeName, @RequestParam String move) {
 		Document d = FenixFramework.getDomainObject(docId);
-		addModuleViewTypeToDocument(d, scenarioName);
+		addModuleViewTypeToDocument(d, viewtypeName);
 		RedirectView rv = new RedirectView();
 		if (move.equals("yes")) {
 			rv.setUrl("/moveAnnotationMVT/" + docId + "/" + annotationId);
@@ -83,7 +85,7 @@ public class ModuleViewtypeController {
 	}
 
 	@RequestMapping(value = "/unlinkFromModuleViewtype/{docId}/{annotationId}/{viewtypeId}")
-	public RedirectView unlinkAnnotationFromScenario(
+	public RedirectView unlinkAnnotationFromViewtype(
 			@PathVariable String docId, @PathVariable String annotationId,
 			@PathVariable String viewtypeId) {
 		ModuleViewType mvt = FenixFramework.getDomainObject(viewtypeId);
@@ -120,7 +122,7 @@ public class ModuleViewtypeController {
 	}
 
 	@RequestMapping(value = "/setModuleViewtypeText/{docId}/{viewtypeId}", method = RequestMethod.POST)
-	public RedirectView setScenarioText(@RequestParam String text,
+	public RedirectView setViewtypeText(@RequestParam String text,
 			@PathVariable String docId, @PathVariable String viewtypeId) {
 		ModuleViewType mvt = FenixFramework.getDomainObject(viewtypeId);
 		updateText(mvt, text);
@@ -132,7 +134,97 @@ public class ModuleViewtypeController {
 	@RequestMapping(value = "/addNewModule/{docId}/{viewtypeId}/{name}")
 	public RedirectView addModuleToViewtype(@PathVariable String docId,
 			@PathVariable String viewtypeId, @PathVariable String name) {
-		return null; //TO BE CONTINUED...
+		ModuleViewType mvt = FenixFramework.getDomainObject(viewtypeId);
+		addNewModule(mvt, name);
+		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
+				+ viewtypeId);
+		return rv;
+
+	}
+
+	@RequestMapping(value = "/linkToModule/{docId}/{viewtypeId}/{moduleId}/{annotationId}")
+	public RedirectView linkAnnotationToModule(@PathVariable String docId,
+			@PathVariable String viewtypeId, @PathVariable String moduleId,
+			@PathVariable String annotationId) {
+		Module m = FenixFramework.getDomainObject(moduleId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		addAnnotationToModule(m, a);
+		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
+				+ viewtypeId+"#"+annotationId);
+		return rv;
+	}
+
+	@RequestMapping(value = "/removeModule/{docId}/{viewtypeId}/{moduleId}")
+	public RedirectView removeModule(@PathVariable String docId,
+			@PathVariable String viewtypeId, @PathVariable String moduleId) {
+		ModuleViewType mvt = FenixFramework.getDomainObject(viewtypeId);
+		Module m = FenixFramework.getDomainObject(moduleId);
+		removeModule(mvt, m);
+		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
+				+ viewtypeId);
+		return rv;
+	}
+
+	@RequestMapping(value = "/unlinkFromModule/{docId}/{viewtypeId}/{moduleId}/{annotationId}")
+	public RedirectView removeAnnotationFromModule(@PathVariable String docId,
+			@PathVariable String viewtypeId, @PathVariable String moduleId,
+			@PathVariable String annotationId) {
+		ModuleViewType mvt = FenixFramework.getDomainObject(viewtypeId);
+		Module m = FenixFramework.getDomainObject(moduleId);
+		Annotation a = FenixFramework.getDomainObject(annotationId);
+		unlinkFromModule(a, m, mvt);
+		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
+				+ viewtypeId);
+		return rv;
+	}
+
+	@RequestMapping(value = "/setModuleText/{docId}/{viewtypeId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView setModuleText(@RequestParam String text,
+			@PathVariable String docId, @PathVariable String viewtypeId,
+			@PathVariable String moduleId) {
+		Module m = FenixFramework.getDomainObject(moduleId);
+		setModuleText(m, text);
+		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
+				+ viewtypeId);
+		return rv;
+	}
+
+	@Atomic(mode=TxMode.WRITE)
+	private void setModuleText(Module m, String text) {
+		m.setText(text);
+	}
+
+	@Atomic(mode = TxMode.WRITE)
+	private void unlinkFromModule(Annotation a, Module m, ModuleViewType mvt) {
+		a.setModule(null);
+		m.removeAnnotation(a);
+		mvt.addAnnotation(a);
+	}
+
+	@Atomic(mode = TxMode.WRITE)
+	private void removeModule(ModuleViewType mvt, Module m) {
+		Iterator<Annotation> it = m.getAnnotationSet().iterator();
+		while (it.hasNext()) {
+			Annotation a = it.next();
+			a.setModule(null);
+			m.removeAnnotation(a);
+			mvt.addAnnotation(a);
+		}
+		m.setModuleViewtype(null);
+		m.delete();
+	}
+
+	@Atomic(mode = TxMode.WRITE)
+	private void addAnnotationToModule(Module m, Annotation a) {
+		a.setModuleViewtype(null);
+		m.addAnnotation(a);
+	}
+
+	@Atomic(mode = TxMode.WRITE)
+	private void addNewModule(ModuleViewType mvt, String name) {
+		Module m = new Module();
+		m.setName(name);
+		mvt.addModule(m);
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -147,6 +239,7 @@ public class ModuleViewtypeController {
 		addAnnotationToModuleViewType(nvt, a);
 	}
 
+	@Atomic(mode=TxMode.WRITE)
 	private void removeAnnotationFromModuleViewtype(ModuleViewType mvt,
 			Annotation a) {
 		a.updateConnection(null);

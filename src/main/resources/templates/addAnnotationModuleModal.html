@@ -19,7 +19,7 @@
   <div class="clearfix element-title">
     <h3>
       <b>Module Viewtypes</b>
-      <a class="pull-right" href="#" data-toggle="collapse" data-target="#addScenario" style="font-size: 50%;">(Add new Viewtype)</a>
+      <a class="pull-right" href="#" data-toggle="collapse" data-target="#addViewtype" style="font-size: 50%;">(Add new Viewtype)</a>
       
     </h3>
     <div class="collapse" id="addViewtype">
@@ -39,7 +39,7 @@
 </div>  
 
 <script type="text/javascript" th:inline="javascript">
-$('#Name').bind('keyup', function() {
+$('#viewtypeName').bind('keyup', function() {
   if($("#viewtypeName").val() != ''){
     $('#createViewtype').removeAttr('disabled');
   }else{

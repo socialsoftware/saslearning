@@ -70,7 +70,7 @@ public class ScenarioController {
 		if (move.equals("yes")) {
 			rv.setUrl("/moveAnnotation/" + docId + "/" + annotationId);
 		} else {
-			rv.setUrl("/addAnnotationToStructure/" + docId + "/" + annotationId);
+			rv.setUrl("/addAnnotationToScenarioStructure/" + docId + "/" + annotationId);
 		}
 		return rv;
 	}

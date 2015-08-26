@@ -1,10 +1,10 @@
 <html>
 <section layout:fragment="headerFragment">
 <!-- INICIO DO HEADER -->
-	<nav class="navbar navbar-inverse">
-	  <div class="container-fluid">
+	<nav class="navbar navbar-inverse" id="headernavbar">
+	  <div class="container-fluid" id="containerFluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
+	    <div class="navbar-header" id="navbarHeader">
 	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 	        <span class="sr-only">Toggle navigation</span>
 	        <span class="icon-bar"></span>
@@ -16,9 +16,9 @@
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	    	<ul class="nav navbar-nav">
-		        <li class="dropdown">
-			        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Menu 
+	    	<ul class="nav navbar-nav" id="ulnavMenu">
+		        <li class="dropdown" id="lidropdown">
+			        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="adropdowntoggle">Menu 
 			        	<span class="caret"></span>
 			        </a>
 				    <ul class="dropdown-menu" role="menu">
@@ -35,13 +35,13 @@
 			        </ul>
 		        </li>
 	      	</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<p class="navbar-text">
+			<ul class="nav navbar-nav navbar-right" id="ulnavbarright">
+				<p class="navbar-text" id="pnavbar-text">
 					<b>Signed in as <span sec:authentication="name"></span></b>
 				</p>
-		      	<ul class="nav navbar-nav">
-		        	<li>
-		        		<a href="#" th:href="@{/logout}" style="font-size: x-small;">
+		      	<ul class="nav navbar-nav" id="ulnavnavbar-nav">
+		        	<li id="liDoLogout">
+		        		<a href="#" th:href="@{/logout}" style="font-size: x-small;" id="logout">
 		        			<u>Logout</u>
 		        		</a>
 		        	</li>
