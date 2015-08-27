@@ -84,8 +84,8 @@ public class DocumentController {
 		RedirectView rv = new RedirectView();
 		if(a.isScenarioAnnotation()) {
 			rv.setUrl("/viewScenario/"+docId+"/"+connectedId+"#"+annotationId);
-		}else if( a.isModuleViewtypeAnnotation()) {
-			rv.setUrl("/viewModuleViewType/"+docId+"/"+connectedId+"#"+annotationId);
+		}else if( a.getTag().equals("Module")) {
+			rv.setUrl("/viewModule/"+docId+"/"+connectedId+"#"+annotationId);
 		}
 		return rv;
 	}
@@ -98,9 +98,9 @@ public class DocumentController {
 			System.out.println("Is scenario tag");
 			rv= new RedirectView("/addAnnotationToScenarioStructure/" + docId + "/"
 					+ annotationId);
-		} else if (Utils.moduleVTConcepts().contains(tag)) {
-			System.out.println("Is mvt tag");
-			rv = new RedirectView("/addAnnotationToModuleVTStructure/" + docId + "/"
+		} else if (tag.equals("Module")) {
+			System.out.println("Is module tag");
+			rv = new RedirectView("/addAnnotationToModuleTemplate/" + docId + "/"
 					+ annotationId);
 		}
 		return rv;

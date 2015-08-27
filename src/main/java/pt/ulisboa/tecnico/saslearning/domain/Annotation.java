@@ -21,6 +21,8 @@ public class Annotation extends Annotation_Base {
 		setOwner(null);
 		setScenario(null);
 		setScenarioElement(null);
+		setModule(null);
+		setModuleViewtype(null);
 		deleteDomainObject();
 		
 	}
@@ -43,14 +45,14 @@ public class Annotation extends Annotation_Base {
 		return Utils.moduleVTConcepts().contains(getTag());
 	}
 	
-	public ModuleViewType getEnclosingModuleViewtype() {
-		if(getModuleViewtype() != null) {
-			return getModuleViewtype();
-		}else if(getModule() != null) {
-			return getModule().getModuleViewtype();
-		}
-		return null;
-	}
+//	public ModuleViewType getEnclosingModuleViewtype() {
+//		if(getModuleViewtype() != null) {
+//			return getModuleViewtype();
+//		}else if(getModule() != null) {
+//			return getModule().getModuleViewtype();
+//		}
+//		return null;
+//	}
 	public Scenario getEnclosingScenario() {
 		if(isScenarioAnnotation()) {
 			if(getScenario() != null) {

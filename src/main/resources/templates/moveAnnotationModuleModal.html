@@ -24,24 +24,23 @@
     </h3>
     <div class="collapse" id="addModule">
       <div style="margin-bottom: 5px;"><b>Module Name:</b></div>
-      <input id="moduleName" type="text" class="form-control" placeholder="Set the Module name"/>
+      <input id="moduleName" type="text" class="form-control" placeholder="Set Module name"/>
       <button id="createModule" type="button" class="btn btn-default" data-dismiss="collapse" disabled="true">Add Module</button>
     </div>  
   </div>
 
-  <!-- Start of modules -->
-<div th:if="${!modules.isEmpty()}">
-  <div class="panel panel-default" th:each="mod : ${modules}">
-    <div class="panel-body" >
+  <!-- Start of Modules -->
+  <div class="panel panel-default" th:each="mod : ${modules}" th:if="${!mod.getExternalId().equals(annotData.getModule().getExternalId())}">
+    <div class="panel-body" style="font-size:115%;">
       <b class="h4">Module: </b> <span th:text="${mod.getIdentifier()}"></span>
-      <a th:id="'linkAnnotation'+${mod.getExternalId()}" href="#" th:if="${!annotData.isConnected()}" style="float:right;" th:href="@{/linkToModule/} + ${docId} + '/' + ${annotation.id} + '/' + ${mod.getExternalId()}">(Add annotation to this Module)</a>
+      <a href="#" style="float:right;" th:href="@{/moveToModule/} + ${docId} + '/' + ${annotation.id} + '/' + ${mod.getExternalId()}">(Move annotation to this Module)</a>
     </div>
   </div>
 </div>
-</div>  
+
 
 <script type="text/javascript" th:inline="javascript">
-$('#moduleName').bind('keyup', function() {
+$('#viewtypeName').bind('keyup', function() {
   if($("#moduleName").val() != ''){
     $('#createModule').removeAttr('disabled');
   }else{
@@ -52,7 +51,7 @@ $("#createModule").click(function(){
   $("#addModule").collapse('toggle');
   var name = encodeURIComponent($("#moduleName").val());
   var loc = /*[[@{/addNewModule/} + ${docId}+'/'+${annotation.id}+'/']]*/;
-  loc+= name + "?move=no";
+  loc+= name+"?move=yes";
   $("#elements").load(loc);
 
 });
@@ -60,7 +59,7 @@ $("#createModule").click(function(){
 
 </script>
 <style type="text/css">
-#addScenario {
+#addModule {
   border: 1px dashed;
   padding: 10px; 
   border-radius: 10px;

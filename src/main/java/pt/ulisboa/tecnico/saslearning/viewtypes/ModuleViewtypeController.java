@@ -210,7 +210,7 @@ public class ModuleViewtypeController {
 			m.removeAnnotation(a);
 			mvt.addAnnotation(a);
 		}
-		m.setModuleViewtype(null);
+		//m.setModuleViewtype(null);
 		m.delete();
 	}
 
@@ -224,7 +224,7 @@ public class ModuleViewtypeController {
 	private void addNewModule(ModuleViewType mvt, String name) {
 		Module m = new Module();
 		m.setName(name);
-		mvt.addModule(m);
+		//mvt.addModule(m);
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -234,8 +234,8 @@ public class ModuleViewtypeController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void moveAnnotationToModuleViewtype(Annotation a, ModuleViewType nvt) {
-		ModuleViewType old = a.getEnclosingModuleViewtype();
-		removeAnnotationFromModuleViewtype(old, a);
+		//ModuleViewType old = a.getEnclosingModuleViewtype();
+		//removeAnnotationFromModuleViewtype(old, a);
 		addAnnotationToModuleViewType(nvt, a);
 	}
 

@@ -33,7 +33,7 @@ public class Module extends Module_Base {
 			a.setModule(null);
 			removeAnnotation(a);
 		}
-		setModuleViewtype(null);
+		setDocument(null);
 		deleteDomainObject();
 	}
     

@@ -27,11 +27,6 @@ public class ModuleViewType extends ModuleViewType_Base {
     }
 
 	public void delete() {
-		Iterator<Module> it = getModuleSet().iterator();
-		while(it.hasNext()) {
-			Module m = it.next();
-			m.delete();
-		}
 		
 		Iterator<Annotation> anns = getAnnotationSet().iterator();
 		while(anns.hasNext()) {

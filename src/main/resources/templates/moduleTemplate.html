@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title> View Viewtype</title>
+  <title> Module</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 
@@ -53,10 +53,10 @@
         <!-- header -->
         <div class="panel-heading">
           <span class="h4">
-            <b>Module Viewtype: <span th:text="${viewtype.getIdentifier()}"></span></b> 
+            <b>Module Viewtype: <span th:text="${module.getIdentifier()}"></span></b> 
             <a href="" name="ModuleViewtype"></a>
           </span>
-          <a href="#" th:href="@{/removeModuleViewtype/}+${docId}+'/'+${viewtype.getExternalId()}" style="float:right;">
+          <a href="#" th:href="@{/removeModule/}+${docId}+'/'+${module.getExternalId()}" style="float:right;">
             <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Viewtype"></span>
           </a>
         </div>
@@ -65,10 +65,10 @@
           <!-- scenario annotations -->
           <div>
             <ul class="list-group" style="margin-top:10px">
-              <li class="list-group-item" th:each=" ann : ${viewtype.getJsonAnnotations()}" th:if="${ann.tag.equals('Module ViewType Description')}">
+              <li class="list-group-item" th:each=" ann : ${module.getJsonAnnotations()}" th:if="${ann.tag.equals('Module ViewType Description')}">
                 <a href="" th:name="${ann.id}"></a>
                 <p style="float:right;margin-left: 10px;">
-                  <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${viewtype.getExternalId()}">
+                  <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
                     <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
                   </a>
                   <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
@@ -85,7 +85,7 @@
                 <script type="text/javascript" th:inline="javascript">
                 $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
                   console.log("click");
-                  var loc = /*[[@{/moveAnnotationMVT/}+${docId}+'/'+${ann.id}]]*/;
+                  var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
                   console.log(loc);
                   $("#elements").load(loc);
                 });
@@ -94,21 +94,21 @@
             </ul>
           </div>
           <div id="EditText">
-            <a th:id="'showEditor'+${viewtype.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+viewtype.getExternalId()}">
+            <a th:id="'showEditor'+${module.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+module.getExternalId()}">
               <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
             </a>
-            <div th:id="'textViewer'+${viewtype.getExternalId()}" th:text="${viewtype.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${viewtype.getText() != null} and ${!viewtype.getText().equals('')}"></div>
-            <div class="collapse" th:id="'editorCollapse'+${viewtype.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
-              <textarea class="form-control" th:id="'text'+${viewtype.getExternalId()}" th:text="${viewtype.getText()}" style="margin-bottom:10px;"></textarea>
-              <button th:id="'submitText'+${viewtype.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+            <div th:id="'textViewer'+${module.getExternalId()}" th:text="${module.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${module.getText() != null} and ${!module.getText().equals('')}"></div>
+            <div class="collapse" th:id="'editorCollapse'+${module.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+              <textarea class="form-control" th:id="'text'+${module.getExternalId()}" th:text="${module.getText()}" style="margin-bottom:10px;"></textarea>
+              <button th:id="'submitText'+${module.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
             </div>
           </div>
 
           <script type="text/javascript" th:inline="javascript">
 
-          $("#submitText"+/*[[${viewtype.getExternalId()}]]*/).click(function(){
-            var elemtext = document.getElementById("text"+/*[[${viewtype.getExternalId()}]]*/).value;
-            var loc = /*[[@{/setModuleViewtypeText/} + ${docId} + '/'+${viewtype.getExternalId()}]]*/;
+          $("#submitText"+/*[[${module.getExternalId()}]]*/).click(function(){
+            var elemtext = document.getElementById("text"+/*[[${module.getExternalId()}]]*/).value;
+            var loc = /*[[@{/setModuleText/} + ${docId} + '/'+${module.getExternalId()}]]*/;
             var content = {text: elemtext}
             $.ajax(loc,{
               method: "POST",
@@ -117,7 +117,7 @@
               console.log(data);
               console.log(textStatus);
               console.log(jqXHR);
-              window.location.hash="#ModuleViewtype";
+              //window.location.hash="#";
               window.location.reload(true);
             });
           });
@@ -151,7 +151,7 @@
                 $("#createModule").click(function(){
                   $("#addModule").collapse('toggle');
                   var name = encodeURIComponent($("#moduleName").val());
-                  var loc = /*[[@{/addNewModule/} + ${docId}+'/'+${viewtype.getExternalId()}+'/']]*/;
+                  var loc = /*[[@{/addNewModule/} + ${docId}+'/'+${module.getExternalId()}+'/']]*/;
                   loc+=name;
                   $.ajax(loc).done(function(data, textStatus, jqXHR){
                     window.location.hash="#Modules";
@@ -165,10 +165,10 @@
             </p>
           </div>
           <div>
-            <ul class="list-group" style="margin-top:10px" th:each=" ann : ${viewtype.getJsonAnnotations()}" th:if="${ann.tag.equals('Module')}">
+            <ul class="list-group" style="margin-top:10px" th:each=" ann : ${module.getJsonAnnotations()}" th:if="${ann.tag.equals('Module')}">
               <li class="list-group-item">
                 <a href="" th:name="${ann.id}"></a>
-                <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${viewtype.getExternalId()}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span></a>
+                <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromModule/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span></a>
                   <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
                     <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
                   </a>
@@ -188,9 +188,9 @@
                         </div>
                         <div class="modal-body" id="elements">
                           <ul class="list-group">
-                            <li class="list-group-item" th:each="module : ${viewtype.getModuleSet()}">
+                            <li class="list-group-item" th:each="module : ${module.getModuleSet()}">
                               <span th:text="${module.getName()}"></span>
-                              <a href="#" th:href="@{/linkToModule/}+${docId}+'/'+${viewtype.getExternalId()}+'/'+${module.getExternalId()}+'/'+ ${ann.id}">select</a>
+                              <a href="#" th:href="@{/linkToModule/}+${docId}+'/'+${module.getExternalId()}+'/'+${module.getExternalId()}+'/'+ ${ann.id}">select</a>
 
                             </li>
                           </ul>
@@ -217,27 +217,27 @@
             </ul>
           </div>
           <!-- tactic annotations -->
-          <div th:if="${!viewtype.getModuleSet().isEmpty()}">
-            <div th:each="module : ${viewtype.getModuleSet()}">
+          <div th:if="${!module.getModuleSet().isEmpty()}">
+            <div th:each="module : ${module.getModuleSet()}">
               <b>
                 <span th:text="'- '+${module.getName()}" style="font-size:17px;">
                 </span>
                 <a href="" th:name="${module.getName()}"></a>
               </b>
-              <a href="#" th:href="@{/removeModule/}+${docId}+'/'+${viewtype.getExternalId()}+'/'+${module.getExternalId()}" style="float:right;">
+              <a href="#" th:href="@{/removeModule/}+${docId}+'/'+${module.getExternalId()}+'/'+${module.getExternalId()}" style="float:right;">
                 <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Module"></span>
               </a>
               <ul class="list-group">
                 <li class="list-group-item" th:each="ann : ${module.getJsonAnnotations()}">
                   <a href="" th:name="${ann.id}"></a>
                   <p style="float:right;margin-left: 10px;">
-                    <a href="#" th:href="@{/unlinkFromModule/}+${docId}+'/'+${viewtype.getExternalId()}+'/'+${module.getExternalId()} + '/' + ${ann.id}">
+                    <a href="#" th:href="@{/unlinkFromModule/}+${docId}+'/'+${module.getExternalId()}+'/'+${module.getExternalId()} + '/' + ${ann.id}">
                       <span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Remove annotation from this tactic"></span></a>
                     </p>
-                    <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${viewtype.getExternalId()}">
-                      <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation from Viewtype"></span></a>
+                    <p style="float:right;margin-left: 10px;"><a href="#" th:href="@{/unlinkFromModule/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
+                      <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation from Module"></span></a>
                       <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                        <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other viewtype"></span>
+                        <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
                       </a>
                     </p>
                     <p>
@@ -269,7 +269,7 @@
                 <script type="text/javascript" th:inline="javascript">
                 $("#submitText"+/*[[${module.getExternalId()}]]*/).click(function(){
                   var elemtext = document.getElementById("text"+/*[[${module.getExternalId()}]]*/).value;
-                  var loc = /*[[@{/setModuleText/} + ${docId} + '/'+${viewtype.getExternalId()}+'/'+${module.getExternalId()}]]*/;
+                  var loc = /*[[@{/setModuleText/} + ${docId} + '/'+${module.getExternalId()}+'/'+${module.getExternalId()}]]*/;
                   var content = {text: elemtext}
                   $.ajax(loc,{
                     method: "POST",
