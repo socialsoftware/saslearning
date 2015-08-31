@@ -13,41 +13,27 @@ import com.google.gson.Gson;
 public class Utils {
 	private static String[] scenarios = {"Scenario Description", "Source Of Stimulus", "Stimulus", "Artifact",
 			"Environment", "Response", "Response Measure"};
-	/*private static String[] qualityAttrs = {"Availability", "Interoperability", "Modifiability",
-			  "Performance", "Security", "Testability", "Usability"};*/
 	private static String[] tactics  = {"Tactic"};
-	
-	private static String[] moduleVT = {"Module ViewType Description", "Module"};
+	private static String[] moduleVT = {"Module","Module - Name", "Module - Implementation Details", "Module - Interface", "Module - Responsibility"};
 	
 	public static List<String> allScenarioConcepts(){
 		List<String> concepts = new ArrayList<String>();
 		for(String i : scenarios) {
 			concepts.add(i);
 		}
-//		for(String j : qualityAttrs) {
-//			concepts.add(j);
-//		}
 		for(String k : tactics) {
 			concepts.add(k);
 		}
 		return concepts;
 	}
 	
-	public static List<String> moduleVTConcepts(){
+	public static List<String> moduleConcepts(){
 		List<String> concepts = new ArrayList<String>();
 		for(String i : moduleVT) {
 			concepts.add(i);
 		}
 		return concepts;
 	}
-	
-//	public static List<String> qualityAttributes(){
-//		List<String> qattrs = new ArrayList<String>();
-//		for(String i : qualityAttrs) {
-//			qattrs.add(i);
-//		}
-//		return qattrs;
-//	}
 
 	public static String getJsonTags() {
 		TagGroup scenarioTags = new TagGroup();

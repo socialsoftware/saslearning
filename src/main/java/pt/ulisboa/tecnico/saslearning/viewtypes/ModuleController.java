@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.saslearning.viewtypes;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,18 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Module;
-import pt.ulisboa.tecnico.saslearning.domain.ModuleViewType;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 
 import com.google.gson.Gson;
 
 @Controller
 public class ModuleController {
+	
+	@RequestMapping(value="setParentModal")
+	public String getModal() {
+		return "setParentModal";
+	}
+	
 	@RequestMapping(value="/addAnnotationToModuleTemplate/{docId}/{annotationId}")
 	public String addAnnotationModal(@PathVariable String docId, @PathVariable String annotationId, Model m) {
 		Document d = FenixFramework.getDomainObject(docId);
@@ -30,12 +36,7 @@ public class ModuleController {
 		Gson g = new Gson();
 		AnnotationJ ann = g.fromJson(a.getAnnotation(), AnnotationJ.class);
 		Set<Module> modules = d.getModuleSet();
-		System.out.println(modules.isEmpty());
-		System.out.println(modules.size());
-		for(Module mod : modules) {
-			System.out.println(mod);
-		}
-		m.addAttribute("modules", modules);
+		m.addAttribute("modules", new HashSet<Module>(modules));
 		m.addAttribute("annotation", ann);
 		m.addAttribute("annotData", a);
 		m.addAttribute("docId", docId);
@@ -48,7 +49,7 @@ public class ModuleController {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
 		addAnnotationToModule(mod, a);
-		RedirectView rv = new RedirectView("/viewModuleViewType/" + docId + "/"
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
 				+ moduleId + "#" + annotationId);
 		return rv;
 	}
@@ -83,12 +84,14 @@ public class ModuleController {
 		d.addModule(m);
 	}
 
-	@RequestMapping("/viewModule/{docId}/{moduleId}")
+	@RequestMapping(value="/viewModule/{docId}/{moduleId}")
 	public String viewModuleTemplate(Model m,
 			@PathVariable String docId, @PathVariable String moduleId) {
 		m.addAttribute("docId", docId);
 		Module mod = FenixFramework.getDomainObject(moduleId);
+		Document d = FenixFramework.getDomainObject(docId);
 		m.addAttribute("module", mod);
+		m.addAttribute("modules", d.getModuleSet());
 		return "moduleTemplate";
 	}
 
@@ -148,18 +151,24 @@ public class ModuleController {
 				+ moduleId + "#" + mod.getName());
 		return rv;
 	}
+	
+	@RequestMapping(value="/setModuleParent/{docId}/{moduleId}/{parentId}")
+	public RedirectView addModuleParent(@PathVariable String moduleId, @PathVariable String parentId, @PathVariable String docId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module parent = FenixFramework.getDomainObject(parentId);
+		addParent(mod, parent);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"+ moduleId);
+		return rv;
+	}
 
+	@Atomic(mode=TxMode.WRITE)
+	private void addParent(Module mod, Module parent) {
+		mod.setParent(parent);
+	}
 
 	@Atomic(mode=TxMode.WRITE)
 	private void setModuleText(Module m, String text) {
 		m.setText(text);
-	}
-
-	@Atomic(mode = TxMode.WRITE)
-	private void unlinkFromModule(Annotation a, Module m, ModuleViewType mvt) {
-		a.setModule(null);
-		m.removeAnnotation(a);
-		mvt.addAnnotation(a);
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -186,20 +195,6 @@ public class ModuleController {
 	private void removeModuleFromDocument(Document d, Module mod) {
 		d.removeModule(mod);
 		mod.delete();
-	}
-
-	@Atomic(mode = TxMode.WRITE)
-	private void addModuleViewTypeToDocument(Document d, String vtName) {
-		ModuleViewType mvt = new ModuleViewType();
-		mvt.setName("Module ViewType");
-		mvt.setIdentifier(vtName);
-		d.addModuleViewtype(mvt);
-	}
-
-	@Atomic(mode = TxMode.WRITE)
-	private void addAnnotationToModuleViewType(ModuleViewType mvt, Annotation a) {
-		mvt.addAnnotation(a);
-		updateAnnotation(mvt.getExternalId(), a);
 	}
 
 	@Atomic(mode = TxMode.WRITE)

@@ -87,7 +87,7 @@
         <!-- header -->
         <div class="panel-heading">
           <span class="h4">
-            <b>Scenario: <span th:text="${scenario.getIdentifier()}"></span></b> 
+            <b>Scenario: <span th:text="${scenario.getName()}"></span></b> 
             <a href="" name="Scenario"></a>
           </span>
           <a href="#" th:href="@{/removeScenario/}+${docId}+'/'+${scenario.getExternalId()}" style="float:right;">
@@ -261,7 +261,7 @@
                             <div class="modal-body" id="elements">
                               <ul class="list-group">
                                 <li class="list-group-item" th:each="tactic : ${scenario.getTacticSet()}">
-                                  <span th:text="${tactic.getName()}"></span>
+                                  <span th:text="${tactic.getIdentifier()}"></span>
                                   <a href="#" th:href="@{/linkToTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}+'/'+ ${ann.id}">select</a>
 
                                 </li>
@@ -291,9 +291,9 @@
               <div th:if="${!scenario.getTacticSet().isEmpty()}">
                 <div th:each="tactic : ${scenario.getTacticSet()}">
                   <b>
-                    <span th:text="'- '+${tactic.getName()}" style="font-size:17px;">
+                    <span th:text="'- '+${tactic.getIdentifier()}" style="font-size:17px;">
                     </span>
-                    <a href="" th:name="${tactic.getName()}"></a>
+                    <a href="" th:name="${tactic.getIdentifier()}"></a>
                   </b>
                   <a href="#" th:href="@{/removeTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}" style="float:right;">
                     <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Tactic"></span>
@@ -343,7 +343,7 @@
                   console.log(data);
                   console.log(textStatus);
                   console.log(jqXHR);
-                  window.location.hash="#"+/*[[${tactic.getName()}]]*/;
+                  window.location.hash="#"+/*[[${tactic.getIdentifier()}]]*/;
                   window.location.reload(true);
                 });
               });

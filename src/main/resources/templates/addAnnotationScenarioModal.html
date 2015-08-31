@@ -32,7 +32,7 @@
   <!-- Start of Scenarios -->
   <div class="panel panel-default" th:each="scenario : ${scenarios}">
     <div class="panel-body" style="font-size:115%;">
-      <b class="h4">Scenario: </b> <span th:text="${scenario.getIdentifier()}"></span>
+      <b class="h4">Scenario: </b> <span th:text="${scenario.getName()}"></span>
       <a th:id="'linkAnnotation'+${scenario.getExternalId()}" href="#" th:if="${!annotData.isConnected()} and ${annotData.isScenarioAnnotation()}" style="float:right;" th:href="@{/linkToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}">(Add annotation to this Scenario)</a>
     </div>
   </div>

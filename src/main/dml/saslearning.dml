@@ -76,7 +76,7 @@ relation documentHasScenarios {
 }
 
 class ScenarioElement {
-	String name;
+	String identifier;
 	String text;
 }
 
@@ -192,32 +192,6 @@ relation scenarioHasTactic {
 	}
 }
 
-class ModuleViewType {
-	String name;
-	String identifier;
-	String text;
-}
-
-relation documentHasModuleViewtypes {
-	Document playsRole document {
-		multiplicity 0..1;
-	}
-	
-	ModuleViewType playsRole moduleViewtype {
-		multiplicity 0..*;
-	}
-}
-
-relation moduleViewtypeHasAnnotations {
-	ModuleViewType playsRole moduleViewtype {
-		multiplicity 0..1;
-	}	
-	
-	Annotation playsRole annotation {
-		multiplicity 0..*;
-	}
-}
-
 class Module {
 	String name;
 	String identifier;
@@ -244,6 +218,37 @@ relation documentHasModules {
 		multiplicity 0..*;
 	}
 }
+
+relation moduleIsPartOfModule {
+	Module playsRole parent{
+		multiplicity 0..1;
+	}
+	
+	Module playsRole child{
+		multiplicity 0..*;
+	}
+}
+
+relation moduleUsesModule {
+	Module playsRole uses{
+		multiplicity 0..*;
+	}
+	
+	Module playsRole usedBy{
+		multiplicity 0..*;
+	}
+}
+
+relation moduleIsAModule {
+	Module playsRole isA {
+		multiplicity 0..*;
+	}
+	
+	Module playsRole superModule {
+		multiplicity 0..*;
+	}
+}
+
 
 
 

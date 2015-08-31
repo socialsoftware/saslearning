@@ -25,6 +25,56 @@ public class Module extends Module_Base {
     	
     }
     
+    public List<AnnotationJ> getAnnotationsByTag(String tag){
+    	List<AnnotationJ> resp = new ArrayList<AnnotationJ>();
+    	Gson g = new Gson();
+    	for(Annotation ann : getAnnotationSet()) {
+    		if(ann.getTag().equals(tag)) {
+    			AnnotationJ a = g.fromJson(ann.getAnnotation(), AnnotationJ.class);
+    			resp.add(a);
+    		}
+    	}
+    	return resp;
+    }
+    
+    public List<AnnotationJ> getModuleResponsibilities(){
+    	List<AnnotationJ> resp = new ArrayList<AnnotationJ>();
+    	Gson g = new Gson();
+    	for(Annotation ann : getAnnotationSet()) {
+    		if(ann.getTag().equals("Module - Responsibility")) {
+    			AnnotationJ a = g.fromJson(ann.getAnnotation(), AnnotationJ.class);
+    			resp.add(a);
+    		}
+    	}
+    	return resp;
+    }
+    
+    public List<AnnotationJ> getModuleInterfaces(){
+    	List<AnnotationJ> resp = new ArrayList<AnnotationJ>();
+    	Gson g = new Gson();
+    	for(Annotation ann : getAnnotationSet()) {
+    		if(ann.getTag().equals("Module - Interface")) {
+    			AnnotationJ a = g.fromJson(ann.getAnnotation(), AnnotationJ.class);
+    			resp.add(a);
+    		}
+    	}
+    	return resp;
+    }    
+    
+    public List<AnnotationJ> getModuleImplDetails(){
+    	List<AnnotationJ> resp = new ArrayList<AnnotationJ>();
+    	Gson g = new Gson();
+    	for(Annotation ann : getAnnotationSet()) {
+    		if(ann.getTag().equals("Module - Implementation Details")) {
+    			AnnotationJ a = g.fromJson(ann.getAnnotation(), AnnotationJ.class);
+    			resp.add(a);
+    		}
+    	}
+    	
+    	return resp;
+    }  
+    
+    
 	public void delete() {
 		Iterator<Annotation> it = getAnnotationSet().iterator();
 		while(it.hasNext()) {

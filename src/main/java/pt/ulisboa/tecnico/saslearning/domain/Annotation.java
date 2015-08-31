@@ -22,7 +22,6 @@ public class Annotation extends Annotation_Base {
 		setScenario(null);
 		setScenarioElement(null);
 		setModule(null);
-		setModuleViewtype(null);
 		deleteDomainObject();
 		
 	}
@@ -42,7 +41,7 @@ public class Annotation extends Annotation_Base {
 	}
 	
 	public boolean isModuleViewtypeAnnotation() {
-		return Utils.moduleVTConcepts().contains(getTag());
+		return Utils.moduleConcepts().contains(getTag());
 	}
 	
 //	public ModuleViewType getEnclosingModuleViewtype() {

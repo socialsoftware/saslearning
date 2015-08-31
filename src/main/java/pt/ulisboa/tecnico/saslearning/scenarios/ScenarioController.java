@@ -183,7 +183,7 @@ public class ScenarioController {
 		ScenarioElement elem = FenixFramework.getDomainObject(elementId);
 		updateText(elem, text);
 		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
-				+ scenarioId + "#" + elem.getName() );
+				+ scenarioId + "#" + elem.getIdentifier() );
 		return rv;
 	}	
 	
@@ -237,7 +237,7 @@ public class ScenarioController {
 	@Atomic(mode = TxMode.WRITE)
 	private void addTactic(Scenario s, String tactic) {
 		Tactic t = new Tactic();
-		t.setName(tactic);
+		t.setIdentifier(tactic);
 		s.addTactic(t);
 	}
 
@@ -307,20 +307,20 @@ public class ScenarioController {
 	@Atomic(mode = TxMode.WRITE)
 	private void addScenarioToDocument(Document d, String scenarioName) {
 		Scenario s = new Scenario();
-		s.setName("Scenario");
-		s.setIdentifier(scenarioName);
+		s.setName(scenarioName);
+		s.setIdentifier("Scenario");
 		SrcOfStimulus src = new SrcOfStimulus();
-		src.setName("Source Of Stimulus");
+		src.setIdentifier("Source Of Stimulus");
 		Stimulus stim = new Stimulus();
-		stim.setName("Stimulus");
+		stim.setIdentifier("Stimulus");
 		Artifact art = new Artifact();
-		art.setName("Artifact");
+		art.setIdentifier("Artifact");
 		Environment env = new Environment();
-		env.setName("Environment");
+		env.setIdentifier("Environment");
 		Response resp = new Response();
-		resp.setName("Response");
+		resp.setIdentifier("Response");
 		ResponseMeasure rm = new ResponseMeasure();
-		rm.setName("Response Measure");
+		rm.setIdentifier("Response Measure");
 		s.setSrcOfStimulus(src);
 		s.setStimulus(stim);
 		s.setArtifact(art);

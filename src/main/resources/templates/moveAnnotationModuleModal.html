@@ -30,17 +30,17 @@
   </div>
 
   <!-- Start of Modules -->
-  <div class="panel panel-default" th:each="mod : ${modules}" th:if="${!mod.getExternalId().equals(annotData.getModule().getExternalId())}">
+  <div class="panel panel-default" th:each="module : ${modules}" th:if="${!module.getExternalId().equals(annotData.getModule().getExternalId())}">
     <div class="panel-body" style="font-size:115%;">
-      <b class="h4">Module: </b> <span th:text="${mod.getIdentifier()}"></span>
-      <a href="#" style="float:right;" th:href="@{/moveToModule/} + ${docId} + '/' + ${annotation.id} + '/' + ${mod.getExternalId()}">(Move annotation to this Module)</a>
+      <b class="h4">Module: </b> <span th:text="${module.getIdentifier()}"></span>
+      <a href="#" style="float:right;" th:href="@{/moveToModule/} + ${docId} + '/' + ${annotation.id} + '/' + ${module.getExternalId()}">(Move annotation to this Module)</a>
     </div>
   </div>
 </div>
 
 
 <script type="text/javascript" th:inline="javascript">
-$('#viewtypeName').bind('keyup', function() {
+$('#moduleName').bind('keyup', function() {
   if($("#moduleName").val() != ''){
     $('#createModule').removeAttr('disabled');
   }else{

@@ -1,0 +1,22 @@
+<html>
+<section layout:fragment="setParentModal">
+	<div class="modal fade" id="setParentModal">
+		<div class="modal-dialog">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myLargeModalLabel">Set Module Parent</h4>
+				</div>
+				<div class="modal-body" id="elements">
+					<div th:each="module : ${modules}" th:if="${!module.getExternalId().equals(id)}">
+						<span th:text="${module.getName()}"></span>
+						<a href="#" th:href="@{/setModuleParent/}+${docId}+'/'+${id}+'/'+${module.getExternalId()}"> select</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!-- /.modal-content -->
+</section>
+</html>

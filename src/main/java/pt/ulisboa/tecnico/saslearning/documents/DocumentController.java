@@ -84,7 +84,7 @@ public class DocumentController {
 		RedirectView rv = new RedirectView();
 		if(a.isScenarioAnnotation()) {
 			rv.setUrl("/viewScenario/"+docId+"/"+connectedId+"#"+annotationId);
-		}else if( a.getTag().equals("Module")) {
+		}else if( a.getTag().contains("Module")) {
 			rv.setUrl("/viewModule/"+docId+"/"+connectedId+"#"+annotationId);
 		}
 		return rv;
@@ -98,8 +98,7 @@ public class DocumentController {
 			System.out.println("Is scenario tag");
 			rv= new RedirectView("/addAnnotationToScenarioStructure/" + docId + "/"
 					+ annotationId);
-		} else if (tag.equals("Module")) {
-			System.out.println("Is module tag");
+		} else if (tag.contains("Module")) {
 			rv = new RedirectView("/addAnnotationToModuleTemplate/" + docId + "/"
 					+ annotationId);
 		}
