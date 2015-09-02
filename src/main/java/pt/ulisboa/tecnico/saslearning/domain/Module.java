@@ -74,7 +74,6 @@ public class Module extends Module_Base {
     	return resp;
     }  
     
-    
 	public void delete() {
 		Iterator<Annotation> it = getAnnotationSet().iterator();
 		while(it.hasNext()) {

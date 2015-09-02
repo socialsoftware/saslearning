@@ -33,7 +33,7 @@
 <div th:if="${!modules.isEmpty()}">
   <div class="panel panel-default" th:each="module : ${modules}">
    <div class="panel-body" >
-      <b class="h4">Module: </b> <span th:text="${module.getIdentifier()}"></span>
+      <b class="h4">Module: </b> <span th:text="${module.getName()}"></span>
       <a th:id="'linkAnnotation'+${module.getExternalId()}" href="#" th:if="${!annotData.isConnected()}" style="float:right;" th:href="@{/linkToModule/} + ${docId} + '/' + ${annotation.id} + '/' + ${module.getExternalId()}">(Add annotation to this Module)</a>
     </div>
   </div>

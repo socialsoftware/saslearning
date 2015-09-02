@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="'Module - '+${module.getIdentifier()}"></title>
+  <title th:text="'Module - '+${module.getName()}"></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 
@@ -53,7 +53,7 @@
         <!-- header -->
         <div class="panel-heading">
           <span class="h4">
-            <b>Module: <span th:text="${module.getIdentifier()}"></span></b> 
+            <b>Module: <span th:text="${module.getName()}"></span></b> 
             <a href="" name="Module"></a>
           </span>
           <a href="#" th:href="@{/removeModule/}+${docId}+'/'+${module.getExternalId()}" style="float:right;">
@@ -178,12 +178,22 @@
           <h4>is-part-of: </h4>
           <div th:if="${module.getParent() != null}" th:with="isA=${module.getParent()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${isA}" th:text="${isA.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleParent/}+${docId}+'/'+${module.getExternalId()}+'/'+${isA.getExternalId()}">X</a>
           </div>  
           <div th:if="${module.getParent() == null}">
             <a href="#" data-toggle="modal" data-target="#setParentModal">add parent</a>
             <section layout:include="@{/setParentModal} :: setParentModal" th:with="modules=${modules},id=${module.getExternalId()},docId=${docId}">
             </section>
           </div>
+
+          <h4>uses: </h4>
+          <a href="#" data-toggle="modal" data-target="#setUsesModal">add module</a>
+            <section layout:include="@{/setParentModal} :: setUsesModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getUsesSet().isEmpty()}" th:each="use : ${module.getUsesSet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${use.getExternalId()}" th:text="${use.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleUse/}+${docId}+'/'+${module.getExternalId()}+'/'+${use.getExternalId()}">X</a>
+          </div>  
+          
           <div style="margin-top: 20px; border-top: 1px solid #DDDDDD;">
             <ul class="list-group" style="margin-top:10px">
               <li class="list-group-item" th:each=" ann : ${module.getJsonAnnotations()}">
