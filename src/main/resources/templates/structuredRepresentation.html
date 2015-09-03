@@ -33,7 +33,7 @@
         <!-- header -->
         <div class="panel-heading">
           <span class="h4">
-            <b>Scenario: <span th:text="${scenario.getIdentifier()}"></span></b> 
+            <b>Scenario: <span th:text="${scenario.getName()}"></span></b> 
             <a href="" name="Scenario"></a>
           </span>
         </div>
@@ -46,73 +46,29 @@
                 <a href="" th:name="${ann.id}">
                 </a>
                 <p>
-                    <b>Document Quote: </b>
-                    <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                  </p>
-                  <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                  <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                </li>
-              </ul>
-            </div>
-            <!-- -->
-            <!-- scenario Elements -->
-            <div class="scenarioElements">
-              <div th:each="entry : ${scenario.getElements()}">
-                <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
-                  <div class="element-title">
-                    <h4>
-                      <b><span th:text="${name}"></span></b>
-                    </h4>
-                    <a href="" th:name="${name}"></a>
-                  </div>
-                  <div th:if="${elem != null}">
-                    <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                      <li class="list-group-item">
-                        <a href="" th:name="${ann.id}"></a> 
-                        <p>
-                          <b>Document Quote: </b>
-                          <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                        </p>
-                        <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                        <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- -->
-              <!--   Tactics  -->
-              <div class="element-title">
-                <p>
-                  <span class="h4">
-                    <b>Tactics:</b>
-                    <a href="" name="Tactics"></a>
-                  </span>
+                  <b>Document Quote: </b>
+                  <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
                 </p>
-              </div>
-              <div>
-                <ul class="list-group" style="margin-top:10px" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Tactic')}">
-                  <li class="list-group-item">
-                    <a href="" th:name="${ann.id}"></a>
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-              <!-- tactic annotations -->
-              <div th:if="${!scenario.getTacticSet().isEmpty()}">
-                <div th:each="tactic : ${scenario.getTacticSet()}">
-                  <b>
-                    <span th:text="'- '+${tactic.getName()}" style="font-size:17px;">
-                    </span>
-                  </b>
-                  <ul class="list-group">
-                    <li class="list-group-item" th:each="ann : ${tactic.getJsonAnnotations()}">
-                      <a href="" th:name="${ann.id}"></a>
+                <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+              </li>
+            </ul>
+          </div>
+          <!-- -->
+          <!-- scenario Elements -->
+          <div class="scenarioElements">
+            <div th:each="entry : ${scenario.getElements()}">
+              <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
+                <div class="element-title">
+                  <h4>
+                    <b><span th:text="${name}"></span></b>
+                  </h4>
+                  <a href="" th:name="${name}"></a>
+                </div>
+                <div th:if="${elem != null}">
+                  <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
+                    <li class="list-group-item">
+                      <a href="" th:name="${ann.id}"></a> 
                       <p>
                         <b>Document Quote: </b>
                         <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
@@ -123,23 +79,67 @@
                   </ul>
                 </div>
               </div>
-              <!-- -->
-              <!-- end tactics-->
             </div>
+            <!-- -->
+            <!--   Tactics  -->
+            <div class="element-title">
+              <p>
+                <span class="h4">
+                  <b>Tactics:</b>
+                  <a href="" name="Tactics"></a>
+                </span>
+              </p>
+            </div>
+            <div>
+              <ul class="list-group" style="margin-top:10px" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Tactic')}">
+                <li class="list-group-item">
+                  <a href="" th:name="${ann.id}"></a>
+                  <p>
+                    <b>Document Quote: </b>
+                    <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                  </p>
+                  <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                  <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                </li>
+              </ul>
+            </div>
+            <!-- tactic annotations -->
+            <div th:if="${!scenario.getTacticSet().isEmpty()}">
+              <div th:each="tactic : ${scenario.getTacticSet()}">
+                <b>
+                  <span th:text="'- '+${tactic.getName()}" style="font-size:17px;">
+                  </span>
+                </b>
+                <ul class="list-group">
+                  <li class="list-group-item" th:each="ann : ${tactic.getJsonAnnotations()}">
+                    <a href="" th:name="${ann.id}"></a>
+                    <p>
+                      <b>Document Quote: </b>
+                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+                    </p>
+                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- -->
+            <!-- end tactics-->
           </div>
         </div>
       </div>
     </div>
-    <style type="text/css">
-    .element-title{
-      margin-top: 20px;
-      margin-bottom: 10px;
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-      border-bottom-color: #C8C8C8;
-    }
+  </div>
+  <style type="text/css">
+  .element-title{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #C8C8C8;
+  }
 
-    </style>
+  </style>
 
-  </body>
-  </html>
+</body>
+</html>

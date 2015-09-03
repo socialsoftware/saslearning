@@ -31,6 +31,11 @@ import com.google.gson.Gson;
 
 @Controller
 public class ScenarioController {
+	
+	@RequestMapping(value="/annotationFragments")
+	public String scenarioTemplateFragments() {
+		return "annotationFragments";
+	}
 
 	@RequestMapping(value = "/addAnnotationToScenarioStructure/{docId}/{annotationId}")
 	public String addAnnotationModal(Model m, @PathVariable String docId,
