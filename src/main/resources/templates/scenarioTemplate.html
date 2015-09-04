@@ -163,7 +163,7 @@
                   </p>
                   <script type="text/javascript" th:inline="javascript">
                   $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                    $("#elements").load(/*@{/moveAnnotation/}+${docId}+'/'+${ann.id}*/);
+                    $("#elements").load(/*[[@{/moveAnnotation/}+${docId}+'/'+${ann.id}]]*/);
                   });
                   </script>
 

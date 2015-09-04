@@ -176,9 +176,9 @@
             </li>
           </ul>
           <h4>is-part-of: </h4>
-          <div th:if="${module.getParent() != null}" th:with="isA=${module.getParent()}">
-            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${isA}" th:text="${isA.getName()}"></a>
-            <a href="#" th:href="@{/removeModuleParent/}+${docId}+'/'+${module.getExternalId()}+'/'+${isA.getExternalId()}">X</a>
+          <div th:if="${module.getParent() != null}" th:with="parent=${module.getParent()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${parent.getExternalId()}" th:text="${parent.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleParent/}+${docId}+'/'+${module.getExternalId()}+'/'+${parent.getExternalId()}">X</a>
           </div>  
           <div th:if="${module.getParent() == null}">
             <a href="#" data-toggle="modal" data-target="#setParentModal">add parent</a>
@@ -192,7 +192,23 @@
           <div th:if="${!module.getUsesSet().isEmpty()}" th:each="use : ${module.getUsesSet()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${use.getExternalId()}" th:text="${use.getName()}"></a>
             <a href="#" th:href="@{/removeModuleUse/}+${docId}+'/'+${module.getExternalId()}+'/'+${use.getExternalId()}">X</a>
+          </div>
+
+          <h4>is a: </h4>
+          <a href="#" data-toggle="modal" data-target="#isAModal">add module</a>
+            <section layout:include="@{/setParentModal} :: setIsAModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getIsASet().isEmpty()}" th:each="isA : ${module.getIsASet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${isA.getExternalId()}" th:text="${isA.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleIsA/}+${docId}+'/'+${module.getExternalId()}+'/'+${isA.getExternalId()}">X</a>
           </div>  
+
+          <h4>crosscuts: </h4>
+          <a href="#" data-toggle="modal" data-target="#setCrosscutsModal">add module</a>
+            <section layout:include="@{/setParentModal} :: setCrossCutsModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getCrossCutsSet().isEmpty()}" th:each="crosscut : ${module.getCrossCutsSet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${crosscut.getExternalId()}" th:text="${crosscut.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleCrossCut/}+${docId}+'/'+${module.getExternalId()}+'/'+${crosscut.getExternalId()}">X</a>
+          </div>   
           
           <div style="margin-top: 20px; border-top: 1px solid #DDDDDD;">
             <ul class="list-group" style="margin-top:10px">

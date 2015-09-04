@@ -176,6 +176,26 @@ public class ModuleController {
 				+ moduleId);
 		return rv;
 	}
+	
+	@RequestMapping(value = "/setModuleCrosscuts/{docId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView addModuleCrosscuts(@PathVariable String moduleId,
+			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		addCrosscuts(mod, modules.getUsed());
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId);
+		return rv;
+	}
+	
+	@RequestMapping(value = "/setModuleIsA/{docId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView addModuleIsA(@PathVariable String moduleId,
+			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		addIsA(mod, modules.getUsed());
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId);
+		return rv;
+	}
 
 	@RequestMapping(value = "/removeModuleParent/{docId}/{moduleId}/{parentId}")
 	public RedirectView removeModuleParent(@PathVariable String docId,
@@ -198,10 +218,42 @@ public class ModuleController {
 				+ moduleId);
 		return rv;
 	}
+	
+	@RequestMapping(value = "/removeModuleCrossCut/{docId}/{moduleId}/{crosscutedId}")
+	public RedirectView removeModuleCrosscut(@PathVariable String docId,
+			@PathVariable String moduleId, @PathVariable String crosscutedId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module used = FenixFramework.getDomainObject(crosscutedId);
+		removeModuleCrosscut(mod, used);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId);
+		return rv;
+	}
+	
+	@RequestMapping(value = "/removeModuleIsA/{docId}/{moduleId}/{parentId}")
+	public RedirectView removeModuleIsA(@PathVariable String docId,
+			@PathVariable String moduleId, @PathVariable String parentId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module used = FenixFramework.getDomainObject(parentId);
+		removeIsA(mod, used);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId);
+		return rv;
+	}
 
 	@Atomic(mode=TxMode.WRITE)
 	private void removeModuleUse(Module mod, Module used) {
 		mod.removeUses(used);
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeModuleCrosscut(Module mod, Module crosscutted) {
+		mod.removeCrossCuts(crosscutted);
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeIsA(Module mod, Module isA) {
+		mod.removeIsA(isA);
 	}
 	
 	@Atomic(mode=TxMode.WRITE)
@@ -215,6 +267,22 @@ public class ModuleController {
 		for (String id : list) {
 			Module m = FenixFramework.getDomainObject(id);
 			mod.addUses(m);
+		}
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void addCrosscuts(Module mod, List<String> list) {
+		for (String id : list) {
+			Module m = FenixFramework.getDomainObject(id);
+			mod.addCrossCuts(m);
+		}
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void addIsA(Module mod, List<String> list) {
+		for (String id : list) {
+			Module m = FenixFramework.getDomainObject(id);
+			mod.addIsA(m);
 		}
 	}
 

@@ -249,6 +249,16 @@ relation moduleIsAModule {
 	}
 }
 
+relation moduleCrosscutsModule {
+	Module playsRole crossCuts {
+		multiplicity 0..*;
+	}
+	
+	Module playsRole crossCuttedBy {
+		multiplicity 0..*;
+	}
+}
+
 
 
 

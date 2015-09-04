@@ -73,7 +73,7 @@ public class ScenarioController {
 		addScenarioToDocument(d, scenarioName);
 		RedirectView rv = new RedirectView();
 		if (move.equals("yes")) {
-			rv.setUrl("/moveAnnotation/" + docId + "/" + annotationId);
+			rv.setUrl("/moveAnnotationScenario/" + docId + "/" + annotationId);
 		} else {
 			rv.setUrl("/addAnnotationToScenarioStructure/" + docId + "/" + annotationId);
 		}
