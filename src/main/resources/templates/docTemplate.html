@@ -74,22 +74,6 @@ var opts ={
   docId: /*[[${doc.getExternalId()}]]*/
 };
 content.annotator('addPlugin', 'SAConcepts', opts);
-var doWork = function(){
-  console.log("ready");
-
-var annotations = document.getElementsByClassName("annotator-hl");
-console.log("cenas"); 
-console.log(annotations);
-  /*for( var i in annotations){
-    console.log(i);
-    var ann = annotations[i];
-    /*var id = ann.attr("data-annotation-id");
-    var a = $(document.createElement("a"));
-    a.href = "";
-    a.name = id;
-    annotations[i].appendChild(a);
-  }*/ 
-}
 
 </script>
 <style>
