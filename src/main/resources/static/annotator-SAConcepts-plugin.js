@@ -5,7 +5,7 @@ Annotator.Plugin.SAConcepts = function (element, options) {
     console.log("SAConcepts plugin init");
     var ann = this.annotator;
     console.log(ann);
-    var opts = {
+      var opts = {
       type: "GET",
       dataType: "json"
     };
@@ -33,25 +33,11 @@ Annotator.Plugin.SAConcepts = function (element, options) {
     }).subscribe("annotationEditorSubmit", function(editor, annotation){
       var tag = document.getElementById("tagSelector").value;
       annotation.tag = tag;
-    }).subscribe("annotationsLoaded", function(annotations){
-      setAnnotationAnchors();
     });
 
   }
   return plugin;
 }	
-
-var setAnnotationAnchors = function(){
-  var annotations = $("span.annotator-hl");
-  for( var i in annotations){
-    var ann = $(annotations[i]);
-    var id = ann.attr("data-annotation-id");
-    var a = $("<a>");
-    a.attr("name", id);
-    ann.before(a);
-  }
-
-}
 
 var removeExtras = function(){
   var extra1 = $(".chosen-container > .annotator-controls");

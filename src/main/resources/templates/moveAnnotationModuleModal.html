@@ -32,7 +32,7 @@
   <!-- Start of Modules -->
   <div class="panel panel-default" th:each="module : ${modules}" th:if="${!module.getExternalId().equals(annotData.getModule().getExternalId())}">
     <div class="panel-body" style="font-size:115%;">
-      <b class="h4">Module: </b> <span th:text="${module.getIdentifier()}"></span>
+      <b class="h4">Module: </b> <span th:text="${module.getName()}"></span>
       <a href="#" style="float:right;" th:href="@{/moveToModule/} + ${docId} + '/' + ${annotation.id} + '/' + ${module.getExternalId()}">(Move annotation to this Module)</a>
     </div>
   </div>

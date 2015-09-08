@@ -82,6 +82,12 @@ public class Module extends Module_Base {
 			a.setModule(null);
 			removeAnnotation(a);
 		}
+		Iterator<View> itv = getViewSet().iterator();
+		while(itv.hasNext()) {
+			View v = itv.next();
+			v.removeModule(this);
+			removeView(v);
+		}
 		setDocument(null);
 		deleteDomainObject();
 	}

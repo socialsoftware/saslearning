@@ -1,0 +1,137 @@
+<head>
+
+<!-- jQuery -->
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<div id="templateContents" class="well">
+  <div class="annotation">
+    <div class="element-title">
+      <h3><b>Annotation:</b></h3>
+    </div>
+    <div>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <p>
+            <b>Document Quote: </b>
+            <i><span th:text="'(...)' + ${annotation.quote} + '(...)'"></span></i>
+          </p>
+          <p><b>Comment: </b><span th:text="${annotation.text}"></span></p>
+          <p><b>Tag: </b><span th:text="${annotation.tag}"></span></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="clearfix element-title">
+    <h3>
+      <b>Views</b>
+      <a class="pull-right" href="#" data-toggle="collapse" data-target="#addView" style="font-size: 50%;">(Add new view)</a>
+    </h3>
+    <div class="collapse" id="addView">
+      <div style="margin-bottom: 5px;"><b>View Name:</b></div>
+      <input id="viewName" type="text" class="form-control" placeholder="Set the View name"/>
+      <p><select id="viewtype">
+        <option value="module">Module Viewtype</option>
+        <option value="cc">Component &#38; Connector Viewtype</option>
+        <option value="alloc">Allocation Viewtype</option>
+      </select></p>
+      <p><select id="style">
+      </select></p>  
+      <button id="createView" type="button" class="btn btn-default" data-dismiss="collapse" disabled="true">Add View</button>
+    </div>
+
+    <div th:if="${!views.isEmpty()}">
+  <div class="panel panel-default" th:each="view : ${views}">
+   <div class="panel-body" >
+      <b class="h4" th:text="${view.getViewtype() + ', ' + view.getStyle()+': '}"></b> <span th:text="${view.getName()}"></span>
+      <a th:id="'linkAnnotation'+${view.getExternalId()}" href="#" th:if="${!annotData.isConnected()}" style="float:right;" th:href="@{/linkToView/} + ${docId} + '/' + ${annotation.id} + '/' + ${view.getExternalId()}">(Add annotation to this View)</a>
+    </div>
+  </div>
+</div>  
+  </div>
+
+</div>  
+
+<script type="text/javascript" th:inline="javascript">
+var styles;
+$(document).ready(function(){
+  var loc = /*[[@{/getStyles}]]*/;
+  var opts = {
+    type: "GET",
+    dataType: "json"
+  };
+  $.ajax(loc, opts).done(function(data){
+    console.log(data);
+    styles = data;
+    var sel = document.getElementById("viewtype");
+    var val = sel.options[sel.selectedIndex].value;
+    var chosen = styles[val];
+    for(var i in chosen){
+    var opt = $(document.createElement("option"));
+    opt.append(chosen[i]);
+    $("#style").append(opt);
+  }
+});
+  
+});
+$("#viewtype").change(function(){
+  var sel = document.getElementById("viewtype");
+  var val = sel.options[sel.selectedIndex].value;
+  var chosen = styles[val];
+  $("#style").empty();
+  for(var i in chosen){
+    var opt = $(document.createElement("option"));
+    opt.append(chosen[i]);
+    $("#style").append(opt);
+  }
+});
+
+$('#viewName').bind('keyup', function() {
+  if($("#viewName").val() != ''){
+    $('#createView').removeAttr('disabled');
+  }else{
+    $('#createView').attr('disabled', 'true');
+  }
+});
+$("#createView").click(function(){
+  $("#addView").collapse('toggle');
+  var name = encodeURIComponent($("#viewName").val());
+  var loc = /*[[@{/addNewView/} + ${docId}+'/'+${annotation.id}+'/']]*/;
+  var selvt = document.getElementById("viewtype");
+  var selsty = document.getElementById("style");
+  var vt = encodeURIComponent(selvt.options[selvt.selectedIndex].text);
+  var style = encodeURIComponent(selsty.options[selsty.selectedIndex].value);
+  loc+= vt+'/'+style+'/'+name +"?move=no";
+  $("#elements").load(loc);
+});
+
+
+</script>
+<style type="text/css">
+#addScenario {
+  border: 1px dashed;
+  padding: 10px; 
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border-color: rgb(166, 162, 162);
+}
+
+.element-title {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #C8C8C8;
+  margin-bottom: 10px;
+}
+
+.list-title{
+  background-color: rgb(233, 229, 229);
+}
+</style>

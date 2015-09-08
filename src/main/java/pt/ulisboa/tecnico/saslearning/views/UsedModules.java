@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.saslearning.viewtypes;
+package pt.ulisboa.tecnico.saslearning.views;
 
 import java.util.ArrayList;
 import java.util.List;

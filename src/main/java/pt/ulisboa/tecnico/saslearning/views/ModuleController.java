@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.saslearning.viewtypes;
+package pt.ulisboa.tecnico.saslearning.views;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
@@ -26,9 +27,28 @@ import com.google.gson.Gson;
 @Controller
 public class ModuleController {
 
-	@RequestMapping(value = "setParentModal")
+	@RequestMapping(value = "/setParentModal")
 	public String getModal() {
 		return "setParentModal";
+	}
+
+	@RequestMapping(value = "/getStyles")
+	@ResponseBody
+	public String getStyles() {
+		String mod = "\"module\"";
+		String cc = "\"cc\"";
+		String all = "\"alloc\"";
+		String modstyles = "[\"Decomposition Style\", \"Uses Style\", "
+				+ "\"Generalization Style\", \"Layered Style\", \"Aspects Style\", \"Data Model\"]";
+		String ccstyles = "[\"Pipe-and-Filter Style\", \"Client-Server Style\", \"Peer-to-Peer Style\","
+				+ " \"Service-Oriented Architecture Style\", \"Publish-Subscribe Style\", "
+				+ "\"Shared-Data Style\", \"Communicating Processes Style\", \"Tiers Style\"]";
+		String allocStyles = "[\"Deployment Style\", \"Install Style\", \"Work Assignment Style\", "
+				+ "\"Implementation Style\"]";
+		String json = "{"+mod+" : "+modstyles+", "
+				+cc + " : "+ccstyles+", "
+				+all + " : " + allocStyles+"}";
+		return json;
 	}
 
 	@RequestMapping(value = "/addAnnotationToModuleTemplate/{docId}/{annotationId}")
@@ -163,7 +183,7 @@ public class ModuleController {
 		Module parent = FenixFramework.getDomainObject(parentId);
 		addParent(mod, parent);
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#isPartOf");
 		return rv;
 	}
 
@@ -173,27 +193,27 @@ public class ModuleController {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addUse(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#uses");
 		return rv;
 	}
-	
+
 	@RequestMapping(value = "/setModuleCrosscuts/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleCrosscuts(@PathVariable String moduleId,
 			@PathVariable String docId, @ModelAttribute UsedModules modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addCrosscuts(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#crosscuts");
 		return rv;
 	}
-	
+
 	@RequestMapping(value = "/setModuleIsA/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleIsA(@PathVariable String moduleId,
 			@PathVariable String docId, @ModelAttribute UsedModules modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addIsA(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#isA");
 		return rv;
 	}
 
@@ -204,7 +224,7 @@ public class ModuleController {
 		Module parent = FenixFramework.getDomainObject(parentId);
 		removeModuleParent(mod, parent);
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#isPartOf");
 		return rv;
 	}
 
@@ -215,10 +235,10 @@ public class ModuleController {
 		Module used = FenixFramework.getDomainObject(usedId);
 		removeModuleUse(mod, used);
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#uses");
 		return rv;
 	}
-	
+
 	@RequestMapping(value = "/removeModuleCrossCut/{docId}/{moduleId}/{crosscutedId}")
 	public RedirectView removeModuleCrosscut(@PathVariable String docId,
 			@PathVariable String moduleId, @PathVariable String crosscutedId) {
@@ -226,10 +246,10 @@ public class ModuleController {
 		Module used = FenixFramework.getDomainObject(crosscutedId);
 		removeModuleCrosscut(mod, used);
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#crosscuts");
 		return rv;
 	}
-	
+
 	@RequestMapping(value = "/removeModuleIsA/{docId}/{moduleId}/{parentId}")
 	public RedirectView removeModuleIsA(@PathVariable String docId,
 			@PathVariable String moduleId, @PathVariable String parentId) {
@@ -237,26 +257,26 @@ public class ModuleController {
 		Module used = FenixFramework.getDomainObject(parentId);
 		removeIsA(mod, used);
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
-				+ moduleId);
+				+ moduleId+"#isA");
 		return rv;
 	}
 
-	@Atomic(mode=TxMode.WRITE)
+	@Atomic(mode = TxMode.WRITE)
 	private void removeModuleUse(Module mod, Module used) {
 		mod.removeUses(used);
 	}
-	
-	@Atomic(mode=TxMode.WRITE)
+
+	@Atomic(mode = TxMode.WRITE)
 	private void removeModuleCrosscut(Module mod, Module crosscutted) {
 		mod.removeCrossCuts(crosscutted);
 	}
-	
-	@Atomic(mode=TxMode.WRITE)
+
+	@Atomic(mode = TxMode.WRITE)
 	private void removeIsA(Module mod, Module isA) {
 		mod.removeIsA(isA);
 	}
-	
-	@Atomic(mode=TxMode.WRITE)
+
+	@Atomic(mode = TxMode.WRITE)
 	private void removeModuleParent(Module mod, Module parent) {
 		parent.removeChild(mod);
 		mod.setParent(null);
@@ -269,7 +289,7 @@ public class ModuleController {
 			mod.addUses(m);
 		}
 	}
-	
+
 	@Atomic(mode = TxMode.WRITE)
 	private void addCrosscuts(Module mod, List<String> list) {
 		for (String id : list) {
@@ -277,7 +297,7 @@ public class ModuleController {
 			mod.addCrossCuts(m);
 		}
 	}
-	
+
 	@Atomic(mode = TxMode.WRITE)
 	private void addIsA(Module mod, List<String> list) {
 		for (String id : list) {

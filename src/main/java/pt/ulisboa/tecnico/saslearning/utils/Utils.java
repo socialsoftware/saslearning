@@ -15,7 +15,7 @@ public class Utils {
 			"Environment", "Response", "Response Measure"};
 	private static String[] tactics  = {"Tactic"};
 	private static String[] moduleVT = {"Module","Module - Name", "Module - Implementation Details", "Module - Interface", "Module - Responsibility"};
-	
+	private static String[] views = {"View"};
 	public static List<String> allScenarioConcepts(){
 		List<String> concepts = new ArrayList<String>();
 		for(String i : scenarios) {
@@ -45,10 +45,14 @@ public class Utils {
 		TagGroup moduleVtTags = new TagGroup();
 		moduleVtTags.setName("Module ViewType");
 		moduleVtTags.setTags(moduleVT);
+		TagGroup viewsTags = new TagGroup();
+		viewsTags.setName("Views");
+		viewsTags.setTags(views);
 		Tags t = new Tags();
 		t.setScenarios(scenarioTags);
 		t.setTactics(tacticsTags);
 		t.setModulevt(moduleVtTags);
+		t.setViews(viewsTags);
 		Gson g = new Gson();
 		String obj = g.toJson(t);
 		return obj;

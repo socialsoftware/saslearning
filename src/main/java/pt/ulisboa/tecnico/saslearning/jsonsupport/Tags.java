@@ -5,6 +5,7 @@ public class Tags {
 	private TagGroup scenarios;
 	private TagGroup tactics;
 	private TagGroup modulevt;
+	private TagGroup views;
 	
 	public TagGroup getScenarios() {
 		return scenarios;
@@ -24,6 +25,12 @@ public class Tags {
 	}
 	public void setModulevt(TagGroup modulevt) {
 		this.modulevt = modulevt;
+	}
+	public TagGroup getViews() {
+		return views;
+	}
+	public void setViews(TagGroup views) {
+		this.views = views;
 	}
 
 }

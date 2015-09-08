@@ -118,7 +118,15 @@ public class AnnotationController {
 		Annotation a = FenixFramework.getDomainObject(annId);
 		Gson gson = new Gson();
 		AnnotationJ ann = gson.fromJson(annot, AnnotationJ.class);
-		a.setTag(ann.getTag());
+		if(!ann.getTag().equals(a.getTag())) {
+			a.setTag(ann.getTag());
+			a.setModule(null);
+			a.setScenario(null);
+			a.setScenarioElement(null);
+			a.setView(null);
+			a.setModule(null);
+		}
+		
 		a.setAnnotation(annot);
 	}
 	

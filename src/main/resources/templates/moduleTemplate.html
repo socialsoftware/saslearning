@@ -66,116 +66,29 @@
           <h4>Name</h4>
           <ul class="list-group" style="margin-top:10px">
             <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module - Name')}">
-              <a href="" th:name="${ann.id}"></a>
-              <p style="float:right;margin-left: 10px;">
-                <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
-                  <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
-                </a>
-                <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                  <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
-                </a>
-              </p>  
-              <p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
-              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-              <script type="text/javascript" th:inline="javascript">
-              $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                console.log("click");
-                var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
-                console.log(loc);
-                $("#elements").load(loc);
-              });
-              </script>
+              <section layout:include="@{/annotationFragments} :: annotationContentModule" th:with="ann=${ann},docId=${docId},module=${module}"></section>
             </li>
           </ul>
           <h4>Responsibilities</h4>
           <ul class="list-group" style="margin-top:10px">
             <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module - Responsibility')}">
-              <a href="" th:name="${ann.id}"></a>
-              <p style="float:right;margin-left: 10px;">
-                <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
-                  <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
-                </a>
-                <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                  <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
-                </a>
-
-              </p>  
-              <p>
-                <b>Document Quote: </b>
-                <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-              </p>
-              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-              <script type="text/javascript" th:inline="javascript">
-              $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                console.log("click");
-                var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
-                console.log(loc);
-                $("#elements").load(loc);
-              });
-              </script>
+              <section layout:include="@{/annotationFragments} :: annotationContentModule" th:with="ann=${ann},docId=${docId},module=${module}"></section>
             </li>
           </ul>
           <h4>Interfaces</h4>
           <ul class="list-group" style="margin-top:10px">
             <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module - Interface')}">
-              <a href="" th:name="${ann.id}"></a>
-              <p style="float:right;margin-left: 10px;">
-                <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
-                  <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
-                </a>
-                <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                  <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
-                </a>
-
-              </p>  
-              <p>
-                <b>Document Quote: </b>
-                <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-              </p>
-              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-              <script type="text/javascript" th:inline="javascript">
-              $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                console.log("click");
-                var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
-                console.log(loc);
-                $("#elements").load(loc);
-              });
-              </script>
+              <section layout:include="@{/annotationFragments} :: annotationContentModule" th:with="ann=${ann},docId=${docId},module=${module}"></section>
             </li>
           </ul>
           <h4>Implementation Information</h4>
           <ul class="list-group" style="margin-top:10px">
             <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module - Implementation Details')}">
-              <a href="" th:name="${ann.id}"></a>
-              <p style="float:right;margin-left: 10px;">
-                <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
-                  <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
-                </a>
-                <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                  <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
-                </a>
-
-              </p>  
-              <p>
-                <b>Document Quote: </b>
-                <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-              </p>
-              <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-              <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-              <script type="text/javascript" th:inline="javascript">
-              $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                console.log("click");
-                var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
-                console.log(loc);
-                $("#elements").load(loc);
-              });
-              </script>
+              <section layout:include="@{/annotationFragments} :: annotationContentModule" th:with="ann=${ann},docId=${docId},module=${module}"></section>
             </li>
           </ul>
           <h4>is-part-of: </h4>
+          <a href="" name="isPartOf"></a>
           <div th:if="${module.getParent() != null}" th:with="parent=${module.getParent()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${parent.getExternalId()}" th:text="${parent.getName()}"></a>
             <a href="#" th:href="@{/removeModuleParent/}+${docId}+'/'+${module.getExternalId()}+'/'+${parent.getExternalId()}">X</a>
@@ -187,6 +100,7 @@
           </div>
 
           <h4>uses: </h4>
+          <a href="" name="uses"></a>
           <a href="#" data-toggle="modal" data-target="#setUsesModal">add module</a>
             <section layout:include="@{/setParentModal} :: setUsesModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
           <div th:if="${!module.getUsesSet().isEmpty()}" th:each="use : ${module.getUsesSet()}">
@@ -195,6 +109,7 @@
           </div>
 
           <h4>is a: </h4>
+          <a href="" name="isA"></a>
           <a href="#" data-toggle="modal" data-target="#isAModal">add module</a>
             <section layout:include="@{/setParentModal} :: setIsAModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
           <div th:if="${!module.getIsASet().isEmpty()}" th:each="isA : ${module.getIsASet()}">
@@ -203,6 +118,7 @@
           </div>  
 
           <h4>crosscuts: </h4>
+          <a href="" name="crosscuts"></a>
           <a href="#" data-toggle="modal" data-target="#setCrosscutsModal">add module</a>
             <section layout:include="@{/setParentModal} :: setCrossCutsModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
           <div th:if="${!module.getCrossCutsSet().isEmpty()}" th:each="crosscut : ${module.getCrossCutsSet()}">
@@ -212,63 +128,14 @@
           
           <div style="margin-top: 20px; border-top: 1px solid #DDDDDD;">
             <ul class="list-group" style="margin-top:10px">
-              <li class="list-group-item" th:each=" ann : ${module.getJsonAnnotations()}">
-                <a href="" th:name="${ann.id}"></a>
-                <p style="float:right;margin-left: 10px;">
-                  <a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
-                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
-                  </a>
-                  <a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-                    <span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
-                  </a>
-
-                </p>  
-                <p>
-                  <b>Document Quote: </b>
-                  <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                </p>
-                <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                <script type="text/javascript" th:inline="javascript">
-                $("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-                  console.log("click");
-                  var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
-                  console.log(loc);
-                  $("#elements").load(loc);
-                });
-                </script>
+              <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module')}">
+                <section layout:include="@{/annotationFragments} :: annotationContentModule" th:with="ann=${ann},docId=${docId},module=${module}"></section>
               </li>
             </ul>
           </div>
-          <div id="EditText">
-            <a th:id="'showEditor'+${module.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+module.getExternalId()}">
-              <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
-            </a>
-            <div th:id="'textViewer'+${module.getExternalId()}" th:text="${module.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${module.getText() != null} and ${!module.getText().equals('')}"></div>
-            <div class="collapse" th:id="'editorCollapse'+${module.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
-              <textarea class="form-control" th:id="'text'+${module.getExternalId()}" th:text="${module.getText()}" style="margin-bottom:10px;"></textarea>
-              <button th:id="'submitText'+${module.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
-            </div>
-          </div>
-
-          <script type="text/javascript" th:inline="javascript">
-
-          $("#submitText"+/*[[${module.getExternalId()}]]*/).click(function(){
-            var elemtext = document.getElementById("text"+/*[[${module.getExternalId()}]]*/).value;
-            var loc = /*[[@{/setModuleText/} + ${docId} + '/'+${module.getExternalId()}]]*/;
-            var content = {text: elemtext}
-            $.ajax(loc,{
-              method: "POST",
-              data: content
-            }).done(function(data, textStatus, jqXHR){
-              console.log(data);
-              console.log(textStatus);
-              console.log(jqXHR);
-              //window.location.hash="#";
-              window.location.reload(true);
-            });
-          });
-          </script>
+          
+          <section layout:include="@{/annotationFragments} :: moduleText" th:with="module=${module},docId=${docId}"></section>
+          
           <!-- -->
           <!-- end tactics-->
         </div>
@@ -278,8 +145,8 @@
   <!--</div>-->
   <script type="text/javascript">
   $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  });
+    $('[data-toggle="tooltip"]').tooltip(
+)  });
   </script>
   <style type="text/css">
   .element-title{

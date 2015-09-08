@@ -86,6 +86,8 @@ public class DocumentController {
 			rv.setUrl("/viewScenario/"+docId+"/"+connectedId+"#"+annotationId);
 		}else if( a.getTag().contains("Module")) {
 			rv.setUrl("/viewModule/"+docId+"/"+connectedId+"#"+annotationId);
+		}else if(a.getTag().contains("View")) {
+			rv.setUrl("/viewView/"+docId+"/"+connectedId+"#"+annotationId);
 		}
 		return rv;
 	}
@@ -100,6 +102,9 @@ public class DocumentController {
 					+ annotationId);
 		} else if (tag.contains("Module")) {
 			rv = new RedirectView("/addAnnotationToModuleTemplate/" + docId + "/"
+					+ annotationId);
+		}else if (tag.contains("View")) {
+			rv = new RedirectView("/addAnnotationToViewTemplate/" + docId + "/"
 					+ annotationId);
 		}
 		return rv;
