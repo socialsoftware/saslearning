@@ -216,6 +216,46 @@ public class ModuleController {
 				+ moduleId+"#isA");
 		return rv;
 	}
+	
+	@RequestMapping(value = "/setModuleOneToOne/{docId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView addModuleOneToOne(@PathVariable String moduleId,
+			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		addOneToOne(mod, modules.getUsed());
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#oneToOne");
+		return rv;
+	}
+	
+	@RequestMapping(value = "/setModuleOneToMany/{docId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView addModuleOneToMany(@PathVariable String moduleId,
+			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		addOneToMany(mod, modules.getUsed());
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#oneToMany");
+		return rv;
+	}
+	
+	@RequestMapping(value = "/setModuleAggregated/{docId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView addModuleAggregated(@PathVariable String moduleId,
+			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		addAggregates(mod, modules.getUsed());
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#aggregated");
+		return rv;
+	}
+	
+	@RequestMapping(value = "/setModuleManyToMany/{docId}/{moduleId}", method = RequestMethod.POST)
+	public RedirectView addModuleManyToMany(@PathVariable String moduleId,
+			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		addManyToMany(mod, modules.getUsed());
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#manyToMany");
+		return rv;
+	}
 
 	@RequestMapping(value = "/removeModuleParent/{docId}/{moduleId}/{parentId}")
 	public RedirectView removeModuleParent(@PathVariable String docId,
@@ -260,6 +300,50 @@ public class ModuleController {
 				+ moduleId+"#isA");
 		return rv;
 	}
+	
+	@RequestMapping(value = "/removeModuleOneToOne/{docId}/{moduleId}/{oneToOneId}")
+	public RedirectView removeModuleOneToOne(@PathVariable String docId,
+			@PathVariable String moduleId, @PathVariable String oneToOneId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module oneToOne = FenixFramework.getDomainObject(oneToOneId);
+		removeModuleOneToOne(mod, oneToOne);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#oneToOne");
+		return rv;
+	}
+
+	@RequestMapping(value = "/removeModuleOneToMany/{docId}/{moduleId}/{oneToManyId}")
+	public RedirectView removeModuleOneToMany(@PathVariable String docId,
+			@PathVariable String moduleId, @PathVariable String oneToManyId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module oneToMany = FenixFramework.getDomainObject(oneToManyId);
+		removeModuleOneToMany(mod, oneToMany);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#oneToMany");
+		return rv;
+	}
+
+	@RequestMapping(value = "/removeModuleManyToMany/{docId}/{moduleId}/{manyToManyId}")
+	public RedirectView removeModuleManyToMany(@PathVariable String docId,
+			@PathVariable String moduleId, @PathVariable String manyToManyId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module manyToMany = FenixFramework.getDomainObject(manyToManyId);
+		removeModuleManyToMany(mod, manyToMany);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#manyToMany");
+		return rv;
+	}
+	
+	@RequestMapping(value = "/removeModuleAggregated/{docId}/{moduleId}/{aggregatedId}")
+	public RedirectView removeModuleAggregated(@PathVariable String docId,
+			@PathVariable String moduleId, @PathVariable String aggregatedId) {
+		Module mod = FenixFramework.getDomainObject(moduleId);
+		Module aggregated = FenixFramework.getDomainObject(aggregatedId);
+		removeModuleAggregated(mod, aggregated);
+		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
+				+ moduleId+"#aggregated");
+		return rv;
+	}
 
 	@Atomic(mode = TxMode.WRITE)
 	private void removeModuleUse(Module mod, Module used) {
@@ -280,6 +364,58 @@ public class ModuleController {
 	private void removeModuleParent(Module mod, Module parent) {
 		parent.removeChild(mod);
 		mod.setParent(null);
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void removeModuleOneToOne(Module mod, Module oneToOne) {
+		mod.removeOneToOne(oneToOne);
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void removeModuleOneToMany(Module mod, Module oneToMany) {
+		mod.removeOneToMany(oneToMany);
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void removeModuleManyToMany(Module mod, Module manyToMany) {
+		mod.removeManyToMany(manyToMany);
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void removeModuleAggregated(Module mod, Module aggregated) {
+		mod.removeAggregated(aggregated);
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void addOneToOne(Module mod, List<String> idList) {
+		for (String id : idList) {
+			Module m = FenixFramework.getDomainObject(id);
+			mod.addOneToOne(m);
+		}
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void addOneToMany(Module mod, List<String> idList) {
+		for (String id : idList) {
+			Module m = FenixFramework.getDomainObject(id);
+			mod.addOneToMany(m);
+		}
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void addManyToMany(Module mod, List<String> idList) {
+		for (String id : idList) {
+			Module m = FenixFramework.getDomainObject(id);
+			mod.addManyToMany(m);
+		}
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void addAggregates(Module mod, List<String> idList) {
+		for (String id : idList) {
+			Module m = FenixFramework.getDomainObject(id);
+			mod.addAggregated(m);
+		}
 	}
 
 	@Atomic(mode = TxMode.WRITE)

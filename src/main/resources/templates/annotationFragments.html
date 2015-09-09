@@ -17,6 +17,7 @@
 	<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
 	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+	<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 </section>
 
 <section layout:fragment="elementText">
@@ -155,6 +156,7 @@
 	<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
 	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+		<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 </section>
 
 <section layout:fragment="annotationContentModule">
@@ -170,6 +172,7 @@
 	<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
 	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+	<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 	<script type="text/javascript" th:inline="javascript">
 	$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
 		console.log("click");

@@ -87,45 +87,103 @@
               <section layout:include="@{/annotationFragments} :: annotationContentModule" th:with="ann=${ann},docId=${docId},module=${module}"></section>
             </li>
           </ul>
-          <h4>is-part-of: </h4>
+
+          <p>  
+          <span class="h4">
+            Is-Part-Of:
+          </span>
           <a href="" name="isPartOf"></a>
+          <a href="#" data-toggle="modal" data-target="#setParentModal" th:if="${module.getParent() == null}"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Parent"></span></a>
+            <section layout:include="@{/setParentModal} :: setParentModal" th:with="modules=${modules},id=${module.getExternalId()},docId=${docId}" th:if="${module.getParent() == null}"></section>
           <div th:if="${module.getParent() != null}" th:with="parent=${module.getParent()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${parent.getExternalId()}" th:text="${parent.getName()}"></a>
-            <a href="#" th:href="@{/removeModuleParent/}+${docId}+'/'+${module.getExternalId()}+'/'+${parent.getExternalId()}">X</a>
+            <a href="#" th:href="@{/removeModuleParent/}+${docId}+'/'+${module.getExternalId()}+'/'+${parent.getExternalId()}"><small>x</small></a>
           </div>  
-          <div th:if="${module.getParent() == null}">
-            <a href="#" data-toggle="modal" data-target="#setParentModal">add parent</a>
-            <section layout:include="@{/setParentModal} :: setParentModal" th:with="modules=${modules},id=${module.getExternalId()},docId=${docId}">
-            </section>
-          </div>
-
-          <h4>uses: </h4>
+          </p>
+          <p>
+          <span class="h4">Uses: </span>
           <a href="" name="uses"></a>
-          <a href="#" data-toggle="modal" data-target="#setUsesModal">add module</a>
+          <a href="#" data-toggle="modal" data-target="#setUsesModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span>
+          </a>
             <section layout:include="@{/setParentModal} :: setUsesModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
           <div th:if="${!module.getUsesSet().isEmpty()}" th:each="use : ${module.getUsesSet()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${use.getExternalId()}" th:text="${use.getName()}"></a>
-            <a href="#" th:href="@{/removeModuleUse/}+${docId}+'/'+${module.getExternalId()}+'/'+${use.getExternalId()}">X</a>
+            <a href="#" th:href="@{/removeModuleUse/}+${docId}+'/'+${module.getExternalId()}+'/'+${use.getExternalId()}"><small>x</small></a>
           </div>
-
-          <h4>is a: </h4>
+          </p>
+          <p>
+          <span class="h4">Is A: </span>
           <a href="" name="isA"></a>
-          <a href="#" data-toggle="modal" data-target="#isAModal">add module</a>
+          <a href="#" data-toggle="modal" data-target="#isAModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span>
+          </a>
             <section layout:include="@{/setParentModal} :: setIsAModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
           <div th:if="${!module.getIsASet().isEmpty()}" th:each="isA : ${module.getIsASet()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${isA.getExternalId()}" th:text="${isA.getName()}"></a>
-            <a href="#" th:href="@{/removeModuleIsA/}+${docId}+'/'+${module.getExternalId()}+'/'+${isA.getExternalId()}">X</a>
+            <a href="#" th:href="@{/removeModuleIsA/}+${docId}+'/'+${module.getExternalId()}+'/'+${isA.getExternalId()}"><small>x</small></a>
           </div>  
-
-          <h4>crosscuts: </h4>
+          </p>
+          <p>
+          <span class="h4">Crosscuts: </span>
           <a href="" name="crosscuts"></a>
-          <a href="#" data-toggle="modal" data-target="#setCrosscutsModal">add module</a>
+          <a href="#" data-toggle="modal" data-target="#setCrosscutsModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span>
+          </a>
             <section layout:include="@{/setParentModal} :: setCrossCutsModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
           <div th:if="${!module.getCrossCutsSet().isEmpty()}" th:each="crosscut : ${module.getCrossCutsSet()}">
             <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${crosscut.getExternalId()}" th:text="${crosscut.getName()}"></a>
-            <a href="#" th:href="@{/removeModuleCrossCut/}+${docId}+'/'+${module.getExternalId()}+'/'+${crosscut.getExternalId()}">X</a>
-          </div>   
-          
+            <a href="#" th:href="@{/removeModuleCrossCut/}+${docId}+'/'+${module.getExternalId()}+'/'+${crosscut.getExternalId()}"><small>x</small></a>
+          </div>
+          </p>
+          <p>
+            <span class="h4">One-To-One: </span>
+          <a href="" name="oneToOne"></a>
+          <a href="#" data-toggle="modal" data-target="#oneToOneModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span>
+          </a>
+            <section layout:include="@{/setParentModal} :: setOneToOneModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getOneToOneSet().isEmpty()}" th:each="oneToOne : ${module.getOneToOneSet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${oneToOne.getExternalId()}" th:text="${oneToOne.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleOneToOne/}+${docId}+'/'+${module.getExternalId()}+'/'+${oneToOne.getExternalId()}"><small>x</small></a>
+          </div>
+          </p>
+          <p>
+          <span class="h4">One-To-Many: </span>
+          <a href="" name="oneToMany"></a>
+          <a href="#" data-toggle="modal" data-target="#oneToManyModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span>
+          </a>
+            <section layout:include="@{/setParentModal} :: setOneToManyModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getOneToManySet().isEmpty()}" th:each="oneToMany : ${module.getOneToManySet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${oneToMany.getExternalId()}" th:text="${oneToMany.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleOneToMany/}+${docId}+'/'+${module.getExternalId()}+'/'+${oneToMany.getExternalId()}"><small>x</small></a>
+          </div>
+          </p>
+          <p>
+          <span class="h4">Many-To-Many: </span>
+          <a href="" name="manyToMany"></a>
+          <a href="#" data-toggle="modal" data-target="#manyToManyModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span> 
+          </a>
+            <section layout:include="@{/setParentModal} :: setManyToManyModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getManyToManySet().isEmpty()}" th:each="manyToMany : ${module.getManyToManySet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${manyToMany.getExternalId()}" th:text="${manyToMany.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleManyToMany/}+${docId}+'/'+${module.getExternalId()}+'/'+${manyToMany.getExternalId()}"><small>x</small></a>
+          </div>
+          </p>
+          <p>
+          <span class="h4">Aggregates: </span>
+          <a href="" name="aggregated"></a>
+          <a href="#" data-toggle="modal" data-target="#aggregatesModal">
+            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="right" title="Add Modules"></span>
+          </a>
+            <section layout:include="@{/setParentModal} :: setAggregatesModal" th:with="modules=${modules},id=${module},docId=${docId},uses=${uses}"></section>
+          <div th:if="${!module.getAggregatedSet().isEmpty()}" th:each="aggregated : ${module.getAggregatedSet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${aggregated.getExternalId()}" th:text="${aggregated.getName()}"></a>
+            <a href="#" th:href="@{/removeModuleAggregated/}+${docId}+'/'+${module.getExternalId()}+'/'+${aggregated.getExternalId()}"><small>x</small></a>
+          </div>
+          </p>
           <div style="margin-top: 20px; border-top: 1px solid #DDDDDD;">
             <ul class="list-group" style="margin-top:10px">
               <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module')}">

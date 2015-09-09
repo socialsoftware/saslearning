@@ -53,7 +53,7 @@
         <!-- header -->
         <div class="panel-heading">
           <span class="h4">
-            <b th:text="${view.getViewtype() + ', ' + view.getStyle()+': '+view.getName()}"></b>
+            <b th:text="${'View ' + view.getName() +': ' + view.getViewtype() + ', ' + view.getStyle()}"></b>
             <a href="" name="View"></a>
           </span>
           <a href="#" th:href="@{/removeView/}+${docId}+'/'+${view.getExternalId()}" style="float:right;">
@@ -147,25 +147,52 @@
                 </li>
               </ul>
               
-              <h4>is-part-of: </h4>
+              <h4>Is-Part-Of: </h4>
               <div th:if="${module.getParent() != null}" th:with="parent=${module.getParent()}">
                 <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${parent.getExternalId()}" th:text="${parent.getName()}"></a>
               </div>  
-              <h4>uses: </h4>
+              <h4>Uses: </h4>
               <div th:if="${!module.getUsesSet().isEmpty()}" th:each="use : ${module.getUsesSet()}">
                 <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${use.getExternalId()}" th:text="${use.getName()}"></a>
               </div>
 
-              <h4>is a: </h4>
+              <h4>Is A: </h4>
               <div th:if="${!module.getIsASet().isEmpty()}" th:each="isA : ${module.getIsASet()}">
                 <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${isA.getExternalId()}" th:text="${isA.getName()}"></a>
               </div>  
 
-              <h4>crosscuts: </h4>
+              <h4>Crosscuts: </h4>
               <div th:if="${!module.getCrossCutsSet().isEmpty()}" th:each="crosscut : ${module.getCrossCutsSet()}">
                 <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${crosscut.getExternalId()}" th:text="${crosscut.getName()}"></a>
               </div>   
 
+              <p>
+            <span class="h4">One-To-One: </span>
+          
+          <div th:if="${!module.getOneToOneSet().isEmpty()}" th:each="oneToOne : ${module.getOneToOneSet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${oneToOne.getExternalId()}" th:text="${oneToOne.getName()}"></a>
+          </div>
+          </p>
+          <p>
+          <span class="h4">One-To-Many: </span>
+         
+
+          <div th:if="${!module.getOneToManySet().isEmpty()}" th:each="oneToMany : ${module.getOneToManySet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${oneToMany.getExternalId()}" th:text="${oneToMany.getName()}"></a>
+          </div>
+          </p>
+          <p>
+          <span class="h4">Many-To-Many: </span>
+          <div th:if="${!module.getManyToManySet().isEmpty()}" th:each="manyToMany : ${module.getManyToManySet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${manyToMany.getExternalId()}" th:text="${manyToMany.getName()}"></a>
+          </div>
+          </p>
+          <p>
+          <span class="h4">Aggregates: </span>
+          <div th:if="${!module.getAggregatedSet().isEmpty()}" th:each="aggregated : ${module.getAggregatedSet()}">
+            <a href="#" th:href="@{/viewModule/}+${docId}+'/'+${aggregated.getExternalId()}" th:text="${aggregated.getName()}"></a>
+          </div>
+          </p>
               <div style="margin-top: 20px; border-top: 1px solid #DDDDDD;">
                 <ul class="list-group" style="margin-top:10px">
                   <li class="list-group-item" th:each=" ann : ${module.getAnnotationsByTag('Module')}">

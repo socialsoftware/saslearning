@@ -259,6 +259,46 @@ relation moduleCrosscutsModule {
 	}
 }
 
+relation moduleOneToOneModule {
+	Module playsRole oneToOne {
+		multiplicity 0..*;
+	}
+	
+	Module playsRole oneRelation {
+		multiplicity 0..*;
+	}
+}
+
+relation moduleOneToManyModule {
+	Module playsRole oneToMany {
+		multiplicity 0..*;
+	}
+	
+	Module playsRole oneToManyRelations {
+		multiplicity 0..*;
+	}
+}
+
+relation moduleManyToManyModule {
+	Module playsRole manyToMany {
+		multiplicity 0..*;
+	}
+	
+	Module playsRole manyToManyRelations {
+		multiplicity 0..*;
+	}
+}
+
+relation moduleAggregatesModule {
+	Module playsRole aggregator {
+		multiplicity 0..*;
+	}
+	
+	Module playsRole aggregated {
+		multiplicity 0..*;
+	}
+}
+
 class View {
 	String name;
 	String viewtype;

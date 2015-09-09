@@ -33,6 +33,23 @@ Annotator.Plugin.SAConcepts = function (element, options) {
     }).subscribe("annotationEditorSubmit", function(editor, annotation){
       var tag = document.getElementById("tagSelector").value;
       annotation.tag = tag;
+    }).subscribe("annotationsLoaded", function(a){
+      console.log("annotations loaded");  
+      var annotations = document.getElementsByClassName("annotator-hl");
+      for(var i = 0; i < annotations.length; i++){
+        var ann = annotations[i];
+        var id = $(ann).attr("data-annotation-id");
+        var a = document.createElement("a");
+        a.href="";
+        a.name = id;
+        ann.appendChild(a);
+        if(document.location.hash === '#'+id){
+          var jann = $(ann);
+          console.log("they see me scrolling...");
+          $(window).scrollTop(jann.offset().top).scrollLeft(jann.offset().left);
+        }
+      }
+
     });
 
   }
