@@ -79,11 +79,14 @@ public class ViewController {
 		m.addAttribute("docId", docId);
 		View v = FenixFramework.getDomainObject(viewId);
 		Document d = FenixFramework.getDomainObject(docId);
-		m.addAttribute("view", v);
-		m.addAttribute("views", d.getViewSet());
-		m.addAttribute("modules", d.getModuleSet());
-		m.addAttribute("used", new UsedModules());
-		return "viewTemplate";
+		if(v.getViewtype().equals("Module Viewtype")) {
+			m.addAttribute("view", v);
+			m.addAttribute("views", d.getViewSet());
+			m.addAttribute("modules", d.getModuleSet());
+			m.addAttribute("used", new UsedModules());
+			return "viewMVTTemplate";
+		}
+		return null;
 	}
 
 	@RequestMapping(value = "/removeView/{docId}/{viewId}")
@@ -145,7 +148,9 @@ public class ViewController {
 	public RedirectView addModulesToView(@PathVariable String docId,
 			@PathVariable String viewId, @ModelAttribute UsedModules modules) {
 		View v = FenixFramework.getDomainObject(viewId);
-		addModulesToView(v, modules);
+		if(v.getViewtype().equals("Module Viewtype")) {
+			addModulesToView(v, modules);
+		}
 		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
 		return rv;
 	}
@@ -155,7 +160,9 @@ public class ViewController {
 			@PathVariable String viewId, @PathVariable String moduleId) {
 		View v = FenixFramework.getDomainObject(viewId);
 		Module m = FenixFramework.getDomainObject(moduleId);
-		removeModuleFromView(v,m);
+		if(v.getViewtype().equals("Module Viewtype")) {
+			removeModuleFromView(v,m);
+		}
 		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
 		return rv;
 	}

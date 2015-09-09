@@ -184,7 +184,7 @@ class Tactic extends ScenarioElement{
 
 relation scenarioHasTactic {
 	Scenario playsRole scenario {
-		multiplicity 0..1;
+		multiplicity 1..1;
 	}
 	
 	Tactic playsRole tactic {
