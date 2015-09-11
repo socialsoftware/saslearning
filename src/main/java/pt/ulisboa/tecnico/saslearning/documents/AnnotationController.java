@@ -20,7 +20,11 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
+import pt.ulisboa.tecnico.saslearning.domain.Module;
+import pt.ulisboa.tecnico.saslearning.domain.Scenario;
+import pt.ulisboa.tecnico.saslearning.domain.ScenarioElement;
 import pt.ulisboa.tecnico.saslearning.domain.User;
+import pt.ulisboa.tecnico.saslearning.domain.View;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 import pt.ulisboa.tecnico.saslearning.utils.Utils;
 
@@ -37,7 +41,23 @@ public class AnnotationController {
 		Gson g = new Gson();
 		for(Annotation a : d.getAnnotationSet()) {
 			AnnotationJ ann = g.fromJson(a.getAnnotation(), AnnotationJ.class);
+			if(a.isViewAnnotation() && a.getView() != null) {
+				View v = a.getView();
+				ann.setText("View: " + v.getViewtype() + " - " + v.getStyle() + "<a href=\"#\">Clicky clicky</a>");
+			} else if(a.isScenarioAnnotation() && a.getEnclosingScenario() != null) {
+				Scenario s = a.getEnclosingScenario();
+				if(a.getScenario() != null) {
+					ann.setText("Scenario: " + s.getName());
+				}else {
+					ScenarioElement elem = a.getScenarioElement();
+					ann.setText(elem.getIdentifier() + " of Scenario: " + s.getName());
+				}
+			} else if(a.isModuleViewtypeAnnotation() && a.getModule() != null) {
+				Module m = a.getModule();
+				ann.setText("Module: " + m.getName());
+			}
 			anns.add(ann);
+			
 		}
 		String resp = g.toJson(anns);
 		return resp;

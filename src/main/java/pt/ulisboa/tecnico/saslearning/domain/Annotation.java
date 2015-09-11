@@ -44,6 +44,10 @@ public class Annotation extends Annotation_Base {
 		return Utils.moduleConcepts().contains(getTag());
 	}
 	
+	public boolean isViewAnnotation() {
+		return getTag().equals("View");
+	}
+	
 //	public ModuleViewType getEnclosingModuleViewtype() {
 //		if(getModuleViewtype() != null) {
 //			return getModuleViewtype();

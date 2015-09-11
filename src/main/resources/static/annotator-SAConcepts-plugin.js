@@ -30,6 +30,7 @@ Annotator.Plugin.SAConcepts = function (element, options) {
 
     this.annotator.subscribe("annotationEditorShown", function(editor, annotation){
       removeExtras();
+      $("#annotator-field-0").attr("disabled","true");
     }).subscribe("annotationEditorSubmit", function(editor, annotation){
       var tag = document.getElementById("tagSelector").value;
       annotation.tag = tag;
