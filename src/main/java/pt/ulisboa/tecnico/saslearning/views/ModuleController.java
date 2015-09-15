@@ -102,6 +102,7 @@ public class ModuleController {
 	@Atomic(mode = TxMode.WRITE)
 	private void addModuleToDocument(Document d, String moduleName) {
 		Module m = new Module();
+		
 		m.setIdentifier("Module");
 		m.setName(moduleName);
 		d.addModule(m);

@@ -60,8 +60,9 @@ public class Annotation extends Annotation_Base {
 		if(isScenarioAnnotation()) {
 			if(getScenario() != null) {
 				return getScenario();
+			}else if (getScenarioElement() != null) {
+				return getScenarioElement().getEnclosingScenario();
 			}
-			return getScenarioElement().getEnclosingScenario();
 		}
 		return null;
 	}
