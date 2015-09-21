@@ -25,6 +25,10 @@
     <div class="collapse" id="addScenario">
       <div style="margin-bottom: 5px;"><b>Scenario's Name:</b></div>
       <input id="scenarioName" type="text" class="form-control" placeholder="Add a name to the Scenario"/>
+      <div style="margin-bottom: 5px;"><b>Scenario's Quality Requirement:</b></div>
+      <select id="qualityRequirement">
+        <option th:each="qr : ${qualReqs}" th:value="${qr}"  th:text="${qr}"></option>
+      </select>
       <button id="createScenario" type="button" class="btn btn-default" data-dismiss="collapse" disabled="true">Add Scenario</button>
     </div>  
   </div>
@@ -32,7 +36,7 @@
   <!-- Start of Scenarios -->
   <div class="panel panel-default" th:each="scenario : ${scenarios}" th:if="${!scenario.getExternalId().equals(annotData.getEnclosingScenario().getExternalId())}">
     <div class="panel-body" style="font-size:115%;">
-      <b class="h4">Scenario: </b> <span th:text="${scenario.getName()}"></span>
+      <b class="h4" th:text="'${Scenario for '+ scenario.getQualityRequirement().getName() +': '}"></b> <span th:text="${scenario.getName()}"></span>
       <a href="#" style="float:right;" th:href="@{/moveToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}">(Move annotation to this Scenario)</a>
     </div>
   </div>
@@ -50,8 +54,9 @@ $('#scenarioName').bind('keyup', function() {
 $("#createScenario").click(function(){
   $("#addScenario").collapse('toggle');
   var name = encodeURIComponent($("#scenarioName").val());
+  var qr = encodeURIComponent($("#qualityRequirement").val());
   var loc = /*[[@{/addNewScenario/} + ${docId}+'/'+${annotation.id}+'/']]*/;
-  loc+= name+"?move=yes";
+  loc+= name+"/"+qr+"?move=yes";
   $("#elements").load(loc);
 
 });

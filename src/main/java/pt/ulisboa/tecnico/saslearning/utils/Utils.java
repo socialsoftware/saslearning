@@ -108,6 +108,18 @@ public class Utils {
 		map.put("Modifiability", modifiabilityTactics());
 		return map;
 	}
+	
+	public static List<String> getQualityRequirements(){
+		List<String> qr = new ArrayList<String>();
+		qr.add("Availability");
+		qr.add("Interoperability");
+		qr.add("Usability");
+		qr.add("Testability");
+		qr.add("Security");
+		qr.add("Performance");
+		qr.add("Modifiability");
+		return qr;
+	}
 
 	private static Map<String, String[]> usabilityTactics() {
 		String n1 = "Support User Initiative";

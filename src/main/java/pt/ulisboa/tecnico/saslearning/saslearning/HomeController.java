@@ -22,6 +22,11 @@ public class HomeController {
 		return "headerFragment";
 	}
 	
+	@RequestMapping(value = "/templates")
+	public String getTemplates(){
+		return "templates";
+	}	
+	
 	
 	
 

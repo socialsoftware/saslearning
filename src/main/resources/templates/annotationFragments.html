@@ -1,14 +1,14 @@
 <html>
 <section layout:fragment="annotationContent">
 	<p style="float:right;margin-left: 10px;">
-		<a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}">
+		<a href="#" th:href="@{/unlinkFromScenario/}+${docId}+'/'+${ann.id}+'/'+${scenario.getExternalId()}" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Delete annotation"></span>
 		</a>
-		<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
+		<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
 		</a>
 
-		<script type="text/javascript" th:inline="javascript">
+		<script type="text/javascript" th:inline="javascript" >
 		$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
 			$("#elements").load(/*[[@{/moveAnnotationScenario/}+${docId}+'/'+${ann.id}]]*/);
 		});
@@ -22,16 +22,16 @@
 
 <section layout:fragment="elementText">
 	<div id="EditText">
-		<a th:id="'showEditor'+${element.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+element.getExternalId()}">
+		<a th:id="'showEditor'+${element.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+element.getExternalId()}" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
 		</a>
 		<div th:id="'textViewer'+${element.getExternalId()}" th:text="${element.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${element.getText() != null} and ${!element.getText().equals('')}"></div>
-		<div class="collapse" th:id="'editorCollapse'+${element.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+		<div class="collapse" th:id="'editorCollapse'+${element.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
 			<textarea class="form-control" th:id="'text'+${element.getExternalId()}" th:text="${element.getText()}" style="margin-bottom:10px;"></textarea>
 			<button th:id="'submitText'+${element.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
 		</div>
 	</div>
-	<script type="text/javascript" th:inline="javascript">
+	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 
 	$("#submitText"+/*[[${element.getExternalId()}]]*/).click(function(){
 		var elemtext = document.getElementById("text"+/*[[${element.getExternalId()}]]*/).value;
@@ -59,16 +59,16 @@
 
 <section layout:fragment="viewText">
 	<div id="EditText">
-		<a th:id="'showEditor'+${element.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+element.getExternalId()}">
+		<a th:id="'showEditor'+${element.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+element.getExternalId()}" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
 		</a>
 		<div th:id="'textViewer'+${element.getExternalId()}" th:text="${element.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${element.getText() != null} and ${!element.getText().equals('')}"></div>
-		<div class="collapse" th:id="'editorCollapse'+${element.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+		<div class="collapse" th:id="'editorCollapse'+${element.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
 			<textarea class="form-control" th:id="'text'+${element.getExternalId()}" th:text="${element.getText()}" style="margin-bottom:10px;"></textarea>
 			<button th:id="'submitText'+${element.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
 		</div>
 	</div>
-	<script type="text/javascript" th:inline="javascript">
+	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 
 	$("#submitText"+/*[[${element.getExternalId()}]]*/).click(function(){
 		var elemtext = document.getElementById("text"+/*[[${element.getExternalId()}]]*/).value;
@@ -99,6 +99,7 @@
 	</div>
 	<section layout:include="@{annotationFragments} :: elementText" th:with="element=${scenario},scenario=${scenario}"></section>
 </section>
+
 <section layout:fragment="scenarioElementsAnnotations">
 	<div th:if="${elem != null}">
 		<ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
@@ -119,14 +120,14 @@
 				</span>
 				<a href="" th:name="${tactic.getIdentifier()}"></a>
 			</b>
-			<a href="#" th:href="@{/removeTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}" style="float:right;">
+			<a href="#" th:href="@{/removeTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()}" style="float:right;" th:if="${edit == true}">
 				<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Tactic"></span>
 			</a>
 			<ul class="list-group">
 				<li class="list-group-item" th:each="ann : ${tactic.getJsonAnnotations()}">
 					<a href="" th:name="${ann.id}"></a>
 					<p style="float:right;margin-left: 10px;">
-						<a href="#" th:href="@{/unlinkFromTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()} + '/' + ${ann.id}">
+						<a href="#" th:href="@{/unlinkFromTactic/}+${docId}+'/'+${scenario.getExternalId()}+'/'+${tactic.getExternalId()} + '/' + ${ann.id}" th:if="${edit == true}">
 							<span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Remove annotation from this tactic"></span>
 						</a>
 					</p>
@@ -140,14 +141,14 @@
 
 <section layout:fragment="annotationContentViewtype">
 	<p style="float:right;margin-left: 10px;">
-		<a href="#" th:href="@{/unlinkFromView/}+${docId}+'/'+${ann.id}+'/'+${view.getExternalId()}">
+		<a href="#" th:href="@{/unlinkFromView/}+${docId}+'/'+${ann.id}+'/'+${view.getExternalId()}" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Delete annotation"></span>
 		</a>
 		<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
-			<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other view"></span>
+			<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other view" th:if="${edit == true}"></span>
 		</a>
 
-		<script type="text/javascript" th:inline="javascript">
+		<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 		$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
 			$("#elements").load(/*[[@{/moveAnnotationView/}+${docId}+'/'+${ann.id}]]*/);
 		});
@@ -162,10 +163,10 @@
 <section layout:fragment="annotationContentModule">
 	<a href="" th:name="${ann.id}"></a>
 	<p style="float:right;margin-left: 10px;">
-		<a href="#" th:href="@{/unlinkFromModuleViewtype/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}">
+		<a href="#" th:href="@{/unlinkFromModule/}+${docId}+'/'+${ann.id}+'/'+${module.getExternalId()}" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
 		</a>
-		<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#">
+		<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other module"></span>
 		</a>
 	</p>  
@@ -173,7 +174,7 @@
 	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
 	<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
-	<script type="text/javascript" th:inline="javascript">
+	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 	$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
 		console.log("click");
 		var loc = /*[[@{/moveAnnotationModule/}+${docId}+'/'+${ann.id}]]*/;
@@ -184,16 +185,16 @@
 </section>
 <section layout:fragment="moduleText">
 	<div id="EditText">
-		<a th:id="'showEditor'+${module.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+module.getExternalId()}">
+		<a th:id="'showEditor'+${module.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+module.getExternalId()}" th:if="${edit == true}">
 			<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
 		</a>
 		<div th:id="'textViewer'+${module.getExternalId()}" th:text="${module.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${module.getText() != null} and ${!module.getText().equals('')}"></div>
-		<div class="collapse" th:id="'editorCollapse'+${module.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;">
+		<div class="collapse" th:id="'editorCollapse'+${module.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
 			<textarea class="form-control" th:id="'text'+${module.getExternalId()}" th:text="${module.getText()}" style="margin-bottom:10px;"></textarea>
 			<button th:id="'submitText'+${module.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
 		</div>
 	</div>
-	<script type="text/javascript" th:inline="javascript">
+	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 
           $("#submitText"+/*[[${module.getExternalId()}]]*/).click(function(){
             var elemtext = document.getElementById("text"+/*[[${module.getExternalId()}]]*/).value;

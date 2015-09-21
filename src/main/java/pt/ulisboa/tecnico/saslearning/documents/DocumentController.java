@@ -72,6 +72,8 @@ public class DocumentController {
 			Model m) {
 		Document d = FenixFramework.getDomainObject(docId);
 		m.addAttribute("scenarios", d.getScenarioSet());
+		m.addAttribute("views", d.getViewSet());
+		m.addAttribute("modules", d.getModuleSet());
 		m.addAttribute("docId", docId);
 		m.addAttribute("title", d.getTitle());
 		return "structuredRepresentation";
@@ -97,7 +99,6 @@ public class DocumentController {
 			@PathVariable String annotationId, @PathVariable String tag) {
 		RedirectView rv = null;
 		if (Utils.allScenarioConcepts().contains(tag)) {
-			System.out.println("Is scenario tag");
 			rv= new RedirectView("/addAnnotationToScenarioStructure/" + docId + "/"
 					+ annotationId);
 		} else if (tag.contains("Module")) {

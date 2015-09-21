@@ -99,7 +99,6 @@ public class ViewController {
 		return rv;
 	}
 
-	// ::
 	@RequestMapping(value = "/unlinkFromView/{docId}/{annotationId}/{viewId}")
 	public RedirectView unlinkAnnotationFromView(@PathVariable String docId,
 			@PathVariable String annotationId, @PathVariable String viewId) {

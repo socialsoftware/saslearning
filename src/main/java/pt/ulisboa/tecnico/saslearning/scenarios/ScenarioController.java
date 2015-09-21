@@ -17,6 +17,7 @@ import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Artifact;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Environment;
+import pt.ulisboa.tecnico.saslearning.domain.QualityRequirement;
 import pt.ulisboa.tecnico.saslearning.domain.Response;
 import pt.ulisboa.tecnico.saslearning.domain.ResponseMeasure;
 import pt.ulisboa.tecnico.saslearning.domain.Scenario;
@@ -48,6 +49,7 @@ public class ScenarioController {
 		m.addAttribute("annotation", ann);
 		m.addAttribute("annotData", a);
 		m.addAttribute("docId", docId);
+		m.addAttribute("qualReqs", Utils.getQualityRequirements());
 		return "addAnnotationScenarioModal";
 	}
 
@@ -65,12 +67,12 @@ public class ScenarioController {
 		return "moveAnnotationScenarioModal";
 	}
 
-	@RequestMapping(value = "/addNewScenario/{docId}/{annotationId}/{scenarioName}")
+	@RequestMapping(value = "/addNewScenario/{docId}/{annotationId}/{scenarioName}/{qualityRequirement}")
 	public RedirectView addNewScenario(@PathVariable String docId,
 			@PathVariable String annotationId,
-			@PathVariable String scenarioName, @RequestParam String move) {
+			@PathVariable String scenarioName, @PathVariable String qualityRequirement,@RequestParam String move) {
 		Document d = FenixFramework.getDomainObject(docId);
-		addScenarioToDocument(d, scenarioName);
+		addScenarioToDocument(d,qualityRequirement ,scenarioName);
 		RedirectView rv = new RedirectView();
 		if (move.equals("yes")) {
 			rv.setUrl("/moveAnnotationScenario/" + docId + "/" + annotationId);
@@ -195,7 +197,6 @@ public class ScenarioController {
 	@RequestMapping(value = "/setScenarioText/{docId}/{scenarioId}", method = RequestMethod.POST)
 	public RedirectView setScenarioText(@RequestParam String text,
 			@PathVariable String docId, @PathVariable String scenarioId) {
-		System.out.println("Text: " + text);
 		Scenario scen = FenixFramework.getDomainObject(scenarioId);
 		updateText(scen, text);
 		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
@@ -310,10 +311,13 @@ public class ScenarioController {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	private void addScenarioToDocument(Document d, String scenarioName) {
+	private void addScenarioToDocument(Document d, String qualityRequirement, String scenarioName) {
 		Scenario s = new Scenario();
 		s.setName(scenarioName);
 		s.setIdentifier("Scenario");
+		QualityRequirement qr = new QualityRequirement();
+		qr.setName(qualityRequirement);
+		s.setQualityRequirement(qr);
 		SrcOfStimulus src = new SrcOfStimulus();
 		src.setIdentifier("Source Of Stimulus");
 		Stimulus stim = new Stimulus();

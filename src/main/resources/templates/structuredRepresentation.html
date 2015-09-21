@@ -19,114 +19,72 @@
 </head>
 <body>
   <section layout:include="@{/headerFragment} :: headerFragment"></section>
-  <div class="panel panel-default" style="margin-top: -20px; height: 30px;">
+  <div class="panel panel-default" style="margin-top: -20px; height: 30px; margin-bottom:0px">
     <div class="panel-body" style="margin-top: -10px;">
       <a href="#" th:href="@{/selectDoc/} + ${docId}">
-        <span class="glyphicon glyphicon-arrow-left"></span> Back
+        <span class="glyphicon glyphicon-arrow-left"></span> Back To Document
       </a>
     </div>
   </div>
-  <div class="well" style="margin-top: -20px;">
+  <div class="well">
+    <div style="border-bottom:1px solid; border-color: #CBC7C7; padding-bottom: 5px; margin-bottom: 10px;">
+      <span class="h3">
+        <b th:text="${title}"></b>
+      </span>
+    </div>
+    <div id="toc">
+      <b>
+        <a href="#scenarios">
+          Scenarios
+        </a>
+      </b>
+      <p th:each="scenario : ${scenarios}" style="padding-left:10px;">
+        <a href="#" th:href="'#'+${scenario.getExternalId()}">
+          <span th:text="'Scenario for '+${scenario.getQualityRequirement().getName()}+': '"></span> <span th:text="${scenario.getName()}"></span>
+        </a>
+      </p>
+      <b>
+        <a href="#views">
+        Views
+        </a>
+      </b>
+      <p th:each="view : ${views}" style="padding-left:10px;">
+        <a href="#" th:href="'#'+${view.getExternalId()}">
+          <span th:text="${'View - ' + view.getName() +': ' + view.getViewtype() + ', ' + view.getStyle()}"></span>
+        </a>
+      </p>
+      <b>
+              <a href="#modules">
+        Modules
+        </a>
+      </b>
+      <p th:each="module : ${modules}" style="padding-left:10px;">
+        <a href="#" th:href="'#'+${module.getExternalId()}">
+          Module:
+          <span th:text="${module.getName()}"></span>
+        </a>
+      </p>
+    </div>
+    <a href="" name="scenarios"></a>
+    <h3 style="border-bottom: 1px solid #CBC7C7;">Scenarios: </h3>
     <div class="clearfix element-title">
-      <!-- Start of Scenarios -->
-      <div class="panel panel-default" th:each="scenario : ${scenarios}">
-        <!-- header -->
-        <div class="panel-heading">
-          <span class="h4">
-            <b>Scenario: <span th:text="${scenario.getName()}"></span></b> 
-            <a href="" name="Scenario"></a>
-          </span>
-        </div>
-        <!-- end of scenario header -->
-        <div class="panel-body">
-          <!-- scenario annotations -->
-          <div>
-            <ul class="list-group" style="margin-top:10px">
-              <li class="list-group-item" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Scenario Description')}">
-                <a href="" th:name="${ann.id}">
-                </a>
-                <p>
-                  <b>Document Quote: </b>
-                  <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                </p>
-                <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-              </li>
-            </ul>
-          </div>
-          <!-- -->
-          <!-- scenario Elements -->
-          <div class="scenarioElements">
-            <div th:each="entry : ${scenario.getElements()}">
-              <div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
-                <div class="element-title">
-                  <h4>
-                    <b><span th:text="${name}"></span></b>
-                  </h4>
-                  <a href="" th:name="${name}"></a>
-                </div>
-                <div th:if="${elem != null}">
-                  <ul class="list-group" style="margin-top:10px" th:each=" ann : ${elem.getJsonAnnotations()}">
-                    <li class="list-group-item">
-                      <a href="" th:name="${ann.id}"></a> 
-                      <p>
-                        <b>Document Quote: </b>
-                        <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                      </p>
-                      <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                      <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <!-- -->
-            <!--   Tactics  -->
-            <div class="element-title">
-              <p>
-                <span class="h4">
-                  <b>Tactics:</b>
-                  <a href="" name="Tactics"></a>
-                </span>
-              </p>
-            </div>
-            <div>
-              <ul class="list-group" style="margin-top:10px" th:each=" ann : ${scenario.getJsonAnnotations()}" th:if="${ann.tag.equals('Tactic')}">
-                <li class="list-group-item">
-                  <a href="" th:name="${ann.id}"></a>
-                  <p>
-                    <b>Document Quote: </b>
-                    <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                  </p>
-                  <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                  <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                </li>
-              </ul>
-            </div>
-            <!-- tactic annotations -->
-            <div th:if="${!scenario.getTacticSet().isEmpty()}">
-              <div th:each="tactic : ${scenario.getTacticSet()}">
-                <b>
-                  <span th:text="'- '+${tactic.getName()}" style="font-size:17px;">
-                  </span>
-                </b>
-                <ul class="list-group">
-                  <li class="list-group-item" th:each="ann : ${tactic.getJsonAnnotations()}">
-                    <a href="" th:name="${ann.id}"></a>
-                    <p>
-                      <b>Document Quote: </b>
-                      <i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
-                    </p>
-                    <p><b>Comment: </b><span th:text="${ann.text}"></span></p>
-                    <p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- -->
-            <!-- end tactics-->
-          </div>
-        </div>
+      <div th:each="scenario : ${scenarios}">
+        <a href="" th:name="${scenario.getExternalId()}"></a>
+        <section layout:include="@{/templates} :: scenarioTemplate" th:with="docId=${docId},scenario=${scenario},edit=false"></section>
+      </div>
+
+      <a href="" name="views"></a>
+      <h3 style="border-bottom: 1px solid #CBC7C7;">Views: </h3>
+            <div th:each="view : ${views}">
+        <a href="" th:name="${view.getExternalId()}"></a>
+        <section layout:include="@{/templates} :: viewMVTTemplate" th:with="docId=${docId},view=${view},edit=false"></section>
+      </div>
+
+      <a href="" name="modules"></a>
+      <h3 style="border-bottom: 1px solid #CBC7C7;">Modules: </h3>
+                  <div th:each="module : ${modules}">
+        <a href="" th:name="${module.getExternalId()}"></a>
+        <section layout:include="@{/templates} :: moduleTemplate" th:with="docId=${docId},module=${module},edit=false"></section>
       </div>
     </div>
   </div>
@@ -137,6 +95,15 @@
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: #C8C8C8;
+  }
+
+  #toc{
+    border: 1px solid;
+    width: 400px;
+    border-radius: 3px;
+    padding: 10px;
+    border-color: #C8C8C8;
+    background-color: white;
   }
 
   </style>

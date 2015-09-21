@@ -75,6 +75,20 @@ relation documentHasScenarios {
 	}
 }
 
+class QualityRequirement {
+	String name;
+}
+
+relation scenarioHasQualityRequirement {
+	Scenario playsRole scenario {
+		multiplicity 0..*;
+	}
+	
+	QualityRequirement playsRole qualityRequirement {
+		multiplicity 0..1;
+	}
+}
+
 class ScenarioElement {
 	String identifier;
 	String text;

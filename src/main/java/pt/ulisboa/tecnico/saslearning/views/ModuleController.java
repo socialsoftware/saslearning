@@ -130,7 +130,6 @@ public class ModuleController {
 		return rv;
 	}
 
-	// ::
 	@RequestMapping(value = "/unlinkFromModule/{docId}/{annotationId}/{moduleId}")
 	public RedirectView unlinkAnnotationFromModule(@PathVariable String docId,
 			@PathVariable String annotationId, @PathVariable String moduleId) {
