@@ -350,6 +350,107 @@ relation viewHasAnnotations {
 	}
 }
 
+class Component {
+	String name;
+	String text;
+}
+
+class Port {
+	String name;
+	String text;
+}
+
+relation documentHasComponents {
+	Component playsRole component {
+		multiplicity 0..*;
+	}
+	
+	Document playsRole document {
+		multiplicity 0..1;
+	}
+}
+
+relation componentHasPorts {
+	Component playsRole component {
+		multiplicity 0..1;
+	}
+	
+	Port playsRole port {
+		multiplicity 0..*;
+	}
+}
+
+relation componentHasAnnotations{
+	Component playsRole component {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation portHasAnnotations{
+	Port playsRole port  {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+class Connector {
+	String name;
+	String text;
+}
+
+class Role {
+	String name;
+	String text;
+}
+
+relation documentHasConnectors {
+	Document playsRole document {
+		multiplicity 0..1;
+	}
+	
+	Connector playsRole connector {
+		multiplicity 0..*;
+	}
+}
+
+relation connectorHasRoles {
+	Connector playsRole connector {
+		multiplicity 1;
+	}
+	
+	Role playsRole role {
+		multiplicity 0..*;
+	}
+}
+relation connectorHasAnnotations {
+	Connector playsRole connector {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation roleHasAnnotations {
+	Role playsRole role {
+		multiplicity 0..1;
+	}
+	
+	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+
+
 
 
 

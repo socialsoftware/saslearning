@@ -22,6 +22,10 @@ public class Annotation extends Annotation_Base {
 		setScenario(null);
 		setScenarioElement(null);
 		setModule(null);
+		setComponent(null);
+		setPort(null);
+		setConnector(null);
+		setRole(null);
 		deleteDomainObject();
 		
 	}

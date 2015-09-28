@@ -90,6 +90,10 @@ public class DocumentController {
 			rv.setUrl("/viewModule/"+docId+"/"+connectedId+"#"+annotationId);
 		}else if(a.getTag().contains("View")) {
 			rv.setUrl("/viewView/"+docId+"/"+connectedId+"#"+annotationId);
+		}else if(a.getTag().contains("Component")) {
+			rv.setUrl("/viewComponent/"+docId+"/"+connectedId+"#"+annotationId);
+		}else if(a.getTag().contains("Connector")) {
+			rv.setUrl("/viewConnector/"+docId+"/"+connectedId+"#"+annotationId);
 		}
 		return rv;
 	}
@@ -106,6 +110,12 @@ public class DocumentController {
 					+ annotationId);
 		}else if (tag.contains("View")) {
 			rv = new RedirectView("/addAnnotationToViewTemplate/" + docId + "/"
+					+ annotationId);
+		}else if (tag.contains("Component")) {
+			rv = new RedirectView("/addAnnotationToComponentTemplate/" + docId + "/"
+					+ annotationId);
+		}else if (tag.contains("Connector")) {
+			rv = new RedirectView("/addAnnotationToConnectorTemplate/" + docId + "/"
 					+ annotationId);
 		}
 		return rv;

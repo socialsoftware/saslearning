@@ -157,7 +157,7 @@
 	<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
 	<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 	<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
-		<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
+	<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 </section>
 
 <section layout:fragment="annotationContentModule">
@@ -196,21 +196,271 @@
 	</div>
 	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 
-          $("#submitText"+/*[[${module.getExternalId()}]]*/).click(function(){
-            var elemtext = document.getElementById("text"+/*[[${module.getExternalId()}]]*/).value;
-            var loc = /*[[@{/setModuleText/} + ${docId} + '/'+${module.getExternalId()}]]*/;
-            var content = {text: elemtext}
-            $.ajax(loc,{
-              method: "POST",
-              data: content
-            }).done(function(data, textStatus, jqXHR){
-              console.log(data);
-              console.log(textStatus);
-              console.log(jqXHR);
+	$("#submitText"+/*[[${module.getExternalId()}]]*/).click(function(){
+		var elemtext = document.getElementById("text"+/*[[${module.getExternalId()}]]*/).value;
+		var loc = /*[[@{/setModuleText/} + ${docId} + '/'+${module.getExternalId()}]]*/;
+		var content = {text: elemtext}
+		$.ajax(loc,{
+			method: "POST",
+			data: content
+		}).done(function(data, textStatus, jqXHR){
+			console.log(data);
+			console.log(textStatus);
+			console.log(jqXHR);
               //window.location.hash="#";
               window.location.reload(true);
-            });
           });
-          </script>
+	});
+	</script>
+</section>
+
+<section layout:fragment="componentAnnotationsTemplate">
+	<div>
+		<ul class="list-group" style="margin-top:10px">
+			<li class="list-group-item" th:each=" ann : ${component.getJsonAnnotations()}" th:if="${ann.tag.equals('Component Description')}">
+				<a href="" th:name="${ann.id}"></a>  
+				<!--<section layout:include="@{annotationFragments} :: annotationContentComponent"></section>-->
+				<a href="" th:name="${ann.id}"></a>
+				<p style="float:right;margin-left: 10px;">
+					<a href="#" th:href="@{/unlinkFromComponent/}+${docId}+'/'+${ann.id}+'/'+${component.getExternalId()}" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
+					</a>
+					<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other component"></span>
+					</a>
+				</p>  
+				<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+				<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+				<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+				<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
+				<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+				$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+					console.log("click");
+					var loc = /*[[@{/moveAnnotationComponent/}+${docId}+'/'+${ann.id}]]*/;
+					console.log(loc);
+					$("#elements").load(loc);
+				});
+				</script>
+			</li>
+		</ul>
+	</div>
+		<div id="EditText">
+		<a th:id="'showEditor'+${component.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+component.getExternalId()}" th:if="${edit == true}">
+			<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+		</a>
+		<div th:id="'textViewer'+${component.getExternalId()}" th:text="${component.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${component.getText() != null} and ${!component.getText().equals('')}"></div>
+		<div class="collapse" th:id="'editorCollapse'+${component.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
+			<textarea class="form-control" th:id="'text'+${component.getExternalId()}" th:text="${component.getText()}" style="margin-bottom:10px;"></textarea>
+			<button th:id="'submitText'+${component.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+
+	$("#submitText"+/*[[${component.getExternalId()}]]*/).click(function(){
+		var elemtext = document.getElementById("text"+/*[[${component.getExternalId()}]]*/).value;
+		var loc = /*[[@{/setComponentText/} + ${docId} + '/'+${component.getExternalId()}]]*/;
+		var content = {text: elemtext}
+		$.ajax(loc,{
+			method: "POST",
+			data: content
+		}).done(function(data, textStatus, jqXHR){
+			console.log(data);
+			console.log(textStatus);
+			console.log(jqXHR);
+              //window.location.hash="#";
+              window.location.reload(true);
+          });
+	});
+	</script>
+</section>
+
+<section layout:fragment="portsAnnotations">
+		<div th:if="${!component.getPortSet().isEmpty()}">
+			<div th:each="port : ${component.getPortSet()}">
+				<b>
+					<span th:text="'- '+${port.getName()}" style="font-size:17px;">
+					</span>
+					<a href="" th:name="${port.getName()}"></a>
+				</b>
+				<a href="#" th:href="@{/removePortFromComponent/}+${docId}+'/'+${component.getExternalId()}+'/'+${port.getExternalId()}" style="float:right;" th:if="${edit == true}">
+					<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Port"></span>
+				</a>
+				<ul class="list-group">
+					<li class="list-group-item" th:each="ann : ${port.getJsonAnnotations()}">
+						<a href="" th:name="${ann.id}"></a>
+						<p style="float:right;margin-left: 10px;">
+							<a href="#" th:href="@{/removeAnnotationFromPort/}+${docId}+'/'+${component.getExternalId()}+'/'+${port.getExternalId()} + '/' + ${ann.id}" th:if="${edit == true}">
+								<span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Remove annotation from this port"></span>
+							</a>
+						</p>  
+						<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+						<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+						<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+						<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
+						<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+						$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+							console.log("click");
+							var loc = /*[[@{/moveAnnotationComponent/}+${docId}+'/'+${ann.id}]]*/;
+							console.log(loc);
+							$("#elements").load(loc);
+						});
+						</script>
+					</li>
+				</ul>
+				<div id="EditText">
+					<a th:id="'showEditor'+${port.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+port.getExternalId()}" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+					</a>
+					<div th:id="'textViewer'+${port.getExternalId()}" th:text="${port.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${port.getText() != null} and ${!port.getText().equals('')}"></div>
+					<div class="collapse" th:id="'editorCollapse'+${port.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
+						<textarea class="form-control" th:id="'text'+${port.getExternalId()}" th:text="${port.getText()}" style="margin-bottom:10px;"></textarea>
+						<button th:id="'submitText'+${port.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+					</div>
+				</div>
+				<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+
+				$("#submitText"+/*[[${port.getExternalId()}]]*/).click(function(){
+					var elemtext = document.getElementById("text"+/*[[${port.getExternalId()}]]*/).value;
+					var loc = /*[[@{/setPortText/} + ${docId} + '/'+${port.getExternalId()}]]*/;
+					var content = {text: elemtext}
+					$.ajax(loc,{
+						method: "POST",
+						data: content
+					}).done(function(data, textStatus, jqXHR){
+						console.log(data);
+						console.log(textStatus);
+						console.log(jqXHR);
+              //window.location.hash="#";
+              window.location.reload(true);
+          });
+				});
+				</script>
+			</div>
+		</div>
+</section>
+
+<section layout:fragment="connectorAnnotationsTemplate">
+	<div>
+		<ul class="list-group" style="margin-top:10px">
+			<li class="list-group-item" th:each=" ann : ${connector.getJsonAnnotations()}" th:if="${ann.tag.equals('Connector Description')}">
+				<a href="" th:name="${ann.id}"></a>  
+				<!--<section layout:include="@{annotationFragments} :: annotationContentConnector"></section>-->
+				<a href="" th:name="${ann.id}"></a>
+				<p style="float:right;margin-left: 10px;">
+					<a href="#" th:href="@{/unlinkFromConnector/}+${docId}+'/'+${ann.id}+'/'+${connector.getExternalId()}" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
+					</a>
+					<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other Connector"></span>
+					</a>
+				</p>  
+				<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+				<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+				<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+				<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
+				<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+				$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+					console.log("click");
+					var loc = /*[[@{/moveAnnotationConnector/}+${docId}+'/'+${ann.id}]]*/;
+					console.log(loc);
+					$("#elements").load(loc);
+				});
+				</script>
+			</li>
+		</ul>
+	</div>
+		<div id="EditText">
+		<a th:id="'showEditor'+${connector.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+connector.getExternalId()}" th:if="${edit == true}">
+			<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+		</a>
+		<div th:id="'textViewer'+${connector.getExternalId()}" th:text="${connector.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${connector.getText() != null} and ${!connector.getText().equals('')}"></div>
+		<div class="collapse" th:id="'editorCollapse'+${connector.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
+			<textarea class="form-control" th:id="'text'+${connector.getExternalId()}" th:text="${connector.getText()}" style="margin-bottom:10px;"></textarea>
+			<button th:id="'submitText'+${connector.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+
+	$("#submitText"+/*[[${connector.getExternalId()}]]*/).click(function(){
+		var elemtext = document.getElementById("text"+/*[[${connector.getExternalId()}]]*/).value;
+		var loc = /*[[@{/setConnectorText/} + ${docId} + '/'+${connector.getExternalId()}]]*/;
+		var content = {text: elemtext}
+		$.ajax(loc,{
+			method: "POST",
+			data: content
+		}).done(function(data, textStatus, jqXHR){
+			console.log(data);
+			console.log(textStatus);
+			console.log(jqXHR);
+              //window.location.hash="#";
+              window.location.reload(true);
+          });
+	});
+	</script>
+</section>
+
+<section layout:fragment="rolesAnnotations">
+		<div th:if="${!connector.getRoleSet().isEmpty()}">
+			<div th:each="role : ${connector.getRoleSet()}">
+				<b>
+					<span th:text="'- '+${role.getName()}" style="font-size:17px;">
+					</span>
+					<a href="" th:name="${role.getName()}"></a>
+				</b>
+				<a href="#" th:href="@{/removeRoleFromConnector/}+${docId}+'/'+${connector.getExternalId()}+'/'+${role.getExternalId()}" style="float:right;" th:if="${edit == true}">
+					<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Role"></span>
+				</a>
+				<ul class="list-group">
+					<li class="list-group-item" th:each="ann : ${role.getJsonAnnotations()}">
+						<a href="" th:name="${ann.id}"></a>
+						<p style="float:right;margin-left: 10px;">
+							<a href="#" th:href="@{/removeAnnotationFromRole/}+${docId}+'/'+${connector.getExternalId()}+'/'+${role.getExternalId()} + '/' + ${ann.id}" th:if="${edit == true}">
+								<span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Remove annotation from this role"></span>
+							</a>
+						</p>  
+						<p><b>Document Quote: </b><i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i></p>
+						<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+						<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+						<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
+						<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+						$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+							console.log("click");
+							var loc = /*[[@{/moveAnnotationConnector/}+${docId}+'/'+${ann.id}]]*/;
+							console.log(loc);
+							$("#elements").load(loc);
+						});
+						</script>
+					</li>
+				</ul>
+				<div id="EditText" style="margin-bottom:20px">
+					<a th:id="'showEditor'+${role.getExternalId()}" href="#toggleEditor" data-toggle="collapse" th:attr="data-target=${'#editorCollapse'+role.getExternalId()}" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add/Edit Text"></span>
+					</a>
+					<div th:id="'textViewer'+${role.getExternalId()}" th:text="${role.getText()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px; margin-bottom:20px" th:if="${role.getText() != null} and ${!role.getText().equals('')}"></div>
+					<div class="collapse" th:id="'editorCollapse'+${role.getExternalId()}" style="border-style: solid; border-width: 1px; border-color: #DEDEDE; padding: 5px; border-radius: 4px;" th:if="${edit == true}">
+						<textarea class="form-control" th:id="'text'+${role.getExternalId()}" th:text="${role.getText()}" style="margin-bottom:10px;"></textarea>
+						<button th:id="'submitText'+${role.getExternalId()}" class="btn btn-default" type="submit">Submit</button>
+					</div>
+				</div>
+				<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+
+				$("#submitText"+/*[[${role.getExternalId()}]]*/).click(function(){
+					var elemtext = document.getElementById("text"+/*[[${role.getExternalId()}]]*/).value;
+					var loc = /*[[@{/setRoleText/} + ${docId} + '/'+${role.getExternalId()}]]*/;
+					var content = {text: elemtext}
+					$.ajax(loc,{
+						method: "POST",
+						data: content
+					}).done(function(data, textStatus, jqXHR){
+						console.log(data);
+						console.log(textStatus);
+						console.log(jqXHR);
+              			//window.location.hash="#";
+             			window.location.reload(true);
+          			});
+				});
+				</script>
+			</div>
+		</div>
 </section>
 </html>

@@ -16,6 +16,7 @@ public class Utils {
 	private static String[] tactics  = {"Tactic"};
 	private static String[] moduleVT = {"Module","Module - Name", "Module - Implementation Details", "Module - Interface", "Module - Responsibility"};
 	private static String[] views = {"View"};
+	private static String[] ccVT = {"Component Description", "Component Port", "Connector Description", "Connector Role"};
 	public static List<String> allScenarioConcepts(){
 		List<String> concepts = new ArrayList<String>();
 		for(String i : scenarios) {
@@ -45,6 +46,9 @@ public class Utils {
 		TagGroup moduleVtTags = new TagGroup();
 		moduleVtTags.setName("Module ViewType");
 		moduleVtTags.setTags(moduleVT);
+		TagGroup ccVtTags = new TagGroup();
+		ccVtTags.setName("Component&Connector ViewType");
+		ccVtTags.setTags(ccVT);
 		TagGroup viewsTags = new TagGroup();
 		viewsTags.setName("Views");
 		viewsTags.setTags(views);
@@ -53,6 +57,7 @@ public class Utils {
 		t.setTactics(tacticsTags);
 		t.setModulevt(moduleVtTags);
 		t.setViews(viewsTags);
+		t.setCcvt(ccVtTags);
 		Gson g = new Gson();
 		String obj = g.toJson(t);
 		return obj;

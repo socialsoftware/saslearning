@@ -57,7 +57,7 @@
 									<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
 								</a>
 								<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
-									<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other scenario"></span>
+									<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move Annotation to other Scenario"></span>
 								</a>
 
 								<a href="#" data-toggle="modal" data-target="#linkToTactic" th:if="${edit == true}">
@@ -121,7 +121,7 @@
 				<a href="" name="Module"></a>
 			</span>
 			<a href="#" th:href="@{/removeModule/}+${docId}+'/'+${module.getExternalId()}" style="float:right;" th:if="${edit == true}">
-				<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Viewtype"></span>
+				<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Module"></span>
 			</a>
 			<span class="h4" th:if="${edit == false}">
 				<b><a href="#" th:href="@{/viewModule/}+${docId}+'/'+${module.getExternalId()}">
@@ -328,3 +328,203 @@
 		</div>
 	</section>	
 </html>
+
+<section layout:fragment="componentTemplate">
+	<div class="panel panel-default">
+		<!-- header -->
+		<div class="panel-heading">
+			<span id="componentName" class="h4" th:if="${edit == true}">
+				<b><span th:text="'Component: '+${component.getName()}"></span></b> 
+				<a href="" name="Component"></a>
+			</span>
+			<a href="#" th:href="@{/removeComponent/}+${docId}+'/'+${component.getExternalId()}" style="float:right;" th:if="${edit == true}">
+				<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Component"></span>
+			</a>
+			<span id="componentName" class="h4" th:if="${edit == false}">
+				<b><a href="#" th:href="@{/viewComponent/}+${docId}+'/'+${component.getExternalId()}" th:text="'Component: '+${component.getName()}">
+
+				</a></b> 
+				<a href="" name="Component"></a>
+			</span>
+		</div>
+		<!-- end of scenario header -->
+		<div class="panel-body">
+			<!-- scenario annotations -->
+			<section layout:include="@{/annotationFragments} :: componentAnnotationsTemplate" th:with="component=${component},docId=${docId}, edit=${edit}"></section>
+			<!-- -->
+			<div class="componentPorts">
+				<!--   Tactics  -->
+				<div>
+					<p>
+						<span class="h4">
+							<b>Ports:</b>
+							<a href="" name="Ports"></a>
+						</span>
+						<a href="#" data-toggle="modal" data-target="#ports" style="float:right;" th:if="${edit == true}">
+							<span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add a Port to the Component"></span>
+						</a>
+					</p>
+				</div>
+				<div>
+					<ul class="list-group" style="margin-top:10px" th:each=" ann : ${component.getJsonAnnotations()}" th:if="${ann.tag.equals('Component Port')}">
+						<li class="list-group-item">
+							<a href="" th:name="${ann.id}"></a>
+							<p style="float:right;margin-left: 10px;">
+								<a href="#" th:href="@{/unlinkFromComponent/}+${docId}+'/'+${ann.id}+'/'+${component.getExternalId()}" th:if="${edit == true}">
+									<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
+								</a>
+								<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
+									<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move annotation to other Component"></span>
+								</a>
+
+								<a href="#" data-toggle="modal" data-target="#linkToPort" th:if="${edit == true}">
+									<span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Add Annotation to a specific Port"></span>
+								</a>
+								<!---->
+								<div class="modal fade" id="linkToPort" th:if="${edit == true}">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content" >
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">x</span>
+												</button>
+												<h4 class="modal-title">Tactics</h4>
+											</div>
+											<div class="modal-body" id="elements">
+												<ul class="list-group">
+													<li class="list-group-item" th:each="port : ${component.getPortSet()}">
+														<span th:text="${port.getName()}"></span>
+														<a href="#" th:href="@{/moveAnnotationToPort/}+${docId}+'/'+${component.getExternalId()}+'/'+${port.getExternalId()}+'/'+ ${ann.id}">select</a>
+
+													</li>
+												</ul>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div>
+								<!---->
+							</p>
+							<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+							$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+								$("#elements").load(/*[[@{/moveAnnotationComponent/}+${docId}+'/'+${ann.id}]]*/);
+							});
+							</script>
+
+							<p>
+								<b>Document Quote: </b>
+								<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+							</p>
+							<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+							<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+						</li>
+					</ul>
+				</div>
+				<!-- tactic annotations -->
+				<section layout:include="@{/annotationFragments} :: portsAnnotations"></section>
+
+				<!-- -->
+				<!-- end tactics-->
+			</div>
+		</div>
+	</div>
+</section>
+
+<section layout:fragment="connectorTemplate">
+	<div class="panel panel-default">
+		<!-- header -->
+		<div class="panel-heading">
+			<span id="connectorName" class="h4" th:if="${edit == true}">
+				<b><span th:text="'Connector: '+${connector.getName()}"></span></b> 
+				<a href="" name="connector"></a>
+			</span>
+			<a href="#" th:href="@{/removeConnector/}+${docId}+'/'+${connector.getExternalId()}" style="float:right;" th:if="${edit == true}">
+				<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Connector"></span>
+			</a>
+			<span id="connectorName" class="h4" th:if="${edit == false}">
+				<b><a href="#" th:href="@{/viewConnector/}+${docId}+'/'+${connector.getExternalId()}" th:text="'Connector: '+${connector.getName()}">
+
+				</a></b> 
+				<a href="" name="connector"></a>
+			</span>
+		</div>
+		<!-- end of header -->
+		<div class="panel-body">
+			<!-- annotations -->
+			<section layout:include="@{/annotationFragments} :: connectorAnnotationsTemplate" th:with="connector=${connector},docId=${docId}, edit=${edit}"></section>
+			<!-- -->
+			<div class="connectorRoles">
+				<!--   Roles  -->
+				<div style="margin-top: 20px;">
+					<p style="border-bottom: 1px solid #DDDDDD;">
+						<span class="h4">
+							<b>Roles:</b>
+							<a href="" name="roles"></a>
+						</span>
+						<a href="#" data-toggle="modal" data-target="#roles" style="float:right;" th:if="${edit == true}">
+							<span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add a Role to the Connector"></span>
+						</a>
+					</p>
+				</div>
+				<div>
+					<ul class="list-group" style="margin-top:10px" th:each=" ann : ${connector.getJsonAnnotations()}" th:if="${ann.tag.equals('Connector Role')}">
+						<li class="list-group-item">
+							<a href="" th:name="${ann.id}"></a>
+							<p style="float:right;margin-left: 10px;">
+								<a href="#" th:href="@{/unlinkFromConnector/}+${docId}+'/'+${ann.id}+'/'+${connector.getExternalId()}" th:if="${edit == true}">
+									<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove Annotation"></span>
+								</a>
+								<a th:id="'moveAnnotation'+${ann.id}" data-toggle="modal" data-target="#move" href="#" th:if="${edit == true}">
+									<span class="glyphicon glyphicon-retweet" data-toggle="tooltip" data-placement="bottom" title="Move Annotation to other Connector"></span>
+								</a>
+
+								<a href="#" data-toggle="modal" data-target="#linkToRole" th:if="${edit == true}">
+									<span class="glyphicon glyphicon-share-alt" data-toggle="tooltip" data-placement="bottom" title="Add Annotation to a specific Role"></span>
+								</a>
+								<!---->
+								<div class="modal fade" id="linkToRole" th:if="${edit == true}">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content" >
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">x</span>
+												</button>
+												<h4 class="modal-title">Roles</h4>
+											</div>
+											<div class="modal-body" id="elements">
+												<ul class="list-group">
+													<li class="list-group-item" th:each="role : ${connector.getRoleSet()}">
+														<span th:text="${role.getName()}"></span>
+														<a href="#" th:href="@{/moveAnnotationToRole/}+${docId}+'/'+${connector.getExternalId()}+'/'+${role.getExternalId()}+'/'+ ${ann.id}">select</a>
+
+													</li>
+												</ul>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div>
+								<!---->
+							</p>
+							<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
+							$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
+								$("#elements").load(/*[[@{/moveAnnotationConnector/}+${docId}+'/'+${ann.id}]]*/);
+							});
+							</script>
+
+							<p>
+								<b>Document Quote: </b>
+								<i><span th:text="'(...)' + ${ann.quote} + '(...)'"></span></i>
+							</p>
+							<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
+							<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+						</li>
+					</ul>
+				</div>
+				<!-- tactic annotations -->
+				<section layout:include="@{/annotationFragments} :: rolesAnnotations"></section>
+
+				<!-- -->
+				<!-- end tactics-->
+			</div>
+		</div>
+	</div>
+</section>

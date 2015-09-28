@@ -19,8 +19,10 @@ import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
+import pt.ulisboa.tecnico.saslearning.domain.Component;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Module;
+import pt.ulisboa.tecnico.saslearning.domain.Port;
 import pt.ulisboa.tecnico.saslearning.domain.Scenario;
 import pt.ulisboa.tecnico.saslearning.domain.ScenarioElement;
 import pt.ulisboa.tecnico.saslearning.domain.User;
@@ -55,6 +57,17 @@ public class AnnotationController {
 			} else if(a.isModuleViewtypeAnnotation() && a.getModule() != null) {
 				Module m = a.getModule();
 				ann.setText("Module: " + m.getName());
+			} else if(a.getTag().contains("Component")) {
+				if(a.getComponent() != null) {
+					Component c = a.getComponent();
+					ann.setText("Component: " + c.getName());
+				}
+				
+				if(a.getPort() != null) {
+					Port p = a.getPort();
+					Component c = p.getComponent();
+					ann.setText("Port " + p.getName() + " of Component " + c.getName());
+				}
 			}
 			anns.add(ann);
 			
@@ -145,6 +158,10 @@ public class AnnotationController {
 			a.setScenarioElement(null);
 			a.setView(null);
 			a.setModule(null);
+			a.setComponent(null);
+			a.setPort(null);
+			a.setConnector(null);
+			a.setRole(null);
 		}
 		
 		a.setAnnotation(annot);
