@@ -7,6 +7,7 @@ public class QualityRequirement extends QualityRequirement_Base {
     }
 
 	public void delete() {
+		setScenario(null);
 		deleteDomainObject();
 	}
     

@@ -36,7 +36,7 @@
   <!-- Start of Scenarios -->
   <div class="panel panel-default" th:each="scenario : ${scenarios}" th:if="${!scenario.getExternalId().equals(annotData.getEnclosingScenario().getExternalId())}">
     <div class="panel-body" style="font-size:115%;">
-      <b class="h4" th:text="'${Scenario for '+ scenario.getQualityRequirement().getName() +': '}"></b> <span th:text="${scenario.getName()}"></span>
+      <b class="h4" th:text="${'Scenario for '+ scenario.getQualityRequirement().getName() +': '}"></b> <span th:text="${scenario.getName()}"></span>
       <a href="#" style="float:right;" th:href="@{/moveToScenario/} + ${docId} + '/' + ${annotation.id} + '/' + ${scenario.getExternalId()}">(Move annotation to this Scenario)</a>
     </div>
   </div>

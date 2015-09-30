@@ -81,7 +81,7 @@ class QualityRequirement {
 
 relation scenarioHasQualityRequirement {
 	Scenario playsRole scenario {
-		multiplicity 0..*;
+		multiplicity 0..1;
 	}
 	
 	QualityRequirement playsRole qualityRequirement {

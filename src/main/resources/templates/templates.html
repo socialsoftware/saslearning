@@ -11,10 +11,9 @@
 				<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove Scenario"></span>
 			</a>
 			<span id="scenarioName" class="h4" th:if="${edit == false}">
-				<b><a href="#" th:href="@{/viewScenario/}+${docId}+'/'+${scenario.getExternalId()}" th:text="'Scenario for '+${scenario.getQualityRequirement().getName()}+': '+ ${scenario.getName()}">
-
-				</a></b> 
 				<a href="" name="Scenario"></a>
+				<b><a href="#" th:href="@{/viewScenario/}+${docId}+'/'+${scenario.getExternalId()}" th:text="'Scenario for '+${scenario.getQualityRequirement().getName()}+': '+ ${scenario.getName()}">
+				</a></b> 
 			</span>
 		</div>
 		<!-- end of scenario header -->
@@ -27,10 +26,11 @@
 				<div th:each="entry : ${scenario.getElements()}">
 					<div th:with="name=${entry.getKey()},elem=${entry.getValue()}">
 						<div class="element-title">
+							<a href="" th:name="${name}"></a>
 							<h4>
 								<b><span th:text="${name}"></span></b>
 							</h4>
-							<a href="" th:name="${name}"></a>
+							
 						</div>
 						<section layout:include="@{/annotationFragments} :: scenarioElementsAnnotations" th:with="elem=${elem},docId=${docId},edit=${edit}"></section>
 					</div>
@@ -89,7 +89,7 @@
 							</p>
 							<script type="text/javascript" th:inline="javascript" th:if="${edit == true}">
 							$("#moveAnnotation"+/*[[${ann.id}]]*/).click(function(){
-								$("#elements").load(/*[[@{/moveAnnotation/}+${docId}+'/'+${ann.id}]]*/);
+								$("#elements").load(/*[[@{/moveAnnotationScenario/}+${docId}+'/'+${ann.id}]]*/);
 							});
 							</script>
 

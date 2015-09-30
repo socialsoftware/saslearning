@@ -57,7 +57,7 @@
             </li>
             <li class="list-group-item" th:each="tactic : ${tacticGroup.getValue()}">
               <span th:text="${tactic}"></span>
-              <a href="#" th:href="@{/addTactic/} + ${docId} + '/'+${scenario.getExternalId()}+'/'+${tactic}">(select)</a>
+              <a href="#" th:href="@{/addTactic/} + ${docId} + '/'+${scenario.getExternalId()}+'?name='+${tactic}">(select)</a>
             </li>
           </ul>
         </div>

@@ -18,10 +18,10 @@ import pt.ulisboa.tecnico.saslearning.domain.User;
 @Controller
 public class SignupController {
 
-	@RequestMapping(value="/signup", method = RequestMethod.GET)
-	public String signupForm(@SuppressWarnings("unused") UserForm user){
-		return "signup";
-	}
+//	@RequestMapping(value="/signup", method = RequestMethod.GET)
+//	public String signupForm(@SuppressWarnings("unused") UserForm user){
+//		return "signup";
+//	}
 	
     @RequestMapping(value="/signup", method=RequestMethod.POST)
     public String checkUserInfo(@Valid UserForm user, BindingResult bindingResult, Model m) {

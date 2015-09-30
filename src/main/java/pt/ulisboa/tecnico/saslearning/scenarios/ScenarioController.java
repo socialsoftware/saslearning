@@ -64,6 +64,7 @@ public class ScenarioController {
 		m.addAttribute("annotation", ann);
 		m.addAttribute("annotData", a);
 		m.addAttribute("docId", docId);
+		m.addAttribute("qualReqs", Utils.getQualityRequirements());	
 		return "moveAnnotationScenarioModal";
 	}
 
@@ -136,11 +137,11 @@ public class ScenarioController {
 		return rv;
 	}
 
-	@RequestMapping(value = "/addTactic/{docId}/{scenarioId}/{tactic}")
+	@RequestMapping(value = "/addTactic/{docId}/{scenarioId}")
 	public RedirectView addTacticToScenario(@PathVariable String docId,
-			@PathVariable String scenarioId, @PathVariable String tactic) {
+			@PathVariable String scenarioId, @RequestParam String name) {
 		Scenario s = FenixFramework.getDomainObject(scenarioId);
-		addTactic(s, tactic);
+		addTactic(s, name);
 		RedirectView rv = new RedirectView("/viewScenario/" + docId + "/"
 				+ scenarioId + "#Tactics");
 		return rv;
