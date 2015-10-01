@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import pt.ist.fenixframework.FenixFramework;
+import pt.ulisboa.tecnico.saslearning.domain.User;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.TagGroup;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.Tags;
 
@@ -16,7 +18,7 @@ public class Utils {
 	private static String[] tactics  = {"Tactic"};
 	private static String[] moduleVT = {"Module","Module - Name", "Module - Implementation Details", "Module - Interface", "Module - Responsibility"};
 	private static String[] views = {"View"};
-	private static String[] ccVT = {"Component Description", "Component Port", "Connector Description", "Connector Role"};
+	private static String[] ccVT = {"Component", "Component Port", "Connector", "Connector Role"};
 	public static List<String> allScenarioConcepts(){
 		List<String> concepts = new ArrayList<String>();
 		for(String i : scenarios) {
@@ -209,6 +211,15 @@ public class Utils {
 		map.put(n3, t3);
 		map.put(n4, t4);
 		return map;
+	}
+	
+	public static boolean userExists(String username) {
+		for(User u : FenixFramework.getDomainRoot().getUserSet()) {
+			if(u.getUsername().equals(username)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -3,7 +3,7 @@ package pt.ulisboa.tecnico.saslearning.domain;
 class Document {
 	String title;
 	String url;
-	String content;
+	bytearray content;
 }
 
 relation DomainRootHasDocumentApplication {
@@ -445,6 +445,26 @@ relation roleHasAnnotations {
 	}
 	
 	Annotation playsRole annotation {
+		multiplicity 0..*;
+	}
+}
+
+relation viewHasComponents {
+	Component playsRole component {
+		multiplicity 0..*;
+	}
+	
+	View playsRole view {
+		multiplicity 0..*;
+	}
+}
+
+relation viewHasConnectors {
+	Connector playsRole connector {
+		multiplicity 0..*;
+	}
+	
+	View playsRole view {
 		multiplicity 0..*;
 	}
 }

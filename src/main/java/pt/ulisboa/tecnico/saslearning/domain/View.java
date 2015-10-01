@@ -39,6 +39,20 @@ public class View extends View_Base {
 			m.removeView(this);
 			removeModule(m);
 		}
+		
+		Iterator<Component> itc = getComponentSet().iterator();
+		while(itc.hasNext()) {
+			Component comp = itc.next();
+			comp.removeView(this);
+			removeComponent(comp);
+		}
+		
+		Iterator<Connector> itcn = getConnectorSet().iterator();
+		while(itcn.hasNext()) {
+			Connector conn = itcn.next();
+			conn.removeView(this);
+			removeConnector(conn);
+		}
 		setDocument(null);
 		deleteDomainObject();
     }

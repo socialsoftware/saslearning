@@ -14,6 +14,11 @@ public class Document extends Document_Base {
     	return getUrl();
     }
     
+    public String getContentsAsString() {
+    	String s = new String(getContent());
+    	return s;
+    }
+    
     public void delete(){
     	Iterator<Annotation> itA = getAnnotationSet().iterator();
     	while(itA.hasNext()){
@@ -43,6 +48,22 @@ public class Document extends Document_Base {
     		View v = itV.next();
     		removeView(v);
     		v.delete();
+    		
+		}
+    	
+    	Iterator<Component> itcomp = getComponentSet().iterator();
+    	while (itcomp.hasNext()) {
+    		Component c = itcomp.next();
+    		removeComponent(c);
+    		c.delete();
+    		
+		}
+    	
+    	Iterator<Connector> itconn = getConnectorSet().iterator();
+    	while (itconn.hasNext()) {
+    		Connector c = itconn.next();
+    		removeConnector(c);
+    		c.delete();
     		
 		}
     	setRoot(null);

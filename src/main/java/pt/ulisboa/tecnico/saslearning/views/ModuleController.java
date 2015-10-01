@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
@@ -32,24 +31,7 @@ public class ModuleController {
 		return "setParentModal";
 	}
 
-	@RequestMapping(value = "/getStyles")
-	@ResponseBody
-	public String getStyles() {
-		String mod = "\"module\"";
-		String cc = "\"cc\"";
-		String all = "\"alloc\"";
-		String modstyles = "[\"Decomposition Style\", \"Uses Style\", "
-				+ "\"Generalization Style\", \"Layered Style\", \"Aspects Style\", \"Data Model\"]";
-		String ccstyles = "[\"Pipe-and-Filter Style\", \"Client-Server Style\", \"Peer-to-Peer Style\","
-				+ " \"Service-Oriented Architecture Style\", \"Publish-Subscribe Style\", "
-				+ "\"Shared-Data Style\", \"Communicating Processes Style\", \"Tiers Style\"]";
-		String allocStyles = "[\"Deployment Style\", \"Install Style\", \"Work Assignment Style\", "
-				+ "\"Implementation Style\"]";
-		String json = "{"+mod+" : "+modstyles+", "
-				+cc + " : "+ccstyles+", "
-				+all + " : " + allocStyles+"}";
-		return json;
-	}
+
 
 	@RequestMapping(value = "/addAnnotationToModuleTemplate/{docId}/{annotationId}")
 	public String addAnnotationModal(@PathVariable String docId,
@@ -116,7 +98,7 @@ public class ModuleController {
 		Document d = FenixFramework.getDomainObject(docId);
 		m.addAttribute("module", mod);
 		m.addAttribute("modules", d.getModuleSet());
-		m.addAttribute("uses", new UsedModules());
+		m.addAttribute("uses", new UsedIds());
 		return "moduleTemplate";
 	}
 
@@ -189,7 +171,7 @@ public class ModuleController {
 
 	@RequestMapping(value = "/setModuleUses/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleUses(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addUse(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
@@ -199,7 +181,7 @@ public class ModuleController {
 
 	@RequestMapping(value = "/setModuleCrosscuts/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleCrosscuts(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addCrosscuts(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
@@ -209,7 +191,7 @@ public class ModuleController {
 
 	@RequestMapping(value = "/setModuleIsA/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleIsA(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addIsA(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
@@ -219,7 +201,7 @@ public class ModuleController {
 	
 	@RequestMapping(value = "/setModuleOneToOne/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleOneToOne(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addOneToOne(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
@@ -229,7 +211,7 @@ public class ModuleController {
 	
 	@RequestMapping(value = "/setModuleOneToMany/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleOneToMany(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addOneToMany(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
@@ -239,7 +221,7 @@ public class ModuleController {
 	
 	@RequestMapping(value = "/setModuleAggregated/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleAggregated(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addAggregates(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"
@@ -249,7 +231,7 @@ public class ModuleController {
 	
 	@RequestMapping(value = "/setModuleManyToMany/{docId}/{moduleId}", method = RequestMethod.POST)
 	public RedirectView addModuleManyToMany(@PathVariable String moduleId,
-			@PathVariable String docId, @ModelAttribute UsedModules modules) {
+			@PathVariable String docId, @ModelAttribute UsedIds modules) {
 		Module mod = FenixFramework.getDomainObject(moduleId);
 		addManyToMany(mod, modules.getUsed());
 		RedirectView rv = new RedirectView("/viewModule/" + docId + "/"

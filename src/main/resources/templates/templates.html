@@ -326,8 +326,7 @@
 			</div>
 
 		</div>
-	</section>	
-</html>
+</section>	
 
 <section layout:fragment="componentTemplate">
 	<div class="panel panel-default">
@@ -528,3 +527,71 @@
 		</div>
 	</div>
 </section>
+
+<section layout:fragment="viewCCTemplate">
+	<!-- Start of View -->
+	<div class="panel panel-default">
+		<!-- header -->
+		<div class="panel-heading">
+			<span class="h4" th:if="${edit == true}">
+				<b th:text="${'View ' + view.getName() +': ' + view.getViewtype() + ', ' + view.getStyle()}"></b>
+				<a href="" name="View"></a>
+			</span>
+			<span class="h4" th:if="${edit == false}">
+				<b><a href="#" th:href="@{/viewView/}+${docId}+'/'+${view.getExternalId()}">
+					<span th:text="${'View - ' + view.getName() +': ' + view.getViewtype() + ', ' + view.getStyle()}"></span></a></b>
+					<a href="" name="View"></a>
+				</span>
+				<a href="#" th:href="@{/removeView/}+${docId}+'/'+${view.getExternalId()}" style="float:right;" th:if="${edit == true}">
+					<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Remove View"></span>
+				</a>
+			</div>
+			<!-- end of header -->
+			<div class="panel-body">
+				<ul class="list-group">
+					<li class="list-group-item" th:each=" ann : ${view.getJsonAnnotations()}">
+						<section layout:include="@{/annotationFragments} :: annotationContentViewtype" th:with="view=${view},edit=${edit}"></section>
+					</li>
+				</ul>
+				<section layout:include="@{/annotationFragments} :: viewText" th:with="element=${view},edit=${edit}"></section>
+			<div class="panel panel-default">
+				<!-- header -->
+				<div class="panel-heading">
+					<span class="h4">
+						<b>Components</b>
+						<a href="" name="View"></a>
+					</span>
+					<a href="#" data-toggle="modal" data-target="#addComponents" style="float:right;" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="left" title="Add Components"></span>
+					</a>
+					<section layout:include="@{/viewFragments} :: addComponentsModal" th:with="components=${components},view=${view},used=${used}" th:if="${edit == true}"></section>
+				</div>
+				<!-- end of header -->
+				<div class="panel-body" th:each="component : ${view.getComponentSet()}">
+					<section layout:include="@{/templates} :: componentTemplate" th:with="component=${component},docId=${docId},view=${view},edit=false,viewEdit=${edit}"></section>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<!-- header -->
+				<div class="panel-heading">
+					<span class="h4">
+						<b>Connectors</b>
+						<a href="" name="View"></a>
+					</span>
+					<a href="#" data-toggle="modal" data-target="#addConnectors" style="float:right;" th:if="${edit == true}">
+						<span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="left" title="Add Connectors"></span>
+					</a>
+					<section layout:include="@{/viewFragments} :: addConnectorsModal" th:with="connectors=${connectors},view=${view},used=${used}" th:if="${edit == true}"></section>
+				</div>
+				<!-- end of header -->
+				<div class="panel-body" th:each="connector : ${view.getConnectorSet()}">
+					<section layout:include="@{/templates} :: connectorTemplate" th:with="connector=${connector},docId=${docId},view=${view},edit=false,viewEdit=${edit}"></section>
+				</div>
+			</div>
+			</div>
+
+		</div>
+</section>	
+
+</html>
+

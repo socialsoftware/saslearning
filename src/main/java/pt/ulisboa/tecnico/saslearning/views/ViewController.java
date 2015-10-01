@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.saslearning.domain.Annotation;
+import pt.ulisboa.tecnico.saslearning.domain.Component;
+import pt.ulisboa.tecnico.saslearning.domain.Connector;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Module;
 import pt.ulisboa.tecnico.saslearning.domain.View;
@@ -29,6 +32,25 @@ public class ViewController {
 	@RequestMapping(value = "/viewFragments")
 	public String viewFragments() {
 		return "viewFragments";
+	}
+	
+	@RequestMapping(value = "/getStyles")
+	@ResponseBody
+	public String getStyles() {
+		String mod = "\"module\"";
+		String cc = "\"cc\"";
+		String all = "\"alloc\"";
+		String modstyles = "[\"Decomposition Style\", \"Uses Style\", "
+				+ "\"Generalization Style\", \"Layered Style\", \"Aspects Style\", \"Data Model\"]";
+		String ccstyles = "[\"Pipe-and-Filter Style\", \"Client-Server Style\", \"Peer-to-Peer Style\","
+				+ " \"Service-Oriented Architecture Style\", \"Publish-Subscribe Style\", "
+				+ "\"Shared-Data Style\", \"Communicating Processes Style\", \"Tiers Style\"]";
+		String allocStyles = "[\"Deployment Style\", \"Install Style\", \"Work Assignment Style\", "
+				+ "\"Implementation Style\"]";
+		String json = "{"+mod+" : "+modstyles+", "
+				+cc + " : "+ccstyles+", "
+				+all + " : " + allocStyles+"}";
+		return json;
 	}
 
 	@RequestMapping(value = "/addAnnotationToViewTemplate/{docId}/{annotationId}")
@@ -72,6 +94,22 @@ public class ViewController {
 		}
 		return rv;
 	}
+	
+	@RequestMapping(value = "/addNewView/{docId}/{annotationId}/Component & Connector Viewtype/{styleName}/{viewName}")
+	public RedirectView addNewCCViewTypeView(@PathVariable String docId,
+			@PathVariable String annotationId, @PathVariable String viewName,
+			@PathVariable String styleName, @RequestParam String move) {
+		Document d = FenixFramework.getDomainObject(docId);
+		addCCViewtypeToDocument(d, viewName, "Component & Connector Viewtype", styleName);
+		RedirectView rv = new RedirectView();
+		if (move.equals("yes")) {
+			rv.setUrl("/moveAnnotationView/" + docId + "/" + annotationId);
+		} else {
+			rv.setUrl("/addAnnotationToViewTemplate/" + docId + "/"
+					+ annotationId);
+		}
+		return rv;
+	}
 
 	@RequestMapping(value = "/viewView/{docId}/{viewId}")
 	public String viewViewTemplate(Model m, @PathVariable String docId,
@@ -83,8 +121,16 @@ public class ViewController {
 			m.addAttribute("view", v);
 			m.addAttribute("views", d.getViewSet());
 			m.addAttribute("modules", d.getModuleSet());
-			m.addAttribute("used", new UsedModules());
+			m.addAttribute("used", new UsedIds());
 			return "viewMVTTemplate";
+		}else if(v.getViewtype().equals("Component & Connector Viewtype")) {
+			m.addAttribute("view", v);
+			m.addAttribute("views", d.getViewSet());
+			m.addAttribute("components", d.getComponentSet());
+			m.addAttribute("connectors", d.getConnectorSet());
+			m.addAttribute("used", new UsedIds());
+			
+			return "viewCCTemplate";
 		}
 		return null;
 	}
@@ -145,10 +191,32 @@ public class ViewController {
 
 	@RequestMapping(value = "/addModulesToView/{docId}/{viewId}", method = RequestMethod.POST)
 	public RedirectView addModulesToView(@PathVariable String docId,
-			@PathVariable String viewId, @ModelAttribute UsedModules modules) {
+			@PathVariable String viewId, @ModelAttribute UsedIds modules) {
 		View v = FenixFramework.getDomainObject(viewId);
 		if(v.getViewtype().equals("Module Viewtype")) {
 			addModulesToView(v, modules);
+		}
+		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
+		return rv;
+	}
+	
+	@RequestMapping(value = "/addComponentsToView/{docId}/{viewId}", method = RequestMethod.POST)
+	public RedirectView addComponentsToView(@PathVariable String docId,
+			@PathVariable String viewId, @ModelAttribute UsedIds components) {
+		View v = FenixFramework.getDomainObject(viewId);
+		if(v.getViewtype().equals("Component & Connector Viewtype")) {
+			addComponentsToView(v, components);
+		}
+		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
+		return rv;
+	}
+	
+	@RequestMapping(value = "/addConnectorsToView/{docId}/{viewId}", method = RequestMethod.POST)
+	public RedirectView addConnectorsToView(@PathVariable String docId,
+			@PathVariable String viewId, @ModelAttribute UsedIds connectors) {
+		View v = FenixFramework.getDomainObject(viewId);
+		if(v.getViewtype().equals("Component & Connector Viewtype")) {
+			addConnectorsToView(v, connectors);
 		}
 		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
 		return rv;
@@ -165,18 +233,70 @@ public class ViewController {
 		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
 		return rv;
 	}
+	
+	@RequestMapping(value = "/removeComponentFromView/{docId}/{viewId}/{componentId}")
+	public RedirectView removeComponent(@PathVariable String docId,
+			@PathVariable String viewId, @PathVariable String componentId) {
+		View v = FenixFramework.getDomainObject(viewId);
+		Component comp = FenixFramework.getDomainObject(componentId);
+		if(v.getViewtype().equals("Module Viewtype")) {
+			removeComponentFromView(v,comp);
+		}
+		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
+		return rv;
+	}
+	
+	@RequestMapping(value = "/removeConnectorFromView/{docId}/{viewId}/{connectorId}")
+	public RedirectView removeConnector(@PathVariable String docId,
+			@PathVariable String viewId, @PathVariable String connectorId) {
+		View v = FenixFramework.getDomainObject(viewId);
+		Connector conn = FenixFramework.getDomainObject(connectorId);
+		if(v.getViewtype().equals("Module Viewtype")) {
+			removeConnectorFromView(v,conn);
+		}
+		RedirectView rv = new RedirectView("/viewView/" + docId + "/" + viewId);
+		return rv;
+	}
 
 	@Atomic(mode=TxMode.WRITE)
 	private void removeModuleFromView(View v, Module m) {
 		v.removeModule(m);
 		m.removeView(v);
 	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeComponentFromView(View v, Component m) {
+		v.removeComponent(m);
+		m.removeView(v);
+	}
+	
+	@Atomic(mode=TxMode.WRITE)
+	private void removeConnectorFromView(View v, Connector m) {
+		v.removeConnector(m);
+		m.removeView(v);
+	}
 
 	@Atomic(mode = TxMode.WRITE)
-	private void addModulesToView(View v, UsedModules modules) {
+	private void addModulesToView(View v, UsedIds modules) {
 		for (String id : modules.getUsed()) {
 			Module m = FenixFramework.getDomainObject(id);
 			v.addModule(m);
+		}
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void addComponentsToView(View v, UsedIds components) {
+		for (String id : components.getUsed()) {
+			Component component = FenixFramework.getDomainObject(id);
+			v.addComponent(component);
+		}
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void addConnectorsToView(View v, UsedIds connectors) {
+		for (String id : connectors.getUsed()) {
+			Connector conn = FenixFramework.getDomainObject(id);
+			v.addConnector(conn);
 		}
 	}
 
@@ -188,6 +308,16 @@ public class ViewController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void addModuleViewtypeToDocument(Document d, String viewName,
+			String viewtype, String styleName) {
+		View v = new View();
+		v.setName(viewName);
+		v.setViewtype(viewtype);
+		v.setStyle(styleName);
+		d.addView(v);
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	private void addCCViewtypeToDocument(Document d, String viewName,
 			String viewtype, String styleName) {
 		View v = new View();
 		v.setName(viewName);

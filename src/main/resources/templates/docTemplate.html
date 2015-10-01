@@ -62,7 +62,7 @@
   Article extracted from 
   <a th:href="${doc.getUrl()}" th:text="${doc.getUrl()}"></a>
 </div>
-<div> <span id="article" th:utext="${doc.getContent()}" ></span> </div>
+<div> <span id="article" th:utext="${doc.getContentsAsString()}" ></span> </div>
 
 <script type="text/javascript" th:inline="javascript">
 var content = $('#article').annotator();

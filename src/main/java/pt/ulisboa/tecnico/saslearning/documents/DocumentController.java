@@ -156,7 +156,7 @@ public class DocumentController {
 				title = url;
 			}
 			doc.setTitle(title);
-			doc.setContent(document.children().toString());
+			doc.setContent(document.children().toString().getBytes());
 			FenixFramework.getDomainRoot().addDocument(doc);
 		}
 	}
