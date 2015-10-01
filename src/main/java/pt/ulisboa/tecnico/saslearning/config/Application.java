@@ -22,7 +22,6 @@ import pt.ulisboa.tecnico.saslearning.utils.Utils;
 public class Application implements InitializingBean {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-
 	}
 
 	@Override
@@ -40,16 +39,23 @@ public class Application implements InitializingBean {
 			}
 			HSSFCell usernameCell = row.getCell(0); //Provide Correct cell number
 			String username = usernameCell.getStringCellValue();
-			HSSFCell nameCell = row.getCell(0); //Provide Correct cell number
+			HSSFCell nameCell = row.getCell(2); //Provide Correct cell number
 			String name = nameCell.getStringCellValue();
 			String[] names = name.split(" ");
 			String firstName = names[0];
-			String lastName = names[name.length()-1];
-			HSSFCell passwordCell = row.getCell(0); //Provide Correct cell number
-			String password  = passwordCell.getStringCellValue();
-			HSSFCell typeCell = row.getCell(0); //Provide Correct cell number
-			String type  = passwordCell.getStringCellValue();
-			//add users to DB here...
+			int ln = names.length-1;
+			String lastName = names[ln];
+			HSSFCell passwordCell = row.getCell(13); //Provide Correct cell number
+			String password  = "";
+			if(passwordCell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+				int pass = (int) passwordCell.getNumericCellValue();
+				password+=pass;
+			}else {
+				password=passwordCell.getStringCellValue();
+			}
+			HSSFCell typeCell = row.getCell(14); //Provide Correct cell number
+			String type  = typeCell.getStringCellValue();
+			addNewUser(username, password, firstName, lastName, type);
 		}
 		wb.close();
 		
@@ -57,7 +63,7 @@ public class Application implements InitializingBean {
 	
 	@Atomic(mode=TxMode.WRITE)
 	private void addNewUser(String username, String password, String firstName, String lastName, String type) {
-		if(!Utils.userExists("teacher")) {
+		if(!Utils.userExists(username)) {
 			User u = new User();
 			u.setFirstName(firstName);
 			u.setLastName(lastName);

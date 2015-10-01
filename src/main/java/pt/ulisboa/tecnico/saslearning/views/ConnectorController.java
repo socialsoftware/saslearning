@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pt.ist.fenixframework.Atomic;
@@ -25,6 +26,25 @@ import com.google.gson.Gson;
 
 @Controller
 public class ConnectorController {
+	
+	@RequestMapping(value = "/getStyles")
+	@ResponseBody
+	public String getStyles() {
+		String mod = "\"module\"";
+		String cc = "\"cc\"";
+		String all = "\"alloc\"";
+		String modstyles = "[\"Decomposition Style\", \"Uses Style\", "
+				+ "\"Generalization Style\", \"Layered Style\", \"Aspects Style\", \"Data Model\"]";
+		String ccstyles = "[\"Pipe-and-Filter Style\", \"Client-Server Style\", \"Peer-to-Peer Style\","
+				+ " \"Service-Oriented Architecture Style\", \"Publish-Subscribe Style\", "
+				+ "\"Shared-Data Style\", \"Communicating Processes Style\", \"Tiers Style\"]";
+		String allocStyles = "[\"Deployment Style\", \"Install Style\", \"Work Assignment Style\", "
+				+ "\"Implementation Style\"]";
+		String json = "{"+mod+" : "+modstyles+", "
+				+cc + " : "+ccstyles+", "
+				+all + " : " + allocStyles+"}";
+		return json;
+	}
 
 	@RequestMapping(value = "/addAnnotationToConnectorTemplate/{docId}/{annotationId}")
 	public String addAnnotationModal(@PathVariable String docId,
@@ -58,12 +78,13 @@ public class ConnectorController {
 		a.updateConnection(conn.getExternalId());
 	}
 
-	@RequestMapping(value = "/addNewConnector/{docId}/{annotationId}/{connectorName}")
+	@RequestMapping(value = "/addNewConnector/{docId}/{annotationId}/{connectorName}/{style}")
 	public RedirectView addNewConnector(@PathVariable String docId,
 			@PathVariable String annotationId,
-			@PathVariable String connectorName, @RequestParam String move) {
+			@PathVariable String connectorName, @PathVariable String style,
+			@RequestParam String move) {
 		Document d = FenixFramework.getDomainObject(docId);
-		addConnectorToDocument(d, connectorName);
+		addConnectorToDocument(d, connectorName, style);
 		RedirectView rv = new RedirectView();
 		if (move.equals("yes")) {
 			rv.setUrl("/moveAnnotationConnector/" + docId + "/" + annotationId);
@@ -75,9 +96,10 @@ public class ConnectorController {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	private void addConnectorToDocument(Document d, String connectorName) {
+	private void addConnectorToDocument(Document d, String connectorName, String style) {
 		Connector c = new Connector();
 		c.setName(connectorName);
+		c.setStyle(style);
 		d.addConnector(c);
 	}
 

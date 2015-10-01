@@ -316,7 +316,6 @@ relation moduleAggregatesModule {
 class View {
 	String name;
 	String viewtype;
-	String style;
 	String text;
 }
 
@@ -402,6 +401,7 @@ relation portHasAnnotations{
 
 class Connector {
 	String name;
+	String style;
 	String text;
 }
 
@@ -466,6 +466,16 @@ relation viewHasConnectors {
 	
 	View playsRole view {
 		multiplicity 0..*;
+	}
+}
+
+relation portIsAttachedToRole {
+	Port playsRole port {
+		multiplicity 0..1;
+	}
+	
+	Role playsRole role {
+		multiplicity 0..1;
 	}
 }
 

@@ -19,6 +19,7 @@ import pt.ulisboa.tecnico.saslearning.domain.Annotation;
 import pt.ulisboa.tecnico.saslearning.domain.Component;
 import pt.ulisboa.tecnico.saslearning.domain.Document;
 import pt.ulisboa.tecnico.saslearning.domain.Port;
+import pt.ulisboa.tecnico.saslearning.domain.Role;
 import pt.ulisboa.tecnico.saslearning.jsonsupport.AnnotationJ;
 
 import com.google.gson.Gson;
@@ -89,6 +90,7 @@ public class ComponentController {
 		Document d = FenixFramework.getDomainObject(docId);
 		m.addAttribute("component", comp);
 		m.addAttribute("components", d.getComponentSet());
+		m.addAttribute("connectors", d.getConnectorSet());
 		return "componentTemplate";
 	}
 
@@ -119,8 +121,8 @@ public class ComponentController {
 				+ componentId);
 		return rv;
 	}
-	
-	@Atomic(mode=TxMode.WRITE)
+
+	@Atomic(mode = TxMode.WRITE)
 	private void removeAnnotationFromComponent(Component comp, Annotation a) {
 		a.updateConnection(null);
 		comp.removeAnnotation(a);
@@ -202,10 +204,10 @@ public class ComponentController {
 		return rv;
 	}
 
-	@Atomic(mode=TxMode.WRITE)
+	@Atomic(mode = TxMode.WRITE)
 	private void removePortFromComponent(Component comp, Port p) {
 		Iterator<Annotation> anns = p.getAnnotationSet().iterator();
-		while(anns.hasNext()) {
+		while (anns.hasNext()) {
 			Annotation a = anns.next();
 			p.removeAnnotation(a);
 			comp.addAnnotation(a);
@@ -213,44 +215,46 @@ public class ComponentController {
 		p.setComponent(null);
 		p.delete();
 	}
-	
+
 	@RequestMapping(value = "/moveAnnotationToPort/{docId}/{componentId}/{portId}/{annotationId}")
 	public RedirectView moveAnnotationToPort(@PathVariable String docId,
-			@PathVariable String componentId, @PathVariable String portId,@PathVariable String annotationId) {
+			@PathVariable String componentId, @PathVariable String portId,
+			@PathVariable String annotationId) {
 		Component comp = FenixFramework.getDomainObject(componentId);
 		Port p = FenixFramework.getDomainObject(portId);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
-		moveAnnotationToPort(comp,p,a);
+		moveAnnotationToPort(comp, p, a);
 		RedirectView rv = new RedirectView("/viewComponent/" + docId + "/"
 				+ componentId + "#" + comp.getName());
 		return rv;
 	}
 
-	@Atomic(mode=TxMode.WRITE)
+	@Atomic(mode = TxMode.WRITE)
 	private void moveAnnotationToPort(Component comp, Port p, Annotation a) {
 		comp.removeAnnotation(a);
 		p.addAnnotation(a);
-		
+
 	}
-	
+
 	@RequestMapping(value = "/removeAnnotationFromPort/{docId}/{componentId}/{portId}/{annotationId}")
 	public RedirectView removeAnnotationFromPort(@PathVariable String docId,
-			@PathVariable String componentId, @PathVariable String portId,@PathVariable String annotationId) {
+			@PathVariable String componentId, @PathVariable String portId,
+			@PathVariable String annotationId) {
 		Component comp = FenixFramework.getDomainObject(componentId);
 		Port p = FenixFramework.getDomainObject(portId);
 		Annotation a = FenixFramework.getDomainObject(annotationId);
-		removeAnnotationFromPort(comp,p,a);
+		removeAnnotationFromPort(comp, p, a);
 		RedirectView rv = new RedirectView("/viewComponent/" + docId + "/"
 				+ componentId + "#" + comp.getName());
 		return rv;
 	}
 
-	@Atomic(mode=TxMode.WRITE)
+	@Atomic(mode = TxMode.WRITE)
 	private void removeAnnotationFromPort(Component comp, Port p, Annotation a) {
 		p.removeAnnotation(a);
 		comp.addAnnotation(a);
 	}
-	
+
 	@RequestMapping(value = "/setPortText/{docId}/{portId}", method = RequestMethod.POST)
 	public RedirectView setPortText(@RequestParam String text,
 			@PathVariable String docId, @PathVariable String portId) {
@@ -266,4 +270,36 @@ public class ComponentController {
 		p.setText(text);
 	}
 
+	@RequestMapping(value = "/attachPortToConnectorRole/{docId}/{portId}/{roleId}")
+	public RedirectView attachPortToRole(@PathVariable String docId,
+			@PathVariable String portId, @PathVariable String roleId) {
+		Port p = FenixFramework.getDomainObject(portId);
+		Role r = FenixFramework.getDomainObject(roleId);
+		attachPortToRole(p,r);
+		RedirectView rv = new RedirectView("/viewComponent/" + docId + "/"
+				+ p.getComponent().getExternalId() + "#" + p.getName());
+		return rv;
+	}
+	
+	@RequestMapping(value = "/unattachPortFromConnectorRole/{docId}/{portId}/{roleId}")
+	public RedirectView unattachPortFromRole(@PathVariable String docId,
+			@PathVariable String portId, @PathVariable String roleId) {
+		Port p = FenixFramework.getDomainObject(portId);
+		Role r = FenixFramework.getDomainObject(roleId);
+		unattachPortFromRole(p,r);
+		RedirectView rv = new RedirectView("/viewComponent/" + docId + "/"
+				+ p.getComponent().getExternalId() + "#" + p.getName());
+		return rv;
+	}
+
+	@Atomic(mode=TxMode.WRITE)
+	private void unattachPortFromRole(Port p, Role r) {
+		r.setPort(null);
+		p.setRole(null);
+	}
+
+	@Atomic(mode=TxMode.WRITE)
+	private void attachPortToRole(Port p, Role r) {
+		p.setRole(r);
+	}
 }

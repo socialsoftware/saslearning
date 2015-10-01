@@ -34,24 +34,6 @@ public class ViewController {
 		return "viewFragments";
 	}
 	
-	@RequestMapping(value = "/getStyles")
-	@ResponseBody
-	public String getStyles() {
-		String mod = "\"module\"";
-		String cc = "\"cc\"";
-		String all = "\"alloc\"";
-		String modstyles = "[\"Decomposition Style\", \"Uses Style\", "
-				+ "\"Generalization Style\", \"Layered Style\", \"Aspects Style\", \"Data Model\"]";
-		String ccstyles = "[\"Pipe-and-Filter Style\", \"Client-Server Style\", \"Peer-to-Peer Style\","
-				+ " \"Service-Oriented Architecture Style\", \"Publish-Subscribe Style\", "
-				+ "\"Shared-Data Style\", \"Communicating Processes Style\", \"Tiers Style\"]";
-		String allocStyles = "[\"Deployment Style\", \"Install Style\", \"Work Assignment Style\", "
-				+ "\"Implementation Style\"]";
-		String json = "{"+mod+" : "+modstyles+", "
-				+cc + " : "+ccstyles+", "
-				+all + " : " + allocStyles+"}";
-		return json;
-	}
 
 	@RequestMapping(value = "/addAnnotationToViewTemplate/{docId}/{annotationId}")
 	public String addAnnotationModal(@PathVariable String docId,
@@ -79,12 +61,12 @@ public class ViewController {
 		return rv;
 	}
 
-	@RequestMapping(value = "/addNewView/{docId}/{annotationId}/Module Viewtype/{styleName}/{viewName}")
+	@RequestMapping(value = "/addNewView/{docId}/{annotationId}/Module Viewtype/{viewName}")
 	public RedirectView addNewModuleViewTypeView(@PathVariable String docId,
 			@PathVariable String annotationId, @PathVariable String viewName,
-			@PathVariable String styleName, @RequestParam String move) {
+			@RequestParam String move) {
 		Document d = FenixFramework.getDomainObject(docId);
-		addModuleViewtypeToDocument(d, viewName, "Module Viewtype", styleName);
+		addModuleViewtypeToDocument(d, viewName, "Module Viewtype");
 		RedirectView rv = new RedirectView();
 		if (move.equals("yes")) {
 			rv.setUrl("/moveAnnotationView/" + docId + "/" + annotationId);
@@ -95,12 +77,12 @@ public class ViewController {
 		return rv;
 	}
 	
-	@RequestMapping(value = "/addNewView/{docId}/{annotationId}/Component & Connector Viewtype/{styleName}/{viewName}")
+	@RequestMapping(value = "/addNewView/{docId}/{annotationId}/Component & Connector Viewtype/{viewName}")
 	public RedirectView addNewCCViewTypeView(@PathVariable String docId,
 			@PathVariable String annotationId, @PathVariable String viewName,
-			@PathVariable String styleName, @RequestParam String move) {
+			@RequestParam String move) {
 		Document d = FenixFramework.getDomainObject(docId);
-		addCCViewtypeToDocument(d, viewName, "Component & Connector Viewtype", styleName);
+		addCCViewtypeToDocument(d, viewName, "Component & Connector Viewtype");
 		RedirectView rv = new RedirectView();
 		if (move.equals("yes")) {
 			rv.setUrl("/moveAnnotationView/" + docId + "/" + annotationId);
@@ -308,21 +290,19 @@ public class ViewController {
 
 	@Atomic(mode = TxMode.WRITE)
 	private void addModuleViewtypeToDocument(Document d, String viewName,
-			String viewtype, String styleName) {
+			String viewtype) {
 		View v = new View();
 		v.setName(viewName);
 		v.setViewtype(viewtype);
-		v.setStyle(styleName);
 		d.addView(v);
 	}
 	
 	@Atomic(mode = TxMode.WRITE)
 	private void addCCViewtypeToDocument(Document d, String viewName,
-			String viewtype, String styleName) {
+			String viewtype) {
 		View v = new View();
 		v.setName(viewName);
 		v.setViewtype(viewtype);
-		v.setStyle(styleName);
 		d.addView(v);
 	}
 

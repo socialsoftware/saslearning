@@ -45,7 +45,7 @@ public class AnnotationController {
 			AnnotationJ ann = g.fromJson(a.getAnnotation(), AnnotationJ.class);
 			if(a.isViewAnnotation() && a.getView() != null) {
 				View v = a.getView();
-				ann.setText("View: " + v.getViewtype() + " - " + v.getStyle());
+				ann.setText("View: " + v.getViewtype());
 			} else if(a.isScenarioAnnotation() && a.getEnclosingScenario() != null) {
 				Scenario s = a.getEnclosingScenario();
 				if(a.getScenario() != null) {

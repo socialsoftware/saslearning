@@ -217,7 +217,7 @@
 <section layout:fragment="componentAnnotationsTemplate">
 	<div>
 		<ul class="list-group" style="margin-top:10px">
-			<li class="list-group-item" th:each=" ann : ${component.getJsonAnnotations()}" th:if="${ann.tag.equals('Component Description')}">
+			<li class="list-group-item" th:each=" ann : ${component.getJsonAnnotations()}" th:if="${ann.tag.equals('Component')}">
 				<a href="" th:name="${ann.id}"></a>  
 				<!--<section layout:include="@{annotationFragments} :: annotationContentComponent"></section>-->
 				<a href="" th:name="${ann.id}"></a>
@@ -275,16 +275,6 @@
 </section>
 
 <section layout:fragment="portsAnnotations">
-		<div th:if="${!component.getPortSet().isEmpty()}">
-			<div th:each="port : ${component.getPortSet()}">
-				<b>
-					<span th:text="'- '+${port.getName()}" style="font-size:17px;">
-					</span>
-					<a href="" th:name="${port.getName()}"></a>
-				</b>
-				<a href="#" th:href="@{/removePortFromComponent/}+${docId}+'/'+${component.getExternalId()}+'/'+${port.getExternalId()}" style="float:right;" th:if="${edit == true}">
-					<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Port"></span>
-				</a>
 				<ul class="list-group">
 					<li class="list-group-item" th:each="ann : ${port.getJsonAnnotations()}">
 						<a href="" th:name="${ann.id}"></a>
@@ -335,14 +325,12 @@
           });
 				});
 				</script>
-			</div>
-		</div>
 </section>
 
 <section layout:fragment="connectorAnnotationsTemplate">
 	<div>
 		<ul class="list-group" style="margin-top:10px">
-			<li class="list-group-item" th:each=" ann : ${connector.getJsonAnnotations()}" th:if="${ann.tag.equals('Connector Description')}">
+			<li class="list-group-item" th:each=" ann : ${connector.getJsonAnnotations()}" th:if="${ann.tag.equals('Connector')}">
 				<a href="" th:name="${ann.id}"></a>  
 				<!--<section layout:include="@{annotationFragments} :: annotationContentConnector"></section>-->
 				<a href="" th:name="${ann.id}"></a>
