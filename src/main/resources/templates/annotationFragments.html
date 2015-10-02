@@ -398,6 +398,11 @@
 				<a href="#" th:href="@{/removeRoleFromConnector/}+${docId}+'/'+${connector.getExternalId()}+'/'+${role.getExternalId()}" style="float:right;" th:if="${edit == true}">
 					<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete Role"></span>
 				</a>
+				<div th:if="${role.getPort() != null}" th:with="port=${role.getPort()}">
+					<b>Attached to: </b>
+					<a th:text="'port ' + ${port.getName()} + ' of Component: '+${port.getComponent().getName()}" th:href="@{/viewComponent/}+${docId}+'/'+${port.getComponent().getExternalId()}+'#'+${port.getName()}"></a>
+				</div>
+
 				<ul class="list-group">
 					<li class="list-group-item" th:each="ann : ${role.getJsonAnnotations()}">
 						<a href="" th:name="${ann.id}"></a>

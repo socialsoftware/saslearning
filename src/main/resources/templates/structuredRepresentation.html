@@ -50,7 +50,7 @@
       </b>
       <p th:each="view : ${views}" style="padding-left:10px;">
         <a href="#" th:href="'#'+${view.getExternalId()}">
-          <span th:text="${'View - ' + view.getName() +': ' + view.getViewtype() + ', ' + view.getStyle()}"></span>
+          <span th:text="${'View - ' + view.getName() +': ' + view.getViewtype()}"></span>
         </a>
       </p>
       <b>

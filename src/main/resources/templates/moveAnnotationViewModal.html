@@ -49,7 +49,7 @@
     <div th:if="${!views.isEmpty()}">
   <div class="panel panel-default" th:each="view : ${views}" th:if="${!view.getExternalId().equals(annotData.getView().getExternalId())}">
    <div class="panel-body" >
-      <b class="h4" th:text="${view.getViewtype() + ', ' + view.getStyle()+': '}"></b> <span th:text="${view.getName()}"></span>
+      <b class="h4" th:text="${view.getViewtype() + ': '}"></b> <span th:text="${view.getName()}"></span>
       <a href="#" style="float:right;" th:href="@{/moveToView/} + ${docId} + '/' + ${annotation.id} + '/' + ${view.getExternalId()}">(Move annotation to this View)</a>
     </div>
   </div>

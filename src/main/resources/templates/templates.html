@@ -138,7 +138,7 @@
 				<h4>Views including this Module: </h4>
 				<div th:each="v : ${module.getViewSet()}">
 					<a href="#"  th:href="@{/viewView/}+${docId}+'/'+${v.getExternalId()}">
-						<b th:text="${v.getViewtype() + ', ' + v.getStyle() + ': '}"></b>
+						<b th:text="${v.getViewtype() + ': '}"></b>
 						<span th:text="${v.getName()}"></span>
 					</a>
 				</div>
@@ -278,9 +278,9 @@
 				<!-- end tactics-->
 			</div>
 		</div>
-	</section>
+</section>
 
-	<section layout:fragment="viewMVTTemplate">
+<section layout:fragment="viewMVTTemplate">
 		<!-- Start of View -->
 		<div class="panel panel-default">
 			<!-- header -->
@@ -326,9 +326,9 @@
 				</div>
 
 			</div>
-		</section>	
+</section>	
 
-		<section layout:fragment="componentTemplate">
+<section layout:fragment="componentTemplate">
 			<div class="panel panel-default">
 				<!-- header -->
 				<div class="panel-heading">
@@ -348,6 +348,14 @@
 				</div>
 				<!-- end of scenario header -->
 				<div class="panel-body">
+
+					<h4>Views including this Component: </h4>
+				<div th:each="v : ${component.getViewSet()}">
+					<a href="#"  th:href="@{/viewView/}+${docId}+'/'+${v.getExternalId()}">
+						<b th:text="${v.getViewtype() + ': '}"></b>
+						<span th:text="${v.getName()}"></span>
+					</a>
+				</div>
 					<!-- scenario annotations -->
 					<section layout:include="@{/annotationFragments} :: componentAnnotationsTemplate" th:with="component=${component},docId=${docId}, edit=${edit}"></section>
 					<!-- -->
@@ -433,9 +441,9 @@
 								<div th:if="${port.getRole() != null}" th:with="role=${port.getRole()}">
 									<b>Attached to: </b>
 									<a th:text="'role ' + ${role.getName()} + ' of Connector: '+${role.getConnector().getName()}" th:href="@{/viewConnector/}+${docId}+'/'+${role.getConnector().getExternalId()}+'#'+${role.getName()}"></a>
-									<a href="#" th:href="@{/unattachPortFromConnectorRole/}+${docId}+'/'+${port.getExternalId()}+'/'+${role.getExternalId()}">(remove)</a>
+									<a href="#" th:href="@{/unattachPortFromConnectorRole/}+${docId}+'/'+${port.getExternalId()}+'/'+${role.getExternalId()}" th:if="${edit == true}">(remove)</a>
 								</div>
-								<div th:if="${port.getRole() == null}">
+								<div th:if="${port.getRole() == null} and ${edit == true}">
 									<a href="#" data-toggle="modal" th:attr="data-target='#attach'+${port.getExternalId()}">Connect Port to a Connector Role</a>
 									<!-- attach ports modal -->
 									<div class="modal fade" th:id="'attach'+${port.getExternalId()}">
@@ -494,11 +502,18 @@
 				</div>
 				<!-- end of header -->
 				<div class="panel-body">
-					<span class="h4">
+					<h4>Views including this Connector: </h4>
+				<div th:each="v : ${connector.getViewSet()}">
+					<a href="#"  th:href="@{/viewView/}+${docId}+'/'+${v.getExternalId()}">
+						<b th:text="${v.getViewtype() + ': '}"></b>
+						<span th:text="${v.getName()}"></span>
+					</a>
+				</div>
+					<p class="h4">
 						<a href="" name="style"></a>
 						<b>Connector Style:</b>
 						<span th:text="${connector.getStyle()}"></span>
-					</span>
+					</p>
 
 					<!-- annotations -->
 					<section layout:include="@{/annotationFragments} :: connectorAnnotationsTemplate" th:with="connector=${connector},docId=${docId}, edit=${edit}"></section>
@@ -580,7 +595,7 @@
 			</div>
 		</section>
 
-		<section layout:fragment="viewCCTemplate">
+<section layout:fragment="viewCCTemplate">
 			<!-- Start of View -->
 			<div class="panel panel-default">
 				<!-- header -->

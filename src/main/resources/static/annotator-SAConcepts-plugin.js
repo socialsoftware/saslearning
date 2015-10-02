@@ -4,7 +4,6 @@ Annotator.Plugin.SAConcepts = function (element, options) {
   plugin.pluginInit = function () {
     console.log("SAConcepts plugin init");
     var ann = this.annotator;
-    console.log(ann);
       var opts = {
       type: "GET",
       dataType: "json"
