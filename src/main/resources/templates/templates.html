@@ -99,6 +99,7 @@
 							</p>
 							<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 							<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+							<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 						</li>
 					</ul>
 				</div>
@@ -395,7 +396,7 @@
 														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 															<span aria-hidden="true">x</span>
 														</button>
-														<h4 class="modal-title">Tactics</h4>
+														<h4 class="modal-title">Ports</h4>
 													</div>
 													<div class="modal-body" id="elements">
 														<ul class="list-group">
@@ -423,6 +424,7 @@
 									</p>
 									<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 									<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+									<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 								</li>
 							</ul>
 						</div>
@@ -582,6 +584,7 @@
 									</p>
 									<p><b>Comment: </b><span th:text="${ann.text}"></span></p>
 									<p><b>Tag: </b><span th:text="${ann.tag}"></span></p>
+									<p><a href="#" th:href="@{/selectDoc/} + ${docId}+'#'+${ann.id}"><span class="glyphicon glyphicon-file" data-toggle="tooltip" data-placement="right" data-original-title="View Annotation in Document"></span></a></p>
 								</li>
 							</ul>
 						</div>

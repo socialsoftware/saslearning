@@ -32,6 +32,7 @@ public class ScenarioElement extends ScenarioElement_Base {
     		a.setScenarioElement(null);
     		removeAnnotation(a);
     	}
+    	
     	removeScenario();
     	deleteDomainObject();
     }

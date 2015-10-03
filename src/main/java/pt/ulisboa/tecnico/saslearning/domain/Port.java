@@ -32,6 +32,8 @@ public class Port extends Port_Base {
 			a.updateConnection(null);
 			removeAnnotation(a);
 		}
+		setComponent(null);
+		setRole(null);
 		deleteDomainObject();
 	}
     

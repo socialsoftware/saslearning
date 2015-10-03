@@ -32,6 +32,8 @@ public class Role extends Role_Base {
 			a.updateConnection(null);
 			removeAnnotation(a);
 		}
+		setConnector(null);
+		setPort(null);
 		deleteDomainObject();
 	}
 }

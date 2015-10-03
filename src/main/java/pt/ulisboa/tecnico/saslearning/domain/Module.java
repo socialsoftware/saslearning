@@ -88,6 +88,14 @@ public class Module extends Module_Base {
 			v.removeModule(this);
 			removeView(v);
 		}
+		setParent(null);
+		getUsesSet().clear();
+		getAggregatedSet().clear();
+		getCrossCutsSet().clear();
+		getIsASet().clear();
+		getOneToOneSet().clear();
+		getOneToManySet().clear();
+		getManyToManySet().clear();
 		setDocument(null);
 		deleteDomainObject();
 	}

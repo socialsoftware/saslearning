@@ -26,6 +26,7 @@ public class Annotation extends Annotation_Base {
 		setPort(null);
 		setConnector(null);
 		setRole(null);
+		setView(null);
 		deleteDomainObject();
 		
 	}

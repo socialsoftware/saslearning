@@ -422,7 +422,7 @@ relation documentHasConnectors {
 
 relation connectorHasRoles {
 	Connector playsRole connector {
-		multiplicity 1;
+		multiplicity 0..1;
 	}
 	
 	Role playsRole role {

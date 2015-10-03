@@ -33,11 +33,13 @@
       </span>
     </div>
     <div id="toc">
-      <b>
-        <a href="#scenarios">
-          Scenarios
-        </a>
-      </b>
+      <p>
+        <b>
+          <a href="#scenarios">
+            Scenarios
+          </a>
+        </b>
+      </p>
       <p th:each="scenario : ${scenarios}" style="padding-left:10px;">
         <a href="#" th:href="'#'+${scenario.getExternalId()}">
           <span th:text="'Scenario for '+${scenario.getQualityRequirement().getName()}+': '"></span> <span th:text="${scenario.getName()}"></span>
@@ -53,15 +55,43 @@
           <span th:text="${'View - ' + view.getName() +': ' + view.getViewtype()}"></span>
         </a>
       </p>
-      <b>
-              <a href="#modules">
-        Modules
-        </a>
-      </b>
+      <p>
+        <b>
+          <a href="#modules">
+            Modules
+          </a>
+        </b>
+      </p>
       <p th:each="module : ${modules}" style="padding-left:10px;">
         <a href="#" th:href="'#'+${module.getExternalId()}">
           Module:
           <span th:text="${module.getName()}"></span>
+        </a>
+      </p>
+      <p>
+        <b>
+          <a href="#components">
+            Components
+          </a>
+        </b>
+      </p>
+      <p th:each="component : ${components}" style="padding-left:10px;">
+        <a href="#" th:href="'#'+${component.getExternalId()}">
+          Component:
+          <span th:text="${component.getName()}"></span>
+        </a>
+      </p>
+      <p>
+        <b>
+          <a href="#connectors">
+            Connectors
+          </a>
+        </b>
+      </p>
+      <p th:each="connector : ${connectors}" style="padding-left:10px;">
+        <a href="#" th:href="'#'+${connector.getExternalId()}">
+          Connector:
+          <span th:text="${connector.getName()} + ' - ' + ${connector.getStyle()}"></span>
         </a>
       </p>
     </div>
@@ -77,15 +107,32 @@
       <h3 style="border-bottom: 1px solid #CBC7C7;">Views: </h3>
             <div th:each="view : ${views}">
         <a href="" th:name="${view.getExternalId()}"></a>
-        <section layout:include="@{/templates} :: viewMVTTemplate" th:with="docId=${docId},view=${view},edit=false"></section>
+        <section layout:include="@{/templates} :: viewMVTTemplate" th:with="docId=${docId},view=${view},edit=false" th:if="${view.getViewtype().equals('Module Viewtype')}"></section>
+
+        <section layout:include="@{/templates} :: viewCCTemplate" th:with="docId=${docId},view=${view},edit=false" th:if="${view.getViewtype().equals('Component &#38; Connector Viewtype')}"></section>
       </div>
 
       <a href="" name="modules"></a>
       <h3 style="border-bottom: 1px solid #CBC7C7;">Modules: </h3>
-                  <div th:each="module : ${modules}">
+      <div th:each="module : ${modules}">
         <a href="" th:name="${module.getExternalId()}"></a>
         <section layout:include="@{/templates} :: moduleTemplate" th:with="docId=${docId},module=${module},edit=false"></section>
       </div>
+
+      <a href="" name="components"></a>
+      <h3 style="border-bottom: 1px solid #CBC7C7;">Components: </h3>
+      <div th:each="component : ${components}">
+        <a href="" th:name="${component.getExternalId()}"></a>
+        <section layout:include="@{/templates} :: componentTemplate" th:with="docId=${docId},component=${component},edit=false"></section>
+      </div>
+
+      <a href="" name="connectors"></a>
+      <h3 style="border-bottom: 1px solid #CBC7C7;">Connectors: </h3>
+      <div th:each="connector : ${connectors}">
+        <a href="" th:name="${connector.getExternalId()}"></a>
+        <section layout:include="@{/templates} :: connectorTemplate" th:with="docId=${docId},connector=${connector},edit=false"></section>
+      </div>
+
     </div>
   </div>
   <style type="text/css">

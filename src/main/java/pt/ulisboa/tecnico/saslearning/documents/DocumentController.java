@@ -74,6 +74,8 @@ public class DocumentController {
 		m.addAttribute("scenarios", d.getScenarioSet());
 		m.addAttribute("views", d.getViewSet());
 		m.addAttribute("modules", d.getModuleSet());
+		m.addAttribute("components", d.getComponentSet());
+		m.addAttribute("connectors", d.getConnectorSet());
 		m.addAttribute("docId", docId);
 		m.addAttribute("title", d.getTitle());
 		return "structuredRepresentation";
