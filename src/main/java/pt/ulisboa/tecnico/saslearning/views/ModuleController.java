@@ -31,8 +31,6 @@ public class ModuleController {
 		return "setParentModal";
 	}
 
-
-
 	@RequestMapping(value = "/addAnnotationToModuleTemplate/{docId}/{annotationId}")
 	public String addAnnotationModal(@PathVariable String docId,
 			@PathVariable String annotationId, Model m) {

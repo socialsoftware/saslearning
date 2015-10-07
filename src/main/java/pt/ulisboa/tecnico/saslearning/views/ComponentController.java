@@ -281,6 +281,11 @@ public class ComponentController {
 		return rv;
 	}
 	
+	@Atomic(mode=TxMode.WRITE)
+	private void attachPortToRole(Port p, Role r) {
+		p.setRole(r);
+	}
+
 	@RequestMapping(value = "/unattachPortFromConnectorRole/{docId}/{portId}/{roleId}")
 	public RedirectView unattachPortFromRole(@PathVariable String docId,
 			@PathVariable String portId, @PathVariable String roleId) {
@@ -296,10 +301,5 @@ public class ComponentController {
 	private void unattachPortFromRole(Port p, Role r) {
 		r.setPort(null);
 		p.setRole(null);
-	}
-
-	@Atomic(mode=TxMode.WRITE)
-	private void attachPortToRole(Port p, Role r) {
-		p.setRole(r);
 	}
 }
