@@ -6,17 +6,15 @@ package pt.ulisboa.tecnico.socialsoftware.domain.interpreter
   * single instance variables.
   *
   * @param name the name of attribute type
-  * @param typeOf the class of the type of the attribute
-  * @tparam T the type of the attribute
+  * @param typeOf the class name of the type of the attribute
   */
-case class AttributeType[T](name: String, typeOf: Class[T])
+case class AttributeType(name: String, typeOf: String)
 
-/**
-  * Represents an instance of the attribute type.
-  *
-  * @param name the name of the instance
-  * @param specification the type of the attribute
-  * @param value the concrete value of the attribute
-  * @tparam T the type of the attribute
-  */
-case class Attribute[T](name: String, specification: AttributeType[T], value: T)
+object AttributeType {
+
+  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+  import io.circe.{Decoder, Encoder}
+
+  implicit val decodeJson: Decoder[AttributeType] = deriveDecoder
+  implicit val encodeJson: Encoder[AttributeType] = deriveEncoder
+}
