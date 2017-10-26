@@ -231,6 +231,9 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 
+# Configuration
+application.conf
+
 
 ### Java ###
 # Mobile Tools for Java (J2ME)
