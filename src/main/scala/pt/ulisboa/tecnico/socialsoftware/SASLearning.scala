@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware
 
-import com.google.api.client.util.store.MemoryDataStoreFactory
-import com.twitter.finagle.{Http, Service}
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.Http
 import com.twitter.finagle.param.Stats
 import com.twitter.server.TwitterServer
 import com.twitter.util.Await
@@ -12,14 +10,14 @@ import com.twitter.util.Await
   */
 object SASLearning extends TwitterServer {
 
-  val api: Service[Request, Response] = ???
-
   def main(): Unit = {
     val server = Http.server
       .configured(Stats(statsReceiver))
-      .serve(":8080", api)
+      .serve(":8081", api.endpoints)
 
-    onExit(server.close())
+    onExit {
+      server.close()
+    }
 
     Await.ready(adminHttpServer)
   }
