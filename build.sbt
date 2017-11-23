@@ -6,9 +6,9 @@ lazy val buildSettings = Seq(
   scalaVersion := "2.12.4"
 )
 
-lazy val finchVersion = "0.16.0-RC1"
-lazy val circeVersion = "0.8.0"
-lazy val jwtVersion   = "0.14.0"
+lazy val finchVersion = "0.16.0-M5"
+lazy val circeVersion = "0.9.0-M2"
+lazy val jwtVersion   = "0.14.1"
 
 val testDependencies = Seq(
   "org.mockito"     % "mockito-all" % "1.10.19",
@@ -28,8 +28,8 @@ val dependenciesSettings = Seq(
     "com.pauldijou"         %% "jwt-circe"          % jwtVersion,
     "org.scalaj"            %% "scalaj-http"        % "2.3.0",
 
-    "com.twitter"           %% "twitter-server"     % "1.32.0",
-    "com.github.pureconfig" %% "pureconfig"         % "0.8.0"
+    "com.twitter"           %% "twitter-server"     % "17.11.0",
+    "com.github.pureconfig" %% "pureconfig"         % "0.8.0",
   ) ++ testDependencies.map(_ % "test"),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
