@@ -20,4 +20,4 @@ script:
   - sbt coverage test
 
 after_success:
-  - sbt coverageReport codacyReport
+  - sbt coverageReport codacyCoverage
