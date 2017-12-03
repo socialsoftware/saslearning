@@ -7,7 +7,7 @@ import shapeless.{:+:, CNil}
 
 case class AnnotationApi() extends Api[Annotation :+: Long :+: Seq[Annotation] :+: CNil] {
 
-  private val prefix = "annotation"
+  private val prefix = "annotations"
 
   private def getAnnotation: Endpoint[Annotation] = get(prefix :: path[Long] :: authorize) { (id: Long, user: User) =>
     Database.getAnnotation(id).map(Ok)

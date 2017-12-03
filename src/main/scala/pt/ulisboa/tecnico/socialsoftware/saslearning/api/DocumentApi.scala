@@ -7,7 +7,7 @@ import shapeless.{:+:, CNil}
 
 case class DocumentApi() extends Api[Document :+: Long :+: Seq[Document] :+: CNil] {
 
-  private val prefix = "document"
+  private val prefix = "documents"
 
   private def getDocument: Endpoint[Document] = get(prefix :: path[Long] :: authorize) { (id: Long, user: User) =>
     Database.getDocument(id).map(Ok)

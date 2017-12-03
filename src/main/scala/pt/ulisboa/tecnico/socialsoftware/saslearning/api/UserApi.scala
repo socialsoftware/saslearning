@@ -6,7 +6,7 @@ import shapeless.{:+:, CNil}
 
 case class UserApi() extends Api[User :+: Seq[User] :+: CNil] {
 
-  private val prefix = "user"
+  private val prefix = "users"
 
   private def user: Endpoint[User] = get(prefix :: path[String] :: authorize) { (username: String, user: User) =>
     Database.getUser(username).map(Ok)
