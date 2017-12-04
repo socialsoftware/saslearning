@@ -24,7 +24,7 @@ case class OAuthService(client: Provider) {
 
     val doc = parse(response).getOrElse(Json.Null)
 
-    client.getUser(doc)
+    User(doc, client.fields.username, client.fields.email, client.fields.displayName)
   }
 
   def requestAccessToken(code: String): Option[Token] = {
