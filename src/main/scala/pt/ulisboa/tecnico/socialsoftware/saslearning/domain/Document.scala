@@ -4,7 +4,7 @@ import java.net.URI
 
 case class Document(id: Option[Long],
                     title: String, source: URI, content: String,
-                    owner: User /*, groups: Seq[Group]*/) extends WithId
+                    creator: User) extends WithId
 
 object Document {
 
