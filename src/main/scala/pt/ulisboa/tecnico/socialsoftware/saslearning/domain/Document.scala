@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-import java.net.URI
+import java.net.{URI, URL}
 
 case class Document(id: Option[Long],
                     title: String, source: URI, content: String,
@@ -12,6 +12,8 @@ object Document {
   import io.circe.{Decoder, Encoder}
 
   import pt.ulisboa.tecnico.socialsoftware.saslearning.utils.JsonUtils._
+
+  def fromUrl(url: URL): Option[Document] = ???
 
   lazy implicit val decodeJson: Decoder[Document] = deriveDecoder[Document]
   lazy implicit val encodeJson: Encoder[Document] = deriveEncoder[Document]
