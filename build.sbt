@@ -6,9 +6,10 @@ lazy val buildSettings = Seq(
   scalaVersion := "2.12.4"
 )
 
-lazy val finchVersion = "0.16.0-M5"
-lazy val circeVersion = "0.9.0-M2"
-lazy val jwtVersion   = "0.14.1"
+lazy val finchVersion   = "0.16.0-M5"
+lazy val circeVersion   = "0.9.0-M2"
+lazy val jwtVersion     = "0.14.1"
+lazy val refinedVersion = "0.8.4"
 
 val testDependencies = Seq(
   "org.mockito"     % "mockito-all" % "1.10.19",
@@ -23,6 +24,8 @@ val dependenciesSettings = Seq(
 
     "io.circe"              %% "circe-generic"      % circeVersion,
     "io.circe"              %% "circe-parser"       % circeVersion,
+
+    "eu.timepit"            %% "refined"            % refinedVersion,
 
     "com.pauldijou"         %% "jwt-core"           % jwtVersion,
     "com.pauldijou"         %% "jwt-circe"          % jwtVersion,
