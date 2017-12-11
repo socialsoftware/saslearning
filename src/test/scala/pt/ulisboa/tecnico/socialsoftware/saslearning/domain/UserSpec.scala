@@ -6,7 +6,9 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{EitherValues, Matchers, WordSpec}
 
-class UserSpec extends WordSpec with Matchers with EitherValues {
+class UserSpec extends WordSpec
+  with Matchers
+  with EitherValues {
 
   val user = User(None, "jdoe", "jdoe@example.org", "John Doe")
   val EXAMPLE_TEAM = "Example Team"
@@ -23,6 +25,17 @@ class UserSpec extends WordSpec with Matchers with EitherValues {
 
   "A user" should {
     val otherUser = User(None, "jane", "janedoe@example.org", "Jane Doe")
+    "have a non empty name" in {
+      val user = User.fromUnsafe(None, "", "jdoe@example.org", "John Doe")
+      user should be ('left)
+    }
+    "have a valid email" in {
+      // TODO
+    }
+    "have a non empty displayName" in {
+      val user = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "")
+      user should be ('left)
+    }
     "be the team owner" when {
       "creating a new team" in {
         val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user), Set.empty)
