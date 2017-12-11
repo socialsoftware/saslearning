@@ -12,9 +12,10 @@ lazy val jwtVersion     = "0.14.1"
 lazy val refinedVersion = "0.8.4"
 
 val testDependencies = Seq(
-  "org.mockito"     % "mockito-all" % "1.10.19",
-  "org.scalacheck"  %% "scalacheck" % "1.13.5",
-  "org.scalatest"   %% "scalatest"  % "3.0.4",
+  "org.mockito"     %  "mockito-all"        % "1.10.19",
+  "org.scalacheck"  %% "scalacheck"         % "1.13.5",
+  "org.scalatest"   %% "scalatest"          % "3.0.4",
+  "eu.timepit"      %% "refined-scalacheck" % refinedVersion,
 )
 
 val dependenciesSettings = Seq(
@@ -24,6 +25,7 @@ val dependenciesSettings = Seq(
 
     "io.circe"              %% "circe-generic"      % circeVersion,
     "io.circe"              %% "circe-parser"       % circeVersion,
+    "io.circe"              %% "circe-refined"      % circeVersion,
 
     "eu.timepit"            %% "refined"            % refinedVersion,
 

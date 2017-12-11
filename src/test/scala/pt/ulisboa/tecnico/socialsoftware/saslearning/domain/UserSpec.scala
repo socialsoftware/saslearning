@@ -1,33 +1,40 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
+import eu.timepit.refined.auto._
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{EitherValues, Matchers, WordSpec}
 
-class UserSpec extends WordSpec with Matchers {
+class UserSpec extends WordSpec with Matchers with EitherValues {
 
   val user = User(None, "jdoe", "jdoe@example.org", "John Doe")
   val EXAMPLE_TEAM = "Example Team"
 
   private def assertCreateUserFromJson(expected: Option[User], actual: String) = {
-    assert(User(parse(actual).getOrElse(Json.Null)) == expected)
+    assert(User.fromJson(parse(actual).getOrElse(Json.Null)) == expected)
+  }
+
+  private def assertCreateTeam(expected: Either[String, Team], actual: Either[String, Team]) = {
+    expected should be ('right)
+    actual should be ('right)
+    actual should equal (expected)
   }
 
   "A user" should {
     val otherUser = User(None, "jane", "janedoe@example.org", "Jane Doe")
     "be the team owner" when {
       "creating a new team" in {
-        val team = Team(EXAMPLE_TEAM, Set(user), Set.empty)
-        assert(team == user.createTeam(EXAMPLE_TEAM))
+        val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user), Set.empty)
+        assertCreateTeam(team, user.createTeam(EXAMPLE_TEAM))
       }
       "creating a team with other owners" in {
-        val team = Team(EXAMPLE_TEAM, Set(user, otherUser), Set.empty)
-        assert(team == user.createTeam(EXAMPLE_TEAM, owners = Set(otherUser)))
+        val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user, otherUser), Set.empty)
+        assertCreateTeam(team, user.createTeam(EXAMPLE_TEAM, owners = Set(otherUser)))
       }
       "creating a team with other members" in {
-        val team = Team(EXAMPLE_TEAM, Set(user), Set(otherUser))
-        assert(team == user.createTeam(EXAMPLE_TEAM, members = Set(otherUser)))
+        val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user), Set(otherUser))
+        assertCreateTeam(team, user.createTeam(EXAMPLE_TEAM, members = Set(otherUser)))
       }
     }
   }

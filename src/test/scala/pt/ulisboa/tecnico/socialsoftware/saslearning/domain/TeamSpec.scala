@@ -1,43 +1,32 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import org.scalatest.{Assertion, Matchers, WordSpec}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.{Assertion, EitherValues, Matchers, WordSpec}
 
-class TeamSpec extends WordSpec with GeneratorDrivenPropertyChecks with Matchers {
+class TeamSpec extends WordSpec
+  with Matchers
+  with EitherValues {
+
+  import eu.timepit.refined.auto._
 
   private val owner = User(None, "test", "jdoe@example.org", "John Doe")
   private val member = User(None, "jane", "jane_doe@example.org", "Jane Doe")
   private val newMember = User(None, "jsmith", "jsmith@example.org", "JohnSmith")
 
-
-  private val EXAMPLE_TEAM = "Example Team"
-  private val exampleTeam = Team(EXAMPLE_TEAM, Set(owner), Set(member))
+  private val exampleTeam = Team("Apple", Set(owner), Set(member))
 
   private def compareTeams(expected: Team, actual: Team): Assertion =
     assert(expected == actual && expected.size == actual.size)
 
-  implicit def userGen: Gen[User] = for {
-    username <- arbitrary[String]
-    email <- arbitrary[String]
-    displayName <- arbitrary[String]
-  } yield User(None, username, email, displayName)
-
-  implicit def membersGen(implicit gen: Gen[User]): Gen[(List[User], List[User])] = for {
-    owners <- Gen.nonEmptyListOf[User](gen)
-    members <- Gen.nonEmptyListOf[User](gen)
-  } yield (owners, members)
-
   "A team" should {
     "have a non empty name" in {
-      assertThrows[IllegalArgumentException](Team("", Set(owner), Set.empty))
+      val team = Team.fromUnsafe("", Set(owner), Set.empty)
+      team should be ('left)
     }
     "have at least one owner" in {
-      assertThrows[IllegalArgumentException](Team(EXAMPLE_TEAM, Set.empty, Set.empty))
+      assertThrows[IllegalArgumentException](Team("Potato", Set.empty, Set.empty))
     }
     "update its owners and members" when {
-      val team = Team(EXAMPLE_TEAM, Set(owner, member), Set.empty)
+      val team = Team("Apple", Set(owner, member), Set.empty)
       "promoting a member to owner" in {
         compareTeams(expected = team, actual = exampleTeam.promote(member))
       }
@@ -75,10 +64,14 @@ class TeamSpec extends WordSpec with GeneratorDrivenPropertyChecks with Matchers
   }
 
   "The team size" should {
-    "be the sum of its members and owners" in {
-      forAll(membersGen) { case (owners, members) =>
-        val team = Team(EXAMPLE_TEAM, owners.toSet, members.toSet)
-        assert(team.size == owners.size + members.size)
+    "be the sum of its members and owners" when {
+      "there at least one owner and no members" in {
+        val team = Team("Banana", Set(owner), Set.empty)
+        team.size should equal (1)
+      }
+      "there is at least one owner and one member" in {
+        val team = Team("Banana", Set(owner), Set(member))
+        team.size should equal (2)
       }
     }
   }

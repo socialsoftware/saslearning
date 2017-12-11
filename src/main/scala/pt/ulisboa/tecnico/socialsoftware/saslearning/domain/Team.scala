@@ -1,5 +1,13 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
+object Team {
+
+  def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] =
+    fromNonEmptyString(name) { str =>
+      new Team(str, owners, members)
+    }
+}
+
 /**
   * A Team represents a group of users that work together.
   *
@@ -12,8 +20,7 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
   * @param owners  the owners of the team
   * @param members the other members of the team
   */
-case class Team(name: String, owners: Set[User], members: Set[User] = Set.empty) {
-  require(name.nonEmpty, "Name must be non empty.")
+case class Team(name: NonEmptyString, owners: Set[User], members: Set[User] = Set.empty) {
   require(owners.nonEmpty, "There should be at least one owner.")
 
   def size: Int = owners.size + members.size

@@ -1,8 +1,13 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-case class Annotation(id: Option[Long], position: Int, offset: Int, content: String, creator: User) extends WithId
+case class Annotation(id: Option[Long], position: Int, offset: Int, content: NonEmptyString, creator: User) extends WithId
 
 object Annotation {
+
+  def fromUnsafe(id: Option[Long], position: Int, offset: Int, content: String, creator: User): Either[String, Annotation] =
+    fromNonEmptyString(content) { str =>
+      Annotation(id, position, offset, str, creator)
+    }
 
   import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
   import io.circe.{Decoder, Encoder}

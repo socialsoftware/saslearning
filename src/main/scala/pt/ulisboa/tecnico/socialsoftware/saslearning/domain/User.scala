@@ -1,15 +1,27 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-import io.circe.Json
+import eu.timepit.refined._
+import eu.timepit.refined.collection.NonEmpty
+import io.circe.{Encoder, Json}
 
-case class User(id: Option[Long], username: String, email: String, displayName: String) extends WithId {
-  def createTeam(name: String, owners: Set[User] = Set.empty, members: Set[User] = Set.empty): Team =
-    Team(name, owners + this, members)
+case class User(id: Option[Long] = None,
+                username: NonEmptyString, email: NonEmptyString, displayName: NonEmptyString) extends WithId {
+
+  def createTeam(name: String, owners: Set[User] = Set.empty, members: Set[User] = Set.empty): Either[String, Team] =
+    Team.fromUnsafe(name, owners + this, members)
+
 }
 
 object User {
 
-  import io.circe.{Decoder, Encoder}
+  def fromUnsafe(id: Option[Long] = None, username: String, email: String, displayName: String): Either[String, User] =
+    for {
+      username <- refineV[NonEmpty](username)
+      email <- refineV[NonEmpty](email)
+      displayName <- refineV[NonEmpty](displayName)
+    } yield new User(id, username, email, displayName)
+
+  import io.circe.Decoder
 
   private val ID = "id"
   private val USERNAME = "username"
@@ -24,16 +36,16 @@ object User {
       (u.id, u.username, u.email, u.displayName)
     )
 
-  def apply(json: Json,
-            usernameField: String = USERNAME,
-            emailField: String = EMAIL,
-            displayNameField: String = DISPLAY_NAME): Option[User] = {
+  def fromJson(json: Json,
+               usernameField: String = USERNAME,
+               emailField: String = EMAIL,
+               displayNameField: String = DISPLAY_NAME): Option[User] = {
     val cursor = json.hcursor
 
     (for {
       username <- cursor.downField(usernameField).as[String]
       email <- cursor.downField(emailField).as[String]
       name <- cursor.downField(displayNameField).as[String]
-    } yield User(None, username, email, name)).toOption
+    } yield User.fromUnsafe(username = username, email = email, displayName = name).toOption).toOption.flatten
   }
 }

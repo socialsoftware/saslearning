@@ -35,7 +35,7 @@ case class OAuthApi(oauthService: OAuthService) extends Api[Unit :+: String :+: 
       //        .withHeader("Location" -> "/")
       //        .withHeader("Token" -> jwtService.generateUserToken(user.username))
       //    }).getOrElse(Unauthorized(new Exception(s"Could not get a valid token")))
-      Ok(jwtService.generateUserToken(user.username))
+      Ok(jwtService.generateUserToken(user.username.value))
     }).getOrElse(Unauthorized(new Exception(s"Could not get a valid token")))
   }
 

@@ -17,7 +17,7 @@ object Database {
   val usernameToJwtTokenMap: mutable.Map[String, String] = mutable.Map.empty[String, String]
 
   def getUser(username: String): Future[User] = users.synchronized {
-    users.values.find(_.username == username) match {
+    users.values.find(_.username.value == username) match {
       case Some(user) => Future.value(user)
       case None => Future.exception(new NoSuchElementException)
     }
