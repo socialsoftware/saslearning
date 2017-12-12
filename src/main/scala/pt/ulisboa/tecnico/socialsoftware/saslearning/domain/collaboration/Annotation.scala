@@ -1,4 +1,7 @@
-package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
+package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
+
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain._
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{NonEmptyString, User, WithId}
 
 case class Annotation(id: Option[Long], position: Int, offset: Int, content: NonEmptyString, creator: User) extends WithId
 

@@ -1,4 +1,6 @@
-package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
+package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
+
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{NonEmptyString, User, fromString}
 
 sealed trait Comment {
   def content: NonEmptyString

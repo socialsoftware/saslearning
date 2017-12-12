@@ -1,7 +1,8 @@
-package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
+package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
 import eu.timepit.refined.auto._
 import org.scalatest.{EitherValues, Matchers, WordSpec}
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.User
 
 class CommentSpec extends WordSpec
   with Matchers

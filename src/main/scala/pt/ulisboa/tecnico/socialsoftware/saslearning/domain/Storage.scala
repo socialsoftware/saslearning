@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Annotation
+
 import scala.concurrent.Future
 
 case class Storage(userCount: Long = -1, users: Map[Long, User] = Map.empty,

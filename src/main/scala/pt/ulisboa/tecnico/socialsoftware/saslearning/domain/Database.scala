@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 import java.util.NoSuchElementException
 
 import com.twitter.util.Future
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Annotation
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.oauth.Token
 
 import scala.collection.mutable

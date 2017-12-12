@@ -2,7 +2,8 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.api
 
 import io.finch._
 import io.finch.circe.dropNullValues._
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{Annotation, Database, User}
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Annotation
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{Database, User}
 import shapeless.{:+:, CNil}
 
 case class AnnotationApi() extends Api[Annotation :+: Long :+: Seq[Annotation] :+: CNil] {
