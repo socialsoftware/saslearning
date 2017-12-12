@@ -1,10 +1,27 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-case class Comment(content: NonEmptyString, author: User)
+sealed trait Comment {
+  def content: NonEmptyString
+  def author: User
+}
 
-object Comment {
+final case class Question(content: NonEmptyString, author: User) extends Comment
+final case class Answer(content: NonEmptyString, author: User) extends Comment
+final case class Definition(content: NonEmptyString, author: User) extends Comment
+final case class NeedMoreInformation(content: NonEmptyString, author: User) extends Comment
 
-  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content) { str =>
-    Comment(str, author)
-  }
+object Question {
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(Question(_, author))
+}
+
+object Answer {
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(Answer(_, author))
+}
+
+object Definition {
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(Definition(_, author))
+}
+
+object NeedMoreInformation {
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(NeedMoreInformation(_, author))
 }
