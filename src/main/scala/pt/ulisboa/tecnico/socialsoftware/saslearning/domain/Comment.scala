@@ -11,17 +11,17 @@ final case class Definition(content: NonEmptyString, author: User) extends Comme
 final case class NeedMoreInformation(content: NonEmptyString, author: User) extends Comment
 
 object Question {
-  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(Question(_, author))
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromString(content)(Question(_, author))
 }
 
 object Answer {
-  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(Answer(_, author))
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromString(content)(Answer(_, author))
 }
 
 object Definition {
-  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(Definition(_, author))
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromString(content)(Definition(_, author))
 }
 
 object NeedMoreInformation {
-  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromNonEmptyString(content)(NeedMoreInformation(_, author))
+  def fromUnsafe(content: String, author: User): Either[String, Comment] = fromString(content)(NeedMoreInformation(_, author))
 }

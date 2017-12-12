@@ -14,7 +14,7 @@ package object domain {
     refineV[NonEmpty](str)
   }
 
-  def fromNonEmptyString[T](value: String)(f: NonEmptyString => T): Either[String, T] = {
+  def fromString[T](value: String)(f: NonEmptyString => T): Either[String, T] = {
     refineV[NonEmpty](value).map(str => f(str))
   }
 

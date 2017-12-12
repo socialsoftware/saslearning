@@ -5,7 +5,7 @@ case class Annotation(id: Option[Long], position: Int, offset: Int, content: Non
 object Annotation {
 
   def fromUnsafe(id: Option[Long], position: Int, offset: Int, content: String, creator: User): Either[String, Annotation] =
-    fromNonEmptyString(content) { str =>
+    fromString(content) { str =>
       Annotation(id, position, offset, str, creator)
     }
 

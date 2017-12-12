@@ -1,13 +1,5 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-object Team {
-
-  def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] =
-    fromNonEmptyString(name) { str =>
-      new Team(str, owners, members)
-    }
-}
-
 /**
   * A Team represents a group of users that work together.
   *
@@ -63,4 +55,9 @@ case class Team(name: NonEmptyString, owners: Set[User], members: Set[User] = Se
   def promote(user: User): Team = removeMember(user).addOwner(user)
 
   def demote(user: User): Team = removeOwner(user).addMember(user)
+}
+
+object Team {
+  def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] =
+    fromString(name)(Team(_, owners, members))
 }
