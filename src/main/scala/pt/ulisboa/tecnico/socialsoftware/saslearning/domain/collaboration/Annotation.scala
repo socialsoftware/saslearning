@@ -3,14 +3,14 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain._
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{NonEmptyString, User, WithId}
 
-case class Annotation(id: Option[Long], position: Natural, offset: Natural, content: NonEmptyString, creator: User) extends WithId
+case class Annotation(id: Option[Long], position: Natural, offset: Positive, content: NonEmptyString, creator: User) extends WithId
 
 object Annotation {
 
   def fromUnsafe(id: Option[Long], position: Long, offset: Long, content: String, creator: User): Either[String, Annotation] =
     for {
       position <- Natural(position)
-      offset <- Natural(offset)
+      offset <- Positive(offset)
       content <- NonEmptyString(content)
     } yield Annotation(id, position, offset, content, creator)
 
