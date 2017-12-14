@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
 import eu.timepit.refined._
 import eu.timepit.refined.collection.NonEmpty
-import io.circe.{Encoder, Json}
 
 case class User(id: Option[Long] = None,
                 username: NonEmptyString, email: NonEmptyString, displayName: NonEmptyString) extends WithId {
@@ -21,7 +20,8 @@ object User {
       displayName <- refineV[NonEmpty](displayName)
     } yield new User(id, username, email, displayName)
 
-  import io.circe.Decoder
+  import io.circe.{Decoder, Encoder, Json}
+  import io.circe.refined._
 
   private val ID = "id"
   private val USERNAME = "username"

@@ -18,8 +18,9 @@ object Document {
     content <- refineV[NonEmpty](content)
   } yield new Document(id, title, source, content, creator)
 
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
   import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+  import io.circe.refined._
 
   import pt.ulisboa.tecnico.socialsoftware.saslearning.utils.JsonUtils._
 
