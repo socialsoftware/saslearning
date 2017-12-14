@@ -20,21 +20,22 @@ val testDependencies = Seq(
 
 val dependenciesSettings = Seq(
   libraryDependencies ++= Seq(
-    "com.github.finagle"    %% "finch-core"         % finchVersion,
-    "com.github.finagle"    %% "finch-circe"        % finchVersion,
+    "com.github.finagle"    %% "finch-core"           % finchVersion,
+    "com.github.finagle"    %% "finch-circe"          % finchVersion,
 
-    "io.circe"              %% "circe-generic"      % circeVersion,
-    "io.circe"              %% "circe-parser"       % circeVersion,
-    "io.circe"              %% "circe-refined"      % circeVersion,
+    "io.circe"              %% "circe-generic"        % circeVersion,
+    "io.circe"              %% "circe-generic-extras" % circeVersion,
+    "io.circe"              %% "circe-parser"         % circeVersion,
+    "io.circe"              %% "circe-refined"        % circeVersion,
 
-    "eu.timepit"            %% "refined"            % refinedVersion,
+    "eu.timepit"            %% "refined"              % refinedVersion,
 
-    "com.pauldijou"         %% "jwt-core"           % jwtVersion,
-    "com.pauldijou"         %% "jwt-circe"          % jwtVersion,
-    "org.scalaj"            %% "scalaj-http"        % "2.3.0",
+    "com.pauldijou"         %% "jwt-core"             % jwtVersion,
+    "com.pauldijou"         %% "jwt-circe"            % jwtVersion,
+    "org.scalaj"            %% "scalaj-http"          % "2.3.0",
 
-    "com.twitter"           %% "twitter-server"     % "17.11.0",
-    "com.github.pureconfig" %% "pureconfig"         % "0.8.0",
+    "com.twitter"           %% "twitter-server"       % "17.11.0",
+    "com.github.pureconfig" %% "pureconfig"           % "0.8.0",
   ) ++ testDependencies.map(_ % "test"),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),

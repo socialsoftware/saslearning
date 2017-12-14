@@ -21,25 +21,19 @@ object User {
     } yield new User(id, username, email, displayName)
 
   import io.circe.{Decoder, Encoder, Json}
+  import io.circe.generic.extras._
+  import io.circe.generic.extras.semiauto.{deriveDecoder, deriveEncoder}
   import io.circe.refined._
 
-  private val ID = "id"
-  private val USERNAME = "username"
-  private val EMAIL = "email"
-  private val DISPLAY_NAME = "display_name"
+  implicit val config: Configuration = Configuration.default.withSnakeCaseMemberNames
 
-  implicit val decodeJson: Decoder[User] =
-    Decoder.forProduct4(ID, USERNAME, EMAIL, DISPLAY_NAME)(User.apply)
-
-  implicit val encodeJson: Encoder[User] =
-    Encoder.forProduct4(ID, USERNAME, EMAIL, DISPLAY_NAME)(u =>
-      (u.id, u.username, u.email, u.displayName)
-    )
+  implicit val decodeJson: Decoder[User] = deriveDecoder
+  implicit val encodeJson: Encoder[User] = deriveEncoder
 
   def fromJson(json: Json,
-               usernameField: String = USERNAME,
-               emailField: String = EMAIL,
-               displayNameField: String = DISPLAY_NAME): Option[User] = {
+               usernameField: String = "username",
+               emailField: String = "email",
+               displayNameField: String = "display_name"): Option[User] = {
     val cursor = json.hcursor
 
     (for {
