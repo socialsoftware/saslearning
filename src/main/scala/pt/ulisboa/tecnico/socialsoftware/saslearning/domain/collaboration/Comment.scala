@@ -7,6 +7,16 @@ sealed trait Comment {
   def author: User
 }
 
+object Comment {
+
+  import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+  import io.circe.refined._
+
+  implicit val decodeJson: Decoder[Comment] = deriveDecoder
+  implicit val encodeJson: Encoder[Comment] = deriveEncoder
+}
+
 final case class Question(content: NonEmptyString, author: User) extends Comment
 final case class Answer(content: NonEmptyString, author: User) extends Comment
 final case class Definition(content: NonEmptyString, author: User) extends Comment

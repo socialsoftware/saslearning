@@ -4,12 +4,15 @@ import eu.timepit.refined.auto._
 import org.scalatest.{EitherValues, Matchers, WordSpec}
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.User
 
+import scala.collection.immutable.Seq
+
 class AnnotationSpec extends WordSpec
   with Matchers
   with EitherValues {
 
   private val user = User(None, username = "jdoe", email = "john.doe@example.org", displayName = "John Doe")
   private val defaultAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user)
+  val annotation = Annotation.fromUnsafe(None, 0l, 1l, "This is an annotation", user)
 
   private def assertLeft(actual: Either[String, Annotation]) = {
     actual should be('left)
@@ -28,7 +31,6 @@ class AnnotationSpec extends WordSpec
 
       }
       "is not empty" in {
-        val annotation = Annotation.fromUnsafe(None, 0l, 1l, "This is an annotation", user)
         assertRight(expected = defaultAnnotation, actual = annotation)
       }
     }
@@ -38,7 +40,6 @@ class AnnotationSpec extends WordSpec
         assertLeft(annotation)
       }
       "equal to 0" in {
-        val annotation = Annotation.fromUnsafe(None, 0l, 1l, "This is an annotation", user)
         assertRight(expected = defaultAnnotation, actual = annotation)
       }
       "greater than 0" in {
@@ -57,8 +58,65 @@ class AnnotationSpec extends WordSpec
         assertLeft(annotation)
       }
       "greater than 0" in {
-        val annotation = Annotation.fromUnsafe(None, 0l, 1l, "This is an annotation", user)
         assertRight(expected = defaultAnnotation, actual = annotation)
+      }
+    }
+  }
+
+  "Posting a comment" should {
+    val question = Question("What is an annotation?", user)
+    "create a thread when it doesn't exist" in {
+      val threadedAnnotation = defaultAnnotation.post(question)
+
+      val expectedAnnotation = Thread
+        .fromUnsafe(Seq(question))
+        .map { thread =>
+          Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread))
+        }
+
+      expectedAnnotation.map { expected =>
+        assertRight(expected = expected, actual = threadedAnnotation)
+      }
+    }
+    "add it to the thread" in {
+      val answer = Answer("An annotation is ...", user)
+      val actualAnnotation = Thread.fromUnsafe(Seq(question)).flatMap { thread =>
+        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).post(answer)
+      }
+
+      val expectedAnnotation = Thread
+        .fromUnsafe(Seq(question, answer))
+        .map { thread =>
+          Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread))
+        }
+
+      expectedAnnotation.map { expected =>
+        assertRight(expected = expected, actual = actualAnnotation)
+      }
+
+    }
+  }
+
+  "Deleting a comment" should {
+    val question = Question("What is an annotation?", user)
+    "remove it from the thread" in {
+      val answer = Answer("An annotation is ...", user)
+
+      val expectedAnnotation = Thread.fromUnsafe(Seq(question)).map { thread =>
+        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread))
+      }
+
+      val actualAnnotation = Thread.fromUnsafe(Seq(question, answer)).map { thread =>
+        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).deletePost(answer)
+      }
+
+      expectedAnnotation.map { expected =>
+        assertRight(expected = expected, actual = actualAnnotation)
+      }
+    }
+    "delete the thread" in {
+      defaultAnnotation.post(question).map { actual =>
+        assert(defaultAnnotation == actual.deletePost(question))
       }
     }
   }
