@@ -42,8 +42,12 @@ class ThreadSpec extends WordSpec
         val thread = Thread.fromUnsafe(Seq(question)).flatMap(_.add(answer))
         assertRight(expected = comments, actual = thread)
       }
-      "delete a comment" in {
+      "delete a comment by position" in {
         val thread = Thread.fromUnsafe(Seq(question, answer)).flatMap(_.delete(1))
+        assertRight(expected = comments, actual = thread)
+      }
+      "delete a comment" in {
+        val thread = Thread.fromUnsafe(Seq(question, answer)).flatMap(_.delete(answer))
         assertRight(expected = comments, actual = thread)
       }
     }
