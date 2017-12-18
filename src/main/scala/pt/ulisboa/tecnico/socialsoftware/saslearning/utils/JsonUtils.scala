@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.utils
 
 import java.net.URI
+import javax.mail.internet.InternetAddress
 
 import io.circe.{Decoder, Encoder, Json}
 
@@ -13,6 +14,12 @@ object JsonUtils {
   }
 
   implicit val uriEncoder: Encoder[URI] = Encoder.encodeString.contramap[URI](_.toString)
+
+  implicit val internetAddressDecoder: Decoder[InternetAddress] = Decoder.decodeString.emap { str =>
+    Either.catchNonFatal(new InternetAddress(str)).leftMap(t => "Invalid e-mail address.")
+  }
+
+  implicit val internetAddressEncoder: Encoder[InternetAddress] = Encoder.encodeString.contramap[InternetAddress](_.toString)
 
   // Convert domain errors to JSON
   implicit val encodeException: Encoder[Exception] = Encoder.instance { e =>

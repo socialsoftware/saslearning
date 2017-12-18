@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
+import javax.mail.internet.InternetAddress
+
 import org.scalatest.{Assertion, EitherValues, Matchers, WordSpec}
 
 class TeamSpec extends WordSpec
@@ -8,9 +10,9 @@ class TeamSpec extends WordSpec
 
   import eu.timepit.refined.auto._
 
-  private val owner = User(None, "test", "jdoe@example.org", "John Doe")
-  private val member = User(None, "jane", "jane_doe@example.org", "Jane Doe")
-  private val newMember = User(None, "jsmith", "jsmith@example.org", "JohnSmith")
+  private val owner = User(None, "test", new InternetAddress("john.doe@example.org"), "John Doe")
+  private val member = User(None, "jane", new InternetAddress("jane_doe@example.org"), "Jane Doe")
+  private val newMember = User(None, "jsmith", new InternetAddress("jsmith@example.org"), "JohnSmith")
 
   private val exampleTeam = Team("Apple", Set(owner), Set(member))
 

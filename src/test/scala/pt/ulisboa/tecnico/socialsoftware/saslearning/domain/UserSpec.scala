@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
+import javax.mail.internet.InternetAddress
+
 import eu.timepit.refined.auto._
 import io.circe.Json
 import io.circe.parser._
@@ -10,7 +12,7 @@ class UserSpec extends WordSpec
   with Matchers
   with EitherValues {
 
-  val user = User(None, "jdoe", "jdoe@example.org", "John Doe")
+  val user = User(None, "jdoe", new InternetAddress("jdoe@example.org"), "John Doe")
   val EXAMPLE_TEAM = "Example Team"
 
   private def assertCreateUserFromJson(expected: Option[User], actual: String) = {
@@ -24,13 +26,14 @@ class UserSpec extends WordSpec
   }
 
   "A user" should {
-    val otherUser = User(None, "jane", "janedoe@example.org", "Jane Doe")
+    val otherUser = User(None, "jane", new InternetAddress("janedoe@example.org"), "Jane Doe")
     "have a non empty name" in {
       val user = User.fromUnsafe(None, "", "jdoe@example.org", "John Doe")
       user should be ('left)
     }
     "have a valid email" in {
-      // TODO
+      val user = User.fromUnsafe(None, "jdoe", "example.org", "John Doe")
+      user should be ('left)
     }
     "have a non empty displayName" in {
       val user = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "")

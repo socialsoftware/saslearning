@@ -29,6 +29,7 @@ val dependenciesSettings = Seq(
     "io.circe"              %% "circe-refined"        % circeVersion,
 
     "eu.timepit"            %% "refined"              % refinedVersion,
+    "com.sun.mail"          %  "mailapi"              % "1.6.0",
 
     "com.pauldijou"         %% "jwt-core"             % jwtVersion,
     "com.pauldijou"         %% "jwt-circe"            % jwtVersion,

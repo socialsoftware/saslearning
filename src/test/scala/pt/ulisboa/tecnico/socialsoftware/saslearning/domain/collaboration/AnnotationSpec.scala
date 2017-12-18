@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
+import javax.mail.internet.InternetAddress
+
 import eu.timepit.refined.auto._
 import org.scalatest.{EitherValues, Matchers, WordSpec}
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.User
@@ -10,7 +12,7 @@ class AnnotationSpec extends WordSpec
   with Matchers
   with EitherValues {
 
-  private val user = User(None, username = "jdoe", email = "john.doe@example.org", displayName = "John Doe")
+  private val user = User(None, username = "jdoe", email = new InternetAddress("john.doe@example.org"), displayName = "John Doe")
   private val defaultAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user)
   val annotation = Annotation.fromUnsafe(None, 0l, 1l, "This is an annotation", user)
 
