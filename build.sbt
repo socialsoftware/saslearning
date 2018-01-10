@@ -9,7 +9,7 @@ lazy val buildSettings = Seq(
 lazy val finchVersion   = "0.16.0-M5"
 lazy val circeVersion   = "0.9.0-M2"
 lazy val jwtVersion     = "0.14.1"
-lazy val refinedVersion = "0.8.4"
+lazy val refinedVersion = "0.8.6"
 
 val testDependencies = Seq(
   "org.mockito"     %  "mockito-all"        % "1.10.19",
