@@ -1,5 +1,8 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
+import eu.timepit.refined.api.RefinedTypeOps
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.Team.NonEmptySet
+
 /**
   * A Team represents a group of users that work together.
   *
@@ -56,12 +59,15 @@ case class Team(name: NonEmptyString, owners: NonEmptySet[User], members: Set[Us
   def demote(user: User): Either[String, Team] = removeOwner(user).map(_.addMember(user))
 
   private def updateOwners(newOwners: Set[User]): Either[String, Team] =
-    NonEmptySet(newOwners).map(o => this.copy(owners = o))
+    NonEmptySet.from(newOwners).map(o => this.copy(owners = o))
 }
 
 object Team {
+
+  private object NonEmptySet extends RefinedTypeOps[NonEmptySet[User], Set[User]]
+
   def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] = for {
-    name <- NonEmptyString(name)
-    owners <- NonEmptySet[User](owners)
+    name <- NonEmptyString.from(name)
+    owners <- NonEmptySet.from(owners)
   } yield new Team(name, owners, members)
 }

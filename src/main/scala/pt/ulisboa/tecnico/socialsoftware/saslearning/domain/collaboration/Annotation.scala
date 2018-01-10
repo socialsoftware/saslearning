@@ -35,9 +35,9 @@ object Annotation {
                  position: Long, offset: Long, content: String,
                  creator: User,
                  thread: Option[Thread] = None): Either[String, Annotation] = for {
-    position <- Natural(position)
-    offset <- Positive(offset)
-    content <- NonEmptyString(content)
+    position <- Natural.from(position)
+    offset <- Positive.from(offset)
+    content <- NonEmptyString.from(content)
   } yield Annotation(id, position, offset, content, creator, thread)
 
   import io.circe.{Decoder, Encoder}
