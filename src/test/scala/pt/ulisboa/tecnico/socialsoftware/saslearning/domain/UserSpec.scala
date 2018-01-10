@@ -25,20 +25,31 @@ class UserSpec extends WordSpec
     actual should equal (expected)
   }
 
+  "Creating a user" should {
+    "fail" when {
+      "have an empty name" in {
+        val user = User.fromUnsafe(None, "", "jdoe@example.org", "John Doe")
+        user should be ('left)
+      }
+      "have an invalid e-mail" in {
+        val user = User.fromUnsafe(None, "jdoe", "example.org", "John Doe")
+        user should be ('left)
+      }
+      "have an empty display name" in {
+        val user = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "")
+        user should be ('left)
+      }
+    }
+    "succeed" in {
+      val actual = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "John Doe")
+
+      actual should be ('right)
+      actual.right.value should be (user)
+    }
+  }
+
   "A user" should {
     val otherUser = User(None, "jane", new InternetAddress("janedoe@example.org"), "Jane Doe")
-    "have a non empty name" in {
-      val user = User.fromUnsafe(None, "", "jdoe@example.org", "John Doe")
-      user should be ('left)
-    }
-    "have a valid email" in {
-      val user = User.fromUnsafe(None, "jdoe", "example.org", "John Doe")
-      user should be ('left)
-    }
-    "have a non empty displayName" in {
-      val user = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "")
-      user should be ('left)
-    }
     "be the team owner" when {
       "creating a new team" in {
         val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user), Set.empty)
