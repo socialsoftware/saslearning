@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
 import javax.mail.internet.InternetAddress
 
+import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
 import io.circe.Json
 import io.circe.parser._
@@ -12,17 +13,17 @@ class UserSpec extends WordSpec
   with Matchers
   with EitherValues {
 
-  val user = User(None, "jdoe", new InternetAddress("jdoe@example.org"), "John Doe")
-  val EXAMPLE_TEAM = "Example Team"
+  private val user = User(None, "jdoe", new InternetAddress("jdoe@example.org"), "John Doe")
+  private val exampleTeam = "Example Team"
 
   private def assertCreateUserFromJson(expected: Option[User], actual: String) = {
     assert(User.fromJson(parse(actual).getOrElse(Json.Null)) == expected)
   }
 
-  private def assertCreateTeam(expected: Either[String, Team], actual: Either[String, Team]) = {
-    expected should be ('right)
+  private def assertCreateTeam(expected: Team, actual: Either[String, Team]) = {
     actual should be ('right)
-    actual should equal (expected)
+    actual.right.value should equal (expected)
+    actual.right.value.size should equal (expected.size)
   }
 
   "Creating a user" should {
@@ -52,16 +53,16 @@ class UserSpec extends WordSpec
     val otherUser = User(None, "jane", new InternetAddress("janedoe@example.org"), "Jane Doe")
     "be the team owner" when {
       "creating a new team" in {
-        val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user), Set.empty)
-        assertCreateTeam(team, user.createTeam(EXAMPLE_TEAM))
+        val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user)), Set.empty)
+        assertCreateTeam(team, user.createTeam(exampleTeam))
       }
       "creating a team with other owners" in {
-        val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user, otherUser), Set.empty)
-        assertCreateTeam(team, user.createTeam(EXAMPLE_TEAM, owners = Set(otherUser)))
+        val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user, otherUser)), Set.empty)
+        assertCreateTeam(team, user.createTeam(exampleTeam, owners = Set(otherUser)))
       }
       "creating a team with other members" in {
-        val team = Team.fromUnsafe(EXAMPLE_TEAM, Set(user), Set(otherUser))
-        assertCreateTeam(team, user.createTeam(EXAMPLE_TEAM, members = Set(otherUser)))
+        val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user)), Set(otherUser))
+        assertCreateTeam(team, user.createTeam(exampleTeam, members = Set(otherUser)))
       }
     }
   }
