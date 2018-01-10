@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
 import javax.mail.internet.InternetAddress
 
+import eu.timepit.refined.api.Refined
 import org.scalatest.{Assertion, EitherValues, Matchers, WordSpec}
 
 class TeamSpec extends WordSpec
@@ -14,12 +15,15 @@ class TeamSpec extends WordSpec
   private val member = User(None, "jane", new InternetAddress("jane_doe@example.org"), "Jane Doe")
   private val newMember = User(None, "jsmith", new InternetAddress("jsmith@example.org"), "JohnSmith")
 
-  private val exampleTeam = Team.fromUnsafe("Apple", Set(owner), Set(member))
+  private val exampleTeam = Team("Apple", Refined.unsafeApply(Set(owner)), Set(member))
 
-  private def compareTeams(expected: Either[String, Team], actual: Either[String, Team]): Assertion = {
+  private def compareTeams(expected: Team, actual: Either[String, Team]): Assertion = {
     actual should be ('right)
-    actual should equal (expected)
+    actual.right.value should equal (expected)
+    actual.right.value.size should equal (expected.size)
   }
+
+  private def compareTeams(expected: Team, actual: Team): Assertion = compareTeams(expected, Right(actual))
 
   "A team" should {
     "have a non empty name" in {
@@ -31,39 +35,39 @@ class TeamSpec extends WordSpec
       team should be ('left)
     }
     "update its owners and members" when {
-      val team = Team.fromUnsafe("Apple", Set(owner, member), Set.empty)
+      val expectedTeam = Team("Apple", Refined.unsafeApply(Set(owner, member)), Set.empty)
       "promoting a member to owner" in {
-        compareTeams(expected = team, actual = exampleTeam.flatMap(_.promote(member)))
+        compareTeams(expected = expectedTeam, actual = exampleTeam.promote(member))
       }
       "demoting a owner to member" in {
-        compareTeams(expected = exampleTeam, actual = team.flatMap(_.demote(member)))
+        compareTeams(expected = exampleTeam, actual = expectedTeam.demote(member))
       }
       "adding a owner that is a member" in {
-        compareTeams(expected = team, exampleTeam.flatMap(_.addOwner(member)))
+        compareTeams(expected = expectedTeam, exampleTeam.addOwner(member))
       }
     }
     "update its owners" when {
-      val team = Team.fromUnsafe("Apple", Set(owner, newMember), Set(member))
+      val expectedTeam = Team("Apple", Refined.unsafeApply(Set(owner, newMember)), Set(member))
       "adding a new owner" in {
-        compareTeams(expected = team, actual = exampleTeam.flatMap(_.addOwner(newMember)))
+        compareTeams(expected = expectedTeam, actual = exampleTeam.addOwner(newMember))
       }
       "removing an existing owner" in {
-        compareTeams(expected = exampleTeam, actual = team.flatMap(_.removeOwner(newMember)))
+        compareTeams(expected = exampleTeam, actual = expectedTeam.removeOwner(newMember))
       }
     }
     "update its members" when {
       "adding a new member" in {
-        val expectedTeam = Team.fromUnsafe("Apple", Set(owner), Set(member, newMember))
-        compareTeams(expected = expectedTeam, actual = exampleTeam.map(_.addMember(newMember)))
+        val expectedTeam = Team("Apple", Refined.unsafeApply(Set(owner)), Set(member, newMember))
+        compareTeams(expected = expectedTeam, actual = exampleTeam.addMember(newMember))
       }
       "removing an existing member" in {
-        val expectedTeam = Team.fromUnsafe("Apple", Set(owner))
-        compareTeams(expected = expectedTeam, actual = exampleTeam.map(_.removeMember(member)))
+        val expectedTeam = Team("Apple", Refined.unsafeApply(Set(owner)))
+        compareTeams(expected = expectedTeam, actual = exampleTeam.removeMember(member))
       }
     }
     "not be updated" when {
       "adding a member that is a owner" in {
-        compareTeams(expected = exampleTeam, actual = exampleTeam.map(_.addMember(owner)))
+        compareTeams(expected = exampleTeam, actual = exampleTeam.addMember(owner))
       }
     }
   }
@@ -85,13 +89,13 @@ class TeamSpec extends WordSpec
 
   "Checking if a user belongs to a team" should {
     "be true if the user is a owner" in {
-      exampleTeam.right.value.contains(owner) should be (true)
+      exampleTeam.contains(owner) should be (true)
     }
     "be true if the user is a member" in {
-      exampleTeam.right.value.contains(member) should be (true)
+      exampleTeam.contains(member) should be (true)
     }
     "be false if the user is not a owner or a member" in {
-      exampleTeam.right.value.contains(newMember) should be (false)
+      exampleTeam.contains(newMember) should be (false)
     }
   }
 
