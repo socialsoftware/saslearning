@@ -4,6 +4,7 @@ import java.net.URI
 
 import eu.timepit.refined._
 import eu.timepit.refined.collection.NonEmpty
+import eu.timepit.refined.types.string.NonEmptyString
 
 case class Document(id: Option[Long],
                     title: NonEmptyString, source: URI, content: NonEmptyString,

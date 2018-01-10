@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
 import eu.timepit.refined.api.RefinedTypeOps
+import eu.timepit.refined.types.string.NonEmptyString
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.Team.NonEmptySet
 
 /**

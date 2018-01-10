@@ -1,12 +1,14 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
+
+import eu.timepit.refined.types.string.NonEmptyString
+import eu.timepit.refined.types.numeric.{NonNegLong, PosLong}
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{User, WithId}
+
 import scala.collection.immutable.Seq
 
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain._
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{NonEmptyString, User, WithId}
-
 case class Annotation(id: Option[Long],
-                      position: Natural, offset: Positive, content: NonEmptyString,
+                      position: NonNegLong, offset: PosLong, content: NonEmptyString,
                       creator: User,
                       thread: Option[Thread] = None) extends WithId {
 
@@ -35,8 +37,8 @@ object Annotation {
                  position: Long, offset: Long, content: String,
                  creator: User,
                  thread: Option[Thread] = None): Either[String, Annotation] = for {
-    position <- Natural.from(position)
-    offset <- Positive.from(offset)
+    position <- NonNegLong.from(position)
+    offset <- PosLong.from(offset)
     content <- NonEmptyString.from(content)
   } yield Annotation(id, position, offset, content, creator, thread)
 

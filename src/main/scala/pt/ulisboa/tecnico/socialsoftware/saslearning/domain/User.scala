@@ -4,6 +4,7 @@ import javax.mail.internet.InternetAddress
 
 import eu.timepit.refined._
 import eu.timepit.refined.collection.NonEmpty
+import eu.timepit.refined.types.string.NonEmptyString
 
 case class User(id: Option[Long] = None,
                 username: NonEmptyString, email: InternetAddress, displayName: NonEmptyString) extends WithId {
