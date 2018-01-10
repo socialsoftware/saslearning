@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{NonEmptyString, User, fromString}
+import eu.timepit.refined.types.string.NonEmptyString
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{User, fromString}
 
 sealed trait Comment {
   def content: NonEmptyString
