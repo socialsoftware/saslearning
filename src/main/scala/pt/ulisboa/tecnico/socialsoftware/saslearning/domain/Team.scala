@@ -12,12 +12,11 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
   * @param owners  the owners of the team
   * @param members the other members of the team
   */
-case class Team(name: NonEmptyString, owners: Set[User], members: Set[User] = Set.empty) {
-  require(owners.nonEmpty, "There should be at least one owner.")
+case class Team(name: NonEmptyString, owners: NonEmptySet[User], members: Set[User] = Set.empty) {
 
-  def size: Int = owners.size + members.size
+  def size: Int = owners.value.size + members.size
 
-  def contains(user: User): Boolean = owners.contains(user) || members.contains(user)
+  def contains(user: User): Boolean = owners.value.contains(user) || members.contains(user)
 
   /**
     * Adds a new member to the team.
@@ -44,20 +43,25 @@ case class Team(name: NonEmptyString, owners: Set[User], members: Set[User] = Se
     * @param user the new owner of the team.
     * @return the team corresponding to the update
     */
-  def addOwner(user: User): Team = if (members.contains(user)) {
+  def addOwner(user: User): Either[String, Team] = if (members.contains(user)) {
     promote(user)
   } else {
-    this.copy(owners = owners + user)
+    updateOwners(owners.value + user)
   }
 
-  def removeOwner(user: User): Team = this.copy(owners = owners - user)
+  def removeOwner(user: User): Either[String, Team] = updateOwners(owners.value - user)
 
-  def promote(user: User): Team = removeMember(user).addOwner(user)
+  def promote(user: User): Either[String, Team] = removeMember(user).addOwner(user)
 
-  def demote(user: User): Team = removeOwner(user).addMember(user)
+  def demote(user: User): Either[String, Team] = removeOwner(user).map(_.addMember(user))
+
+  private def updateOwners(newOwners: Set[User]): Either[String, Team] =
+    NonEmptySet(newOwners).map(o => this.copy(owners = o))
 }
 
 object Team {
-  def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] =
-    fromString(name)(Team(_, owners, members))
+  def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] = for {
+    name <- NonEmptyString(name)
+    owners <- NonEmptySet[User](owners)
+  } yield new Team(name, owners, members)
 }

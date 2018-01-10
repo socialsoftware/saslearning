@@ -14,10 +14,12 @@ class TeamSpec extends WordSpec
   private val member = User(None, "jane", new InternetAddress("jane_doe@example.org"), "Jane Doe")
   private val newMember = User(None, "jsmith", new InternetAddress("jsmith@example.org"), "JohnSmith")
 
-  private val exampleTeam = Team("Apple", Set(owner), Set(member))
+  private val exampleTeam = Team.fromUnsafe("Apple", Set(owner), Set(member))
 
-  private def compareTeams(expected: Team, actual: Team): Assertion =
-    assert(expected == actual && expected.size == actual.size)
+  private def compareTeams(expected: Either[String, Team], actual: Either[String, Team]): Assertion = {
+    actual should be ('right)
+    actual should equal (expected)
+  }
 
   "A team" should {
     "have a non empty name" in {
@@ -25,42 +27,43 @@ class TeamSpec extends WordSpec
       team should be ('left)
     }
     "have at least one owner" in {
-      assertThrows[IllegalArgumentException](Team("Potato", Set.empty, Set.empty))
+      val team = Team.fromUnsafe("Potato", Set.empty, Set.empty)
+      team should be ('left)
     }
     "update its owners and members" when {
-      val team = Team("Apple", Set(owner, member), Set.empty)
+      val team = Team.fromUnsafe("Apple", Set(owner, member), Set.empty)
       "promoting a member to owner" in {
-        compareTeams(expected = team, actual = exampleTeam.promote(member))
+        compareTeams(expected = team, actual = exampleTeam.flatMap(_.promote(member)))
       }
       "demoting a owner to member" in {
-        compareTeams(expected = exampleTeam, actual = team.demote(member))
+        compareTeams(expected = exampleTeam, actual = team.flatMap(_.demote(member)))
       }
       "adding a owner that is a member" in {
-        compareTeams(expected = team, exampleTeam.addOwner(member))
+        compareTeams(expected = team, exampleTeam.flatMap(_.addOwner(member)))
       }
     }
     "update its owners" when {
-      val updatedTeam = exampleTeam.copy(owners = exampleTeam.owners + newMember)
+      val team = Team.fromUnsafe("Apple", Set(owner, newMember), Set(member))
       "adding a new owner" in {
-        compareTeams(expected = updatedTeam, actual = exampleTeam.addOwner(newMember))
+        compareTeams(expected = team, actual = exampleTeam.flatMap(_.addOwner(newMember)))
       }
       "removing an existing owner" in {
-        compareTeams(expected = exampleTeam, actual = updatedTeam.removeOwner(newMember))
+        compareTeams(expected = exampleTeam, actual = team.flatMap(_.removeOwner(newMember)))
       }
     }
     "update its members" when {
       "adding a new member" in {
-        val expectedTeam = exampleTeam.copy(members = exampleTeam.members + newMember)
-        compareTeams(expected = expectedTeam, actual = exampleTeam.addMember(newMember))
+        val expectedTeam = Team.fromUnsafe("Apple", Set(owner), Set(member, newMember))
+        compareTeams(expected = expectedTeam, actual = exampleTeam.map(_.addMember(newMember)))
       }
       "removing an existing member" in {
-        val expectedTeam = exampleTeam.copy(members = Set.empty)
-        compareTeams(expected = expectedTeam, actual = exampleTeam.removeMember(member))
+        val expectedTeam = Team.fromUnsafe("Apple", Set(owner))
+        compareTeams(expected = expectedTeam, actual = exampleTeam.map(_.removeMember(member)))
       }
     }
     "not be updated" when {
       "adding a member that is a owner" in {
-        compareTeams(expected = exampleTeam, actual = exampleTeam.addMember(owner))
+        compareTeams(expected = exampleTeam, actual = exampleTeam.map(_.addMember(owner)))
       }
     }
   }
@@ -68,25 +71,27 @@ class TeamSpec extends WordSpec
   "The team size" should {
     "be the sum of its members and owners" when {
       "there at least one owner and no members" in {
-        val team = Team("Banana", Set(owner), Set.empty)
-        team.size should equal (1)
+        val team = Team.fromUnsafe("Banana", Set(owner), Set.empty)
+        team should be ('right)
+        team.right.value.size should equal (1)
       }
       "there is at least one owner and one member" in {
-        val team = Team("Banana", Set(owner), Set(member))
-        team.size should equal (2)
+        val team = Team.fromUnsafe("Banana", Set(owner), Set(member))
+        team should be ('right)
+        team.right.value.size should equal (2)
       }
     }
   }
 
   "Checking if a user belongs to a team" should {
     "be true if the user is a owner" in {
-      assert(exampleTeam.contains(owner))
+      exampleTeam.right.value.contains(owner) should be (true)
     }
     "be true if the user is a member" in {
-      assert(exampleTeam.contains(member))
+      exampleTeam.right.value.contains(member) should be (true)
     }
     "be false if the user is not a owner or a member" in {
-      assert(!exampleTeam.contains(newMember))
+      exampleTeam.right.value.contains(newMember) should be (false)
     }
   }
 
