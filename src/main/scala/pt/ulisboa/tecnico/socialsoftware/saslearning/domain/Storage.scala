@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Annotation
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.{Annotation, Document}
 
 import scala.concurrent.Future
 
