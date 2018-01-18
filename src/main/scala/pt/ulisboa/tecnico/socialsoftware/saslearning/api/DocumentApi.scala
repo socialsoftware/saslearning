@@ -2,7 +2,8 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.api
 
 import io.finch._
 import io.finch.circe.dropNullValues._
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{Database, Document, User}
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Document
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{Database, User}
 import shapeless.{:+:, CNil}
 
 case class DocumentApi() extends Api[Document :+: Long :+: Seq[Document] :+: CNil] {
