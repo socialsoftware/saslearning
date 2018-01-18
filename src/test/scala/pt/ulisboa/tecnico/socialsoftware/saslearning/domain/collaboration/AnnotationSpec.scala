@@ -68,7 +68,7 @@ class AnnotationSpec extends WordSpec
   "Posting a comment" should {
     val question = Question("What is an annotation?", user)
     "create a thread when it doesn't exist" in {
-      val threadedAnnotation = defaultAnnotation.post(question)
+      val threadedAnnotation = defaultAnnotation.postComment(question)
 
       val expectedAnnotation = Thread
         .fromUnsafe(Seq(question))
@@ -83,7 +83,7 @@ class AnnotationSpec extends WordSpec
     "add it to the thread" in {
       val answer = Answer("An annotation is ...", user)
       val actualAnnotation = Thread.fromUnsafe(Seq(question)).flatMap { thread =>
-        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).post(answer)
+        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).postComment(answer)
       }
 
       val expectedAnnotation = Thread
@@ -109,7 +109,7 @@ class AnnotationSpec extends WordSpec
       }
 
       val actualAnnotation = Thread.fromUnsafe(Seq(question, answer)).map { thread =>
-        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).deletePost(answer)
+        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).deleteComment(answer)
       }
 
       expectedAnnotation.map { expected =>
@@ -117,8 +117,8 @@ class AnnotationSpec extends WordSpec
       }
     }
     "delete the thread" in {
-      defaultAnnotation.post(question).map { actual =>
-        assert(defaultAnnotation == actual.deletePost(question))
+      defaultAnnotation.postComment(question).map { actual =>
+        assert(defaultAnnotation == actual.deleteComment(question))
       }
     }
   }
