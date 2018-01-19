@@ -7,42 +7,39 @@ import eu.timepit.refined.auto._
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.{EitherValues, Matchers, WordSpec}
+import org.scalatest.Assertion
 
-class UserSpec extends WordSpec
-  with Matchers
-  with EitherValues {
+class UserSpec extends UnitSpec {
 
-  private val user = User(None, "jdoe", new InternetAddress("jdoe@example.org"), "John Doe")
   private val exampleTeam = "Example Team"
 
   private def assertCreateUserFromJson(expected: Option[User], actual: String) = {
     assert(User.fromJson(parse(actual).getOrElse(Json.Null)) == expected)
   }
 
-  private def assertCreateTeam(expected: Team, actual: Either[String, Team]) = {
-    actual should be ('right)
-    actual.right.value should equal (expected)
+  def assertRight(expected: Team, actual: Either[String, Team]): Assertion = {
+    super.assertRight(expected, actual)
+
     actual.right.value.size should equal (expected.size)
   }
 
   "Creating a user" should {
     "fail" when {
       "have an empty name" in {
-        val user = User.fromUnsafe(None, "", "jdoe@example.org", "John Doe")
+        val user = User.fromUnsafe(None, "", "john.doe@example.org", "John Doe")
         user should be ('left)
       }
       "have an invalid e-mail" in {
-        val user = User.fromUnsafe(None, "jdoe", "example.org", "John Doe")
+        val user = User.fromUnsafe(None, "test", "example.org", "John Doe")
         user should be ('left)
       }
       "have an empty display name" in {
-        val user = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "")
+        val user = User.fromUnsafe(None, "test", "john.doe@example.org", "")
         user should be ('left)
       }
     }
     "succeed" in {
-      val actual = User.fromUnsafe(None, "jdoe", "jdoe@example.org", "John Doe")
+      val actual = User.fromUnsafe(None, "test", "john.doe@example.org", "John Doe")
 
       actual should be ('right)
       actual.right.value should be (user)
@@ -54,15 +51,15 @@ class UserSpec extends WordSpec
     "be the team owner" when {
       "creating a new team" in {
         val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user)), Set.empty)
-        assertCreateTeam(team, user.createTeam(exampleTeam))
+        assertRight(team, user.createTeam(exampleTeam))
       }
       "creating a team with other owners" in {
         val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user, otherUser)), Set.empty)
-        assertCreateTeam(team, user.createTeam(exampleTeam, owners = Set(otherUser)))
+        assertRight(team, user.createTeam(exampleTeam, owners = Set(otherUser)))
       }
       "creating a team with other members" in {
         val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user)), Set(otherUser))
-        assertCreateTeam(team, user.createTeam(exampleTeam, members = Set(otherUser)))
+        assertRight(team, user.createTeam(exampleTeam, members = Set(otherUser)))
       }
     }
   }
@@ -72,8 +69,8 @@ class UserSpec extends WordSpec
       val json =
         """{
           |  "id" : 0,
-          |  "username" : "jdoe",
-          |  "email" : "jdoe@example.org",
+          |  "username" : "test",
+          |  "email" : "john.doe@example.org",
           |  "display_name" : "John Doe"
           |}""".stripMargin
       assert(user.copy(id = Some(0)).asJson.spaces2 == json)
@@ -85,8 +82,8 @@ class UserSpec extends WordSpec
       "the fields are what we expect" in {
         val rawJson =
           """{
-            |  "username" : "jdoe",
-            |  "email" : "jdoe@example.org",
+            |  "username" : "test",
+            |  "email" : "john.doe@example.org",
             |  "display_name" : "John Doe"
             |}""".stripMargin
         assertCreateUserFromJson(expected = Some(user), actual = rawJson)
@@ -94,8 +91,8 @@ class UserSpec extends WordSpec
       "extra fields are provided" in {
         val rawJson =
           """{
-            |  "username" : "jdoe",
-            |  "email" : "jdoe@example.org",
+            |  "username" : "test",
+            |  "email" : "john.doe@example.org",
             |  "display_name" : "John Doe",
             |  "age" : 20
             |}""".stripMargin
@@ -105,8 +102,8 @@ class UserSpec extends WordSpec
         val rawJson =
           """{
             |  "id" : 0,
-            |  "username" : "jdoe",
-            |  "email" : "jdoe@example.org",
+            |  "username" : "test",
+            |  "email" : "john.doe@example.org",
             |  "display_name" : "John Doe"
             |}""".stripMargin
         assertCreateUserFromJson(expected = Some(user), actual = rawJson)
@@ -116,7 +113,7 @@ class UserSpec extends WordSpec
       "username field is missing" in {
         val rawJson =
           """{
-            |  "email" : "jdoe@example.org",
+            |  "email" : "john.doe@example.org",
             |  "display_name" : "John Doe"
             |}""".stripMargin
         assertCreateUserFromJson(expected = None, actual = rawJson)
@@ -124,7 +121,7 @@ class UserSpec extends WordSpec
       "email field is missing" in {
         val rawJson =
           """{
-            |  "username" : "jdoe",
+            |  "username" : "test",
             |  "display_name" : "John Doe"
             |}""".stripMargin
         assertCreateUserFromJson(expected = None, actual = rawJson)
@@ -132,8 +129,8 @@ class UserSpec extends WordSpec
       "displayName field is missing" in {
         val rawJson =
           """{
-            |  "username" : "jdoe",
-            |  "email" : "jdoe@example.org",
+            |  "username" : "test",
+            |  "email" : "john.doe@example.org",
             |}""".stripMargin
         assertCreateUserFromJson(expected = None, actual = rawJson)
       }

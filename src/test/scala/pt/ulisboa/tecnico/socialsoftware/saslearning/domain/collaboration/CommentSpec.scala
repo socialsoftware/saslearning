@@ -1,20 +1,8 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
-import javax.mail.internet.InternetAddress
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.UnitSpec
 
-import eu.timepit.refined.auto._
-import org.scalatest.{EitherValues, Matchers, WordSpec}
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.User
-
-class CommentSpec extends WordSpec
-  with Matchers
-  with EitherValues {
-
-  private val user = User(None, username = "jdoe", email = new InternetAddress("john.doe@example.org"), displayName = "John Doe")
-
-  private def assertLeft(actual: Either[String, Comment]) = {
-    actual should be('left)
-  }
+class CommentSpec extends UnitSpec {
 
   private def assertRight(expected: String, actual: Either[String, Comment]) = {
     actual should be('right)
