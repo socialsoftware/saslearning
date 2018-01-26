@@ -1,21 +1,15 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
 import java.net.URI
-import javax.mail.internet.InternetAddress
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
 import eu.timepit.refined.types.string.NonEmptyString
-import org.scalatest.{EitherValues, Matchers, WordSpec}
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.User
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.UnitSpec
 
 import scala.collection.immutable.Seq
 
-class DocumentSpec extends WordSpec
-  with Matchers
-  with EitherValues {
-
-  private val user = User(None, username = "jdoe", email = new InternetAddress("john.doe@example.org"), displayName = "John Doe")
+class DocumentSpec extends UnitSpec {
 
   private val defaultUri = URI.create("http://example.org")
   private val defaultTitle: NonEmptyString = Refined.unsafeApply("The history of Art")
@@ -25,11 +19,6 @@ class DocumentSpec extends WordSpec
 
   private val question = Question("What is art?", user)
   private val documentWithQuestion = defaultDocument.copy(thread = Some(Thread(Refined.unsafeApply(Seq(question)))))
-
-  private def assertRight(expected: Document, actual: Either[String, Document]) = {
-    actual should be('right)
-    actual.right.value should be(expected)
-  }
 
   "A document" should {
     "have a title" when {

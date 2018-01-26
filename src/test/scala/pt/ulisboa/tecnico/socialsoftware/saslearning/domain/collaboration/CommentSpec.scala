@@ -1,18 +1,11 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
-import javax.mail.internet.InternetAddress
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.UnitSpec
 
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.auto._
 import io.circe.syntax._
-import org.scalatest.{EitherValues, Matchers, WordSpec}
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.User
 
-class CommentSpec extends WordSpec
-  with Matchers
-  with EitherValues {
-
-  private val user = User(Some(0), username = "jdoe", email = new InternetAddress("john.doe@example.org"), displayName = "John Doe")
+class CommentSpec extends UnitSpec {
 
   private val question = "Can you explain this?"
   private val answer = "This is a pie"
@@ -22,9 +15,6 @@ class CommentSpec extends WordSpec
   private def commentToJsonString(comment: Comment, `type`: String): String =
     s"""{"content":"${comment.content}","author":${user.asJson.noSpaces},"type":"${`type`}"}""".stripMargin
 
-  private def assertLeft(actual: Either[String, Comment]) = {
-    actual should be('left)
-  }
 
   private def assertRight(expected: String, actual: Either[String, Comment]) = {
     actual should be('right)
