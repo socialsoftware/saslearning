@@ -53,34 +53,16 @@ class AnnotationSpec extends UnitSpec {
   "Posting a comment" should {
     val question = Question("What is an annotation?", user)
     "create a thread when it doesn't exist" in {
-      val threadedAnnotation = defaultAnnotation.postComment(question)
-
-      val expectedAnnotation = Thread
-        .fromUnsafe(Seq(question))
-        .map { thread =>
-          Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread))
-        }
-
-      expectedAnnotation.map { expected =>
-        assertRight(expected = expected, actual = threadedAnnotation)
-      }
+      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question)))
+      val actualAnnotation = defaultAnnotation.postComment(question)
+      assert(expectedAnnotation == actualAnnotation)
     }
     "add it to the thread" in {
       val answer = Answer("An annotation is ...", user)
-      val actualAnnotation = Thread.fromUnsafe(Seq(question)).flatMap { thread =>
-        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).postComment(answer)
-      }
 
-      val expectedAnnotation = Thread
-        .fromUnsafe(Seq(question, answer))
-        .map { thread =>
-          Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread))
-        }
-
-      expectedAnnotation.map { expected =>
-        assertRight(expected = expected, actual = actualAnnotation)
-      }
-
+      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question, answer)))
+      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question))).postComment(answer)
+      assert(expectedAnnotation == actualAnnotation)
     }
   }
 
@@ -89,22 +71,16 @@ class AnnotationSpec extends UnitSpec {
     "remove it from the thread" in {
       val answer = Answer("An annotation is ...", user)
 
-      val expectedAnnotation = Thread.fromUnsafe(Seq(question)).map { thread =>
-        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread))
-      }
+      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question)))
 
-      val actualAnnotation = Thread.fromUnsafe(Seq(question, answer)).map { thread =>
-        Annotation(None, 0l, 1l, "This is an annotation", user, Some(thread)).deleteComment(answer)
-      }
+      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question, answer)))
+        .deleteComment(answer)
 
-      expectedAnnotation.map { expected =>
-        assertRight(expected = expected, actual = actualAnnotation)
-      }
+      assert(expectedAnnotation == actualAnnotation)
     }
     "delete the thread" in {
-      defaultAnnotation.postComment(question).map { actual =>
-        assert(defaultAnnotation == actual.deleteComment(question))
-      }
+      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question)))
+      assert(defaultAnnotation == actualAnnotation.deleteComment(question))
     }
   }
 

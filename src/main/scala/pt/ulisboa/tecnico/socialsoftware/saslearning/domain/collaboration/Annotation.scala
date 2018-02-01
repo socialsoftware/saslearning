@@ -8,9 +8,9 @@ import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{User, WithId}
 case class Annotation(id: Option[Long],
                       position: NonNegLong, offset: PosLong, content: NonEmptyString,
                       creator: User,
-                      thread: Option[Thread] = None) extends WithId with Post[Annotation] {
+                      thread: Thread = Thread()) extends WithId with Post[Annotation] {
 
-  override def updateThread(thread: Option[Thread]): Annotation = this.copy(thread = thread)
+  override def updated(thread: Thread): Annotation = this.copy(thread = thread)
 }
 
 object Annotation {
@@ -18,7 +18,7 @@ object Annotation {
   def fromUnsafe(id: Option[Long] = None,
                  position: Long, offset: Long, content: String,
                  creator: User,
-                 thread: Option[Thread] = None): Either[String, Annotation] = for {
+                 thread: Thread = Thread()): Either[String, Annotation] = for {
     position <- NonNegLong.from(position)
     offset <- PosLong.from(offset)
     content <- NonEmptyString.from(content)

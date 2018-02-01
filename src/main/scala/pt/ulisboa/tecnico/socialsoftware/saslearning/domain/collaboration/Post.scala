@@ -1,19 +1,34 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
-import scala.collection.immutable.Seq
 
 trait Post[T] {
-  def thread: Option[Thread]
+  def thread: Thread
 
-  def updateThread(thread: Option[Thread]): T
+  /**
+    * A function to update T, given a new [[Thread]].
+    *
+    * @param thread the new [[Thread]] to replace in T.
+    *
+    * @return the new T.
+    */
+  def updated(thread: Thread): T
 
-  def postComment(comment: Comment): Either[String, T] = {
-    val threadWithComment = thread match {
-      case Some(t) => t.add(comment)
-      case _ => Thread.fromUnsafe(Seq(comment))
-    }
+  def postComment(comment: Comment): T = updated(thread.add(comment))
 
-    threadWithComment.map(thread => updateThread(Some(thread)))
-  }
+  /**
+    * Deletes a comment by position.
+    *
+    * @param position the position of the comment to be deleted. Must be >= 0.
+    *
+    * @return Right(T) if position >= 0, where T is updated without the comment.
+    */
+  def deleteComment(position: Int): Either[String, T] = thread.delete(position).map(t => updated(t))
 
-  def deleteComment(comment: Comment): T = updateThread(thread.flatMap(_.delete(comment).toOption))
+  /**
+    * Deletes the comment.
+    *
+    * @param comment the comment to delete
+    *
+    * @return the updated T, without the comment.
+    */
+  def deleteComment(comment: Comment): T = updated(thread.delete(comment))
 }
