@@ -9,22 +9,16 @@ import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.{User, WithId}
 
 case class Document(id: Option[Long],
                     title: NonEmptyString, source: URI, content: NonEmptyString,
-                    creator: User,
-                    thread: Option[Thread] = None) extends WithId with Post[Document] {
-
-  override def updateThread(thread: Option[Thread]): Document = this.copy(thread = thread)
-
-}
+                    creator: User) extends WithId
 
 object Document {
 
   def fromUnsafe(id: Option[Long],
                  title: String, source: URI, content: String,
-                 creator: User,
-                 thread: Option[Thread] = None): Either[String, Document] = for {
+                 creator: User): Either[String, Document] = for {
     title <- refineV[NonEmpty](title)
     content <- refineV[NonEmpty](content)
-  } yield new Document(id, title, source, content, creator, thread)
+  } yield new Document(id, title, source, content, creator)
 
   import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
   import io.circe.{Decoder, Encoder}
