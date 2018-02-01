@@ -9,7 +9,7 @@ class CommentSpec extends UnitSpec {
 
   private val question = "Can you explain this?"
   private val answer = "This is a pie"
-  private val definition = "The number π is a mathematical constant"
+  private val definition = "The number PI is a mathematical constant"
   private val needMoreInformation = "Clarify why 80 is the default port for HTTP"
 
   private def commentToJsonString(comment: Comment, category: String): String =
