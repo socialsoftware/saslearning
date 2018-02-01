@@ -12,8 +12,8 @@ class CommentSpec extends UnitSpec {
   private val definition = "The number π is a mathematical constant"
   private val needMoreInformation = "Clarify why 80 is the default port for HTTP"
 
-  private def commentToJsonString(comment: Comment, `type`: String): String =
-    s"""{"content":"${comment.content}","author":${user.asJson.noSpaces},"type":"${`type`}"}""".stripMargin
+  private def commentToJsonString(comment: Comment, category: String): String =
+    s"""{"content":"${comment.content}","author":${user.asJson.noSpaces},"type":"$category"}""".stripMargin
 
 
   private def assertRight(expected: String, actual: Either[String, Comment]) = {
