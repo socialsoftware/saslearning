@@ -3,6 +3,9 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 import eu.timepit.refined.api.RefinedTypeOps
 import eu.timepit.refined.types.string.NonEmptyString
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.Team.NonEmptySet
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Document
+
+import scala.collection.immutable.Seq
 
 /**
   * A Team represents a group of users that work together.
@@ -12,11 +15,14 @@ import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.Team.NonEmptySet
   * add or remove members, add or remove owners, promote members to owners and demote
   * owners to members.
   *
-  * @param name    the name of the team
+  * @param name the name of the team
+  * @param workspaces the place where team members cooperate
   * @param owners  the owners of the team
   * @param members the other members of the team
   */
-case class Team(name: NonEmptyString, owners: NonEmptySet[User], members: Set[User] = Set.empty) {
+case class Team(name: NonEmptyString,
+                workspaces: Seq[Workspace] = Seq.empty,
+                owners: NonEmptySet[User], members: Set[User] = Set.empty) {
 
   def size: Int = owners.value.size + members.size
 
@@ -61,14 +67,20 @@ case class Team(name: NonEmptyString, owners: NonEmptySet[User], members: Set[Us
 
   private def updateOwners(newOwners: Set[User]): Either[String, Team] =
     NonEmptySet.from(newOwners).map(o => this.copy(owners = o))
+
+  def addDocument(document: Document): Team = this.copy(workspaces = workspaces :+ Workspace(document))
+
+  def removeDocument(document: Document): Team = this.copy(workspaces = workspaces.filterNot(_.document == document))
 }
 
 object Team {
 
   private object NonEmptySet extends RefinedTypeOps[NonEmptySet[User], Set[User]]
 
-  def fromUnsafe(name: String, owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] = for {
+  def fromUnsafe(name: String,
+                 workspaces: Seq[Workspace],
+                 owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] = for {
     name <- NonEmptyString.from(name)
     owners <- NonEmptySet.from(owners)
-  } yield new Team(name, owners, members)
+  } yield new Team(name, workspaces, owners, members)
 }
