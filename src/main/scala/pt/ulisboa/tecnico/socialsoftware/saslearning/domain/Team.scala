@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 import eu.timepit.refined.api.RefinedTypeOps
 import eu.timepit.refined.types.string.NonEmptyString
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.Team.NonEmptySet
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.Document
 
 import scala.collection.immutable.Seq
 
@@ -22,7 +21,7 @@ import scala.collection.immutable.Seq
   */
 case class Team(name: NonEmptyString,
                 workspaces: Seq[Workspace] = Seq.empty,
-                owners: NonEmptySet[User], members: Set[User] = Set.empty) {
+                owners: NonEmptySet[User], members: Set[User] = Set.empty) extends Workable[Team] {
 
   def size: Int = owners.value.size + members.size
 
@@ -68,9 +67,7 @@ case class Team(name: NonEmptyString,
   private def updateOwners(newOwners: Set[User]): Either[String, Team] =
     NonEmptySet.from(newOwners).map(o => this.copy(owners = o))
 
-  def addDocument(document: Document): Team = this.copy(workspaces = workspaces :+ Workspace(document))
-
-  def removeDocument(document: Document): Team = this.copy(workspaces = workspaces.filterNot(_.document == document))
+  override protected def updated(workspaces: Seq[Workspace]): Team = this.copy(workspaces = workspaces)
 }
 
 object Team {

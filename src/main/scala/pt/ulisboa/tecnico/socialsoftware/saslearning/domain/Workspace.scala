@@ -14,3 +14,23 @@ case class Workspace(document: Document,
 
   override protected def updated(items: Seq[Comment]): Workspace = this.copy(comments = items)
 }
+
+object Workspace {
+  import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+
+  implicit val decodeJson: Decoder[Workspace] = deriveDecoder
+  implicit val encodeJson: Encoder[Workspace] = deriveEncoder
+}
+
+trait Workable[T] {
+
+  def workspaces: Seq[Workspace]
+
+  protected def updated(workspaces: Seq[Workspace]): T
+
+  def addDocument(document: Document): T = updated(workspaces :+ Workspace(document))
+
+  def removeDocument(document: Document): T = updated(workspaces.filterNot(_.document == document))
+}
+

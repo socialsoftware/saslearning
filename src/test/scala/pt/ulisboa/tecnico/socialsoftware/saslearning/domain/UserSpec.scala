@@ -73,7 +73,9 @@ class UserSpec extends UnitSpec {
           |  "id" : 0,
           |  "username" : "test",
           |  "email" : "john.doe@example.org",
-          |  "display_name" : "John Doe"
+          |  "display_name" : "John Doe",
+          |  "workspaces" : [
+          |  ]
           |}""".stripMargin
       assert(user.copy(id = Some(0)).asJson.spaces2 == json)
     }
