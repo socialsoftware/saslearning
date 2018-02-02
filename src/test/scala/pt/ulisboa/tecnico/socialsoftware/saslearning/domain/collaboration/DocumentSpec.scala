@@ -5,27 +5,26 @@ import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.UnitSpec
 
 class DocumentSpec extends UnitSpec {
 
+  val source = "http://example.org"
+
   "A document" should {
-    "have a title" when {
-      "is empty" in {
-        val document = Document.fromUnsafe(None, "", defaultUri, defaultContent, user)
-        document should be ('left)
+    "not be created" when {
+      "the title is empty" in {
+        val document = Document.fromUnsafe(None, "", source, defaultContent, user)
+        document should be('left)
       }
-      "is not empty" in {
-        val document = Document.fromUnsafe(None, "The history of Art", defaultUri, defaultContent, user)
-        assertRight(expected = defaultDocument, actual = document)
+      "have no content" in {
+        val document = Document.fromUnsafe(None, defaultTitle, source, "", user)
+        document should be('left)
+      }
+      "have an invalid URI" in {
+        val document = Document.fromUnsafe(None, defaultTitle, "invalid source", defaultContent, user)
+        document should be('left)
       }
     }
-    "have content" when {
-      "is empty" in {
-        val document = Document.fromUnsafe(None, defaultTitle, defaultUri, "", user)
-        document should be ('left)
-      }
-      "is not empty" in {
-        val document = Document.fromUnsafe(None, defaultTitle, defaultUri, "Content goes here", user)
-        assertRight(expected = defaultDocument, actual = document)
-      }
+    "be created" in {
+      val document = Document.fromUnsafe(None, defaultTitle, source, defaultContent, user)
+      assertRight(expected = defaultDocument, actual = document)
     }
   }
-
 }
