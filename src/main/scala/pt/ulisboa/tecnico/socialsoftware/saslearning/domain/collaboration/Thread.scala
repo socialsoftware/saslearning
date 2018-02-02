@@ -4,22 +4,32 @@ import eu.timepit.refined.types.numeric.NonNegInt
 
 import scala.collection.immutable.Seq
 
-case class Thread(comments: Seq[Comment] = Seq.empty) {
+trait Thread[T] {
 
-  def add(comment: Comment): Thread = this.copy(comments :+ comment)
+  protected def comments: Seq[Comment]
 
-  def delete(position: Int): Either[String, Thread] = for {
+  protected def updated(items: Seq[Comment]): T
+
+  def post(comment: Comment): T = updated(comments :+ comment)
+
+  /**
+    * Deletes the comment.
+    *
+    * @param comment the comment to delete
+    *
+    * @return the updated T, without the comment.
+    */
+  def delete(comment: Comment): T = updated(comments.filterNot(_ == comment))
+
+  /**
+    * Deletes a comment by position.
+    *
+    * @param position the position of the comment to be deleted. Must be >= 0.
+    *
+    * @return Right(T) if position >= 0, where T is updated without the comment.
+    */
+  def delete(position: Int): Either[String, T] = for {
     position <- NonNegInt.from(position)
-  } yield this.copy(comments.take(position.value) ++ comments.drop(position.value + 1))
+  } yield updated(comments.take(position.value) ++ comments.drop(position.value + 1))
 
-  def delete(comment: Comment): Thread = this.copy(comments = comments.filterNot(_ == comment))
-}
-
-object Thread {
-
-  import io.circe.{Decoder, Encoder}
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-
-  implicit val decodeJson: Decoder[Thread] = deriveDecoder
-  implicit val encodeJson: Encoder[Thread] = deriveEncoder
 }

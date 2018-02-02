@@ -53,15 +53,15 @@ class AnnotationSpec extends UnitSpec {
   "Posting a comment" should {
     val question = Question("What is an annotation?", user)
     "create a thread when it doesn't exist" in {
-      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question)))
-      val actualAnnotation = defaultAnnotation.postComment(question)
+      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Seq(question))
+      val actualAnnotation = defaultAnnotation.post(question)
       assert(expectedAnnotation == actualAnnotation)
     }
     "add it to the thread" in {
       val answer = Answer("An annotation is ...", user)
 
-      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question, answer)))
-      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question))).postComment(answer)
+      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Seq(question, answer))
+      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Seq(question)).post(answer)
       assert(expectedAnnotation == actualAnnotation)
     }
   }
@@ -71,16 +71,16 @@ class AnnotationSpec extends UnitSpec {
     "remove it from the thread" in {
       val answer = Answer("An annotation is ...", user)
 
-      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question)))
+      val expectedAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Seq(question))
 
-      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question, answer)))
-        .deleteComment(answer)
+      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Seq(question, answer))
+        .delete(answer)
 
       assert(expectedAnnotation == actualAnnotation)
     }
     "delete the thread" in {
-      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Thread(Seq(question)))
-      assert(defaultAnnotation == actualAnnotation.deleteComment(question))
+      val actualAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user, Seq(question))
+      assert(defaultAnnotation == actualAnnotation.delete(question))
     }
   }
 
