@@ -1,28 +1,35 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration
 
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.collection.NonEmpty
-import eu.timepit.refined.refineV
+import eu.timepit.refined.types.numeric.NonNegInt
 
 import scala.collection.immutable.Seq
 
-case class Thread(comments: Seq[Comment] Refined NonEmpty) {
+trait Thread[T] {
 
-  def add(comment: Comment): Either[String, Thread] = refineV[NonEmpty](comments.value :+ comment).map(Thread(_))
-  def delete(position: Int): Either[String, Thread] =
-    Thread.fromUnsafe(comments.value.take(position) ++ comments.value.drop(position + 1))
-  def delete(comment: Comment): Either[String, Thread] = Thread.fromUnsafe(comments.value.filterNot(_ == comment))
-}
+  protected def comments: Seq[Comment]
 
-object Thread {
-  def fromUnsafe(comments: Seq[Comment]): Either[String, Thread] = {
-    refineV[NonEmpty](comments).map(Thread(_))
-  }
+  protected def updated(items: Seq[Comment]): T
 
-  import io.circe.{Decoder, Encoder}
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-  import io.circe.refined._
+  def post(comment: Comment): T = updated(comments :+ comment)
 
-  implicit val decodeJson: Decoder[Thread] = deriveDecoder
-  implicit val encodeJson: Encoder[Thread] = deriveEncoder
+  /**
+    * Deletes the comment.
+    *
+    * @param comment the comment to delete
+    *
+    * @return the updated T, without the comment.
+    */
+  def delete(comment: Comment): T = updated(comments.filterNot(_ == comment))
+
+  /**
+    * Deletes a comment by position.
+    *
+    * @param position the position of the comment to be deleted. Must be >= 0.
+    *
+    * @return Right(T) if position >= 0, where T is updated without the comment.
+    */
+  def delete(position: Int): Either[String, T] = for {
+    position <- NonNegInt.from(position)
+  } yield updated(comments.take(position.value) ++ comments.drop(position.value + 1))
+
 }

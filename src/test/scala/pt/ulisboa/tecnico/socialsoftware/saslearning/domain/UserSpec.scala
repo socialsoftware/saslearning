@@ -9,6 +9,8 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.Assertion
 
+import scala.collection.immutable.Seq
+
 class UserSpec extends UnitSpec {
 
   private val exampleTeam = "Example Team"
@@ -50,15 +52,15 @@ class UserSpec extends UnitSpec {
     val otherUser = User(None, "jane", new InternetAddress("janedoe@example.org"), "Jane Doe")
     "be the team owner" when {
       "creating a new team" in {
-        val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user)), Set.empty)
+        val team = Team(Refined.unsafeApply(exampleTeam), Seq.empty, Refined.unsafeApply(Set(user)), Set.empty)
         assertRight(team, user.createTeam(exampleTeam))
       }
       "creating a team with other owners" in {
-        val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user, otherUser)), Set.empty)
+        val team = Team(Refined.unsafeApply(exampleTeam), Seq.empty, Refined.unsafeApply(Set(user, otherUser)), Set.empty)
         assertRight(team, user.createTeam(exampleTeam, owners = Set(otherUser)))
       }
       "creating a team with other members" in {
-        val team = Team(Refined.unsafeApply(exampleTeam), Refined.unsafeApply(Set(user)), Set(otherUser))
+        val team = Team(Refined.unsafeApply(exampleTeam), Seq.empty, Refined.unsafeApply(Set(user)), Set(otherUser))
         assertRight(team, user.createTeam(exampleTeam, members = Set(otherUser)))
       }
     }
@@ -71,7 +73,9 @@ class UserSpec extends UnitSpec {
           |  "id" : 0,
           |  "username" : "test",
           |  "email" : "john.doe@example.org",
-          |  "display_name" : "John Doe"
+          |  "display_name" : "John Doe",
+          |  "workspaces" : [
+          |  ]
           |}""".stripMargin
       assert(user.copy(id = Some(0)).asJson.spaces2 == json)
     }

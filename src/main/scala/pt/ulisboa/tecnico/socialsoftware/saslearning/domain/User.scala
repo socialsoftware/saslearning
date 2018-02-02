@@ -6,11 +6,16 @@ import eu.timepit.refined._
 import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.types.string.NonEmptyString
 
+import scala.collection.immutable.Seq
+
 case class User(id: Option[Long] = None,
-                username: NonEmptyString, email: InternetAddress, displayName: NonEmptyString) extends WithId {
+                username: NonEmptyString, email: InternetAddress, displayName: NonEmptyString,
+                workspaces: Seq[Workspace] = Seq.empty) extends Workable[User] with WithId {
 
   def createTeam(name: String, owners: Set[User] = Set.empty, members: Set[User] = Set.empty): Either[String, Team] =
-    Team.fromUnsafe(name, owners + this, members)
+    Team.fromUnsafe(name, Seq.empty, owners + this, members)
+
+  override protected def updated(workspaces: Seq[Workspace]): User = this.copy(workspaces = workspaces)
 
 }
 
