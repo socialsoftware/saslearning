@@ -7,8 +7,6 @@ import scala.collection.immutable.Seq
 
 class AnnotationSpec extends UnitSpec {
 
-  private val defaultAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user)
-
   "An annotation" should {
     val annotation = Annotation.fromUnsafe(None, 0l, 1l, "This is an annotation", user)
     "have a content" when {
