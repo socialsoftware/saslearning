@@ -20,7 +20,7 @@ In order to have a running version of this project you must setup your machine w
 
 - Git
 - Scala 2.12.4
-- SBT 1.1.0-RC1
+- SBT 1.1
 
 Now clone the repository to your machine by:
 

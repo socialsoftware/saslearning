@@ -21,7 +21,9 @@ import scala.collection.immutable.Seq
   */
 case class Team(name: NonEmptyString,
                 workspaces: Seq[Workspace] = Seq.empty,
-                owners: NonEmptySet[User], members: Set[User] = Set.empty) extends Workable[Team] {
+                owners: NonEmptySet[User],
+                members: Set[User] = Set.empty)
+    extends Workable[Team] {
 
   def size: Int = owners.value.size + members.size
 
@@ -35,11 +37,12 @@ case class Team(name: NonEmptyString,
     * @param user the new member of the team.
     * @return the team corresponding to the update
     */
-  def addMember(user: User): Team = if (contains(user)) {
-    this
-  } else {
-    this.copy(members = members + user)
-  }
+  def addMember(user: User): Team =
+    if (contains(user)) {
+      this
+    } else {
+      this.copy(members = members + user)
+    }
 
   def removeMember(user: User): Team = this.copy(members = members - user)
 
@@ -52,11 +55,12 @@ case class Team(name: NonEmptyString,
     * @param user the new owner of the team.
     * @return the team corresponding to the update
     */
-  def addOwner(user: User): Either[String, Team] = if (members.contains(user)) {
-    promote(user)
-  } else {
-    updateOwners(owners.value + user)
-  }
+  def addOwner(user: User): Either[String, Team] =
+    if (members.contains(user)) {
+      promote(user)
+    } else {
+      updateOwners(owners.value + user)
+    }
 
   def removeOwner(user: User): Either[String, Team] = updateOwners(owners.value - user)
 
@@ -67,7 +71,8 @@ case class Team(name: NonEmptyString,
   private def updateOwners(newOwners: Set[User]): Either[String, Team] =
     NonEmptySet.from(newOwners).map(o => this.copy(owners = o))
 
-  override protected def updated(workspaces: Seq[Workspace]): Team = this.copy(workspaces = workspaces)
+  override protected def updated(workspaces: Seq[Workspace]): Team =
+    this.copy(workspaces = workspaces)
 }
 
 object Team {
@@ -76,8 +81,10 @@ object Team {
 
   def fromUnsafe(name: String,
                  workspaces: Seq[Workspace],
-                 owners: Set[User], members: Set[User] = Set.empty): Either[String, Team] = for {
-    name <- NonEmptyString.from(name)
-    owners <- NonEmptySet.from(owners)
-  } yield new Team(name, workspaces, owners, members)
+                 owners: Set[User],
+                 members: Set[User] = Set.empty): Either[String, Team] =
+    for {
+      name <- NonEmptyString.from(name)
+      owners <- NonEmptySet.from(owners)
+    } yield new Team(name, workspaces, owners, members)
 }

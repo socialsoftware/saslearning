@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.interpreter
 
-
 /**
   *
   * @param name
@@ -8,13 +7,15 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.interpreter
   * @param parents
   * @param children
   */
-case class Accountability(name: String, definition: AccountabilityType,
-                          parents: Seq[Entity], children: Seq[Entity])
+case class Accountability(name: String,
+                          definition: AccountabilityType,
+                          parents: Seq[Entity],
+                          children: Seq[Entity])
 
 object Accountability {
 
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-  import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{ deriveDecoder, deriveEncoder }
+  import io.circe.{ Decoder, Encoder }
 
   implicit val decodeJson: Decoder[Accountability] = deriveDecoder
   implicit val encodeJson: Encoder[Accountability] = deriveEncoder

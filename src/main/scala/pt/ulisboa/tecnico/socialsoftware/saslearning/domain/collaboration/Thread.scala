@@ -28,8 +28,9 @@ trait Thread[T] {
     *
     * @return Right(T) if position >= 0, where T is updated without the comment.
     */
-  def delete(position: Int): Either[String, T] = for {
-    position <- NonNegInt.from(position)
-  } yield updated(comments.take(position.value) ++ comments.drop(position.value + 1))
+  def delete(position: Int): Either[String, T] =
+    for {
+      position <- NonNegInt.from(position)
+    } yield updated(comments.take(position.value) ++ comments.drop(position.value + 1))
 
 }

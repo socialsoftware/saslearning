@@ -15,36 +15,35 @@ class UserSpec extends UnitSpec {
 
   private val exampleTeam = "Example Team"
 
-  private def assertCreateUserFromJson(expected: Option[User], actual: String) = {
+  private def assertCreateUserFromJson(expected: Option[User], actual: String) =
     assert(User.fromJson(parse(actual).getOrElse(Json.Null)) == expected)
-  }
 
   def assertRight(expected: Team, actual: Either[String, Team]): Assertion = {
     super.assertRight(expected, actual)
 
-    actual.right.value.size should equal (expected.size)
+    actual.right.value.size should equal(expected.size)
   }
 
   "Creating a user" should {
     "fail" when {
       "have an empty name" in {
         val user = User.fromUnsafe(None, "", "john.doe@example.org", "John Doe")
-        user should be ('left)
+        user should be('left)
       }
       "have an invalid e-mail" in {
         val user = User.fromUnsafe(None, "test", "example.org", "John Doe")
-        user should be ('left)
+        user should be('left)
       }
       "have an empty display name" in {
         val user = User.fromUnsafe(None, "test", "john.doe@example.org", "")
-        user should be ('left)
+        user should be('left)
       }
     }
     "succeed" in {
       val actual = User.fromUnsafe(None, "test", "john.doe@example.org", "John Doe")
 
-      actual should be ('right)
-      actual.right.value should be (user)
+      actual should be('right)
+      actual.right.value should be(user)
     }
   }
 
@@ -52,15 +51,24 @@ class UserSpec extends UnitSpec {
     val otherUser = User(None, "jane", new InternetAddress("janedoe@example.org"), "Jane Doe")
     "be the team owner" when {
       "creating a new team" in {
-        val team = Team(Refined.unsafeApply(exampleTeam), Seq.empty, Refined.unsafeApply(Set(user)), Set.empty)
+        val team = Team(Refined.unsafeApply(exampleTeam),
+                        Seq.empty,
+                        Refined.unsafeApply(Set(user)),
+                        Set.empty)
         assertRight(team, user.createTeam(exampleTeam))
       }
       "creating a team with other owners" in {
-        val team = Team(Refined.unsafeApply(exampleTeam), Seq.empty, Refined.unsafeApply(Set(user, otherUser)), Set.empty)
+        val team = Team(Refined.unsafeApply(exampleTeam),
+                        Seq.empty,
+                        Refined.unsafeApply(Set(user, otherUser)),
+                        Set.empty)
         assertRight(team, user.createTeam(exampleTeam, owners = Set(otherUser)))
       }
       "creating a team with other members" in {
-        val team = Team(Refined.unsafeApply(exampleTeam), Seq.empty, Refined.unsafeApply(Set(user)), Set(otherUser))
+        val team = Team(Refined.unsafeApply(exampleTeam),
+                        Seq.empty,
+                        Refined.unsafeApply(Set(user)),
+                        Set(otherUser))
         assertRight(team, user.createTeam(exampleTeam, members = Set(otherUser)))
       }
     }

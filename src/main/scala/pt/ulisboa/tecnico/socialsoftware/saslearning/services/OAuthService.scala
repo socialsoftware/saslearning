@@ -14,7 +14,6 @@ case class OAuthService(client: Provider) {
 
   def userFromOAuth(authInfo: Token): Option[User] = {
     import io.circe.parser.parse
-
     import scalaj.http.Http
 
     val response = Http(client.userProfileEndpoint.toString)
@@ -29,11 +28,9 @@ case class OAuthService(client: Provider) {
 
   def requestAccessToken(code: String): Option[Token] = {
     import io.circe.parser._
-
     import scalaj.http.Http
 
-    val response = Http(client.accessTokenUrl.toString)
-      .postForm
+    val response = Http(client.accessTokenUrl.toString).postForm
       .param("client_id", client.id)
       .param("client_secret", client.secret)
       .param("redirect_uri", redirectUri.toString)
@@ -46,19 +43,19 @@ case class OAuthService(client: Provider) {
     // FIXME authorization_code and scope
     // FIXME handle unauthorization
 
-    parse(response)
-      .toOption
+    parse(response).toOption
       .flatMap(_.as[Token].toOption)
   }
 
   // TODO: private def refreshAccessToken(): Unit = ???
 
-  private implicit val decodeOAuthInfo: Decoder[Token] = (c: HCursor) => for {
-    accessToken <- c.downField("access_token").as[String]
-    refreshToken <- c.downField("refresh_token").as[Option[String]]
-    expiresIn <- c.downField("expires_in").as[Int]
-  } yield {
-    Token(accessToken, refreshToken, expiresIn, client) //FIXME now + expiresIn
+  private implicit val decodeOAuthInfo: Decoder[Token] = (c: HCursor) =>
+    for {
+      accessToken <- c.downField("access_token").as[String]
+      refreshToken <- c.downField("refresh_token").as[Option[String]]
+      expiresIn <- c.downField("expires_in").as[Int]
+    } yield {
+      Token(accessToken, refreshToken, expiresIn, client) //FIXME now + expiresIn
   }
 
 }

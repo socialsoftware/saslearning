@@ -18,7 +18,8 @@ class DocumentSpec extends UnitSpec {
         document should be('left)
       }
       "have an invalid URI" in {
-        val document = Document.fromUnsafe(None, defaultTitle, "invalid source", defaultContent, user)
+        val document =
+          Document.fromUnsafe(None, defaultTitle, "invalid source", defaultContent, user)
         document should be('left)
       }
     }

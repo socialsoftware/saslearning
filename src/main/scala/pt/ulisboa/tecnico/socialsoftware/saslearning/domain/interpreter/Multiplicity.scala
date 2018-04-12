@@ -19,8 +19,8 @@ case class Multiplicity(lower: Int, upper: Int) {
 
 object Multiplicity {
 
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-  import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{ deriveDecoder, deriveEncoder }
+  import io.circe.{ Decoder, Encoder }
 
   implicit val decodeJson: Decoder[Multiplicity] = deriveDecoder
   implicit val encodeJson: Encoder[Multiplicity] = deriveEncoder

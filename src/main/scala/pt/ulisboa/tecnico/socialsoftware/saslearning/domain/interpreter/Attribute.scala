@@ -11,8 +11,8 @@ case class Attribute(name: String, specification: AttributeType, value: String)
 
 object Attribute {
 
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-  import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{ deriveDecoder, deriveEncoder }
+  import io.circe.{ Decoder, Encoder }
 
   implicit val decodeJson: Decoder[Attribute] = deriveDecoder
   implicit val encodeJson: Encoder[Attribute] = deriveEncoder

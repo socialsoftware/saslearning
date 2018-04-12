@@ -15,7 +15,6 @@ class CommentSpec extends UnitSpec {
   private def commentToJsonString(comment: Comment, category: String): String =
     s"""{"content":"${comment.content}","author":${user.asJson.noSpaces},"type":"$category"}""".stripMargin
 
-
   private def assertRight(expected: String, actual: Either[String, Comment]) = {
     actual should be('right)
     actual.right.value.content.value should be(expected)
@@ -58,7 +57,8 @@ class CommentSpec extends UnitSpec {
       assertLeft(comment)
     }
     "have content" in {
-      assertRight(expected = needMoreInformation, actual = NeedMoreInformation.fromUnsafe(needMoreInformation, user))
+      assertRight(expected = needMoreInformation,
+                  actual = NeedMoreInformation.fromUnsafe(needMoreInformation, user))
     }
   }
 

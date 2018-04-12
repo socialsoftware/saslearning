@@ -10,8 +10,8 @@ case class EntityType(name: String, attributes: Seq[AttributeType])
 
 object EntityType {
 
-  import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-  import io.circe.{Decoder, Encoder}
+  import io.circe.generic.semiauto.{ deriveDecoder, deriveEncoder }
+  import io.circe.{ Decoder, Encoder }
 
   implicit val decodeJson: Decoder[EntityType] = deriveDecoder
   implicit val encodeJson: Encoder[EntityType] = deriveEncoder
