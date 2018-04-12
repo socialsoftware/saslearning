@@ -13,11 +13,12 @@ before_cache:
 
 cache:
   directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+    - $HOME/.sbt
+    - $HOME/.ivy2
+    - $HOME/.coursier
 
 script:
-  - sbt coverage test
+  - sbt ";fmt ;fix ;coverage ;test"
 
 after_success:
   - sbt coverageReport codacyCoverage

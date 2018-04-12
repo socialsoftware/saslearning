@@ -13,7 +13,8 @@ import scala.collection.immutable.Seq
 class TeamSpec extends UnitSpec {
 
   private val member = User(None, "jane", new InternetAddress("jane_doe@example.org"), "Jane Doe")
-  private val newMember = User(None, "jsmith", new InternetAddress("jsmith@example.org"), "JohnSmith")
+  private val newMember =
+    User(None, "jsmith", new InternetAddress("jsmith@example.org"), "JohnSmith")
 
   private val exampleTeam = Team("Apple", Seq.empty, Refined.unsafeApply(Set(user)), Set(member))
 
@@ -22,7 +23,8 @@ class TeamSpec extends UnitSpec {
     actual.right.value.size should equal(expected.size)
   }
 
-  private def compareTeams(expected: Team, actual: Team): Assertion = assertRight(expected, Right(actual))
+  private def compareTeams(expected: Team, actual: Team): Assertion =
+    assertRight(expected, Right(actual))
 
   "A team" should {
     "have a non empty name" in {
@@ -46,7 +48,8 @@ class TeamSpec extends UnitSpec {
       }
     }
     "update its owners" when {
-      val expectedTeam = Team("Apple", Seq.empty, Refined.unsafeApply(Set(user, newMember)), Set(member))
+      val expectedTeam =
+        Team("Apple", Seq.empty, Refined.unsafeApply(Set(user, newMember)), Set(member))
       "adding a new owner" in {
         assertRight(expected = expectedTeam, actual = exampleTeam.addOwner(newMember))
       }
@@ -56,7 +59,8 @@ class TeamSpec extends UnitSpec {
     }
     "update its members" when {
       "adding a new member" in {
-        val expectedTeam = Team("Apple", Seq.empty, Refined.unsafeApply(Set(user)), Set(member, newMember))
+        val expectedTeam =
+          Team("Apple", Seq.empty, Refined.unsafeApply(Set(user)), Set(member, newMember))
         compareTeams(expected = expectedTeam, actual = exampleTeam.addMember(newMember))
       }
       "removing an existing member" in {
@@ -100,7 +104,8 @@ class TeamSpec extends UnitSpec {
 
   "Adding a document" should {
     "create a new workspace" in {
-      val expected = Team("Apple", Seq(Workspace(defaultDocument)), Refined.unsafeApply(Set(user)), Set(member))
+      val expected =
+        Team("Apple", Seq(Workspace(defaultDocument)), Refined.unsafeApply(Set(user)), Set(member))
       val actual = exampleTeam.addDocument(defaultDocument)
       assert(expected == actual)
     }
@@ -108,19 +113,21 @@ class TeamSpec extends UnitSpec {
 
   "Removing a document" should {
     "remove the matching workspace from the list" in {
-      val actual = Team("Apple", Seq(Workspace(defaultDocument)), Refined.unsafeApply(Set(user)), Set(member))
-        .removeDocument(defaultDocument)
+      val actual =
+        Team("Apple", Seq(Workspace(defaultDocument)), Refined.unsafeApply(Set(user)), Set(member))
+          .removeDocument(defaultDocument)
 
       assert(exampleTeam == actual)
     }
     "not change the workspace list" in {
-      val expected = Team("Apple", Seq(Workspace(defaultDocument)), Refined.unsafeApply(Set(user)), Set(member))
+      val expected =
+        Team("Apple", Seq(Workspace(defaultDocument)), Refined.unsafeApply(Set(user)), Set(member))
 
       val anotherDocument = Document(None,
-        Refined.unsafeApply("Art of War"),
-        URI.create("www.exameple.org"),
-        Refined.unsafeApply("Some content"),
-        user)
+                                     Refined.unsafeApply("Art of War"),
+                                     URI.create("www.exameple.org"),
+                                     Refined.unsafeApply("Some content"),
+                                     user)
 
       val actual = expected.removeDocument(anotherDocument)
 

@@ -1,10 +1,11 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.{ Request, Response }
 import io.circe.Json
 import io.circe.generic.auto._
 import io.finch._
+import io.finch.syntax._
 import io.finch.circe._
 import pt.ulisboa.tecnico.socialsoftware.saslearning.services.OAuthService
 
@@ -16,10 +17,12 @@ package object api {
 
   implicit val settings: Settings = Settings.fromConfig()
 
-  private def oauthEndpoints(implicit settings: Settings) = settings.oauthProviders
-    .map { provider =>
-      OAuthApi(OAuthService(provider)).endpoints
-    }.reduceRight(_.coproduct(_))
+  private def oauthEndpoints(implicit settings: Settings) =
+    settings.oauthProviders
+      .map { provider =>
+        OAuthApi(OAuthService(provider)).endpoints
+      }
+      .reduceRight(_.coproduct(_))
 
   private val userEndpoints = UserApi()
   private val documentEndpoints = DocumentApi()

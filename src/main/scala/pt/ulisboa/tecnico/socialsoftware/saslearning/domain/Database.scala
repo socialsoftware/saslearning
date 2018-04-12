@@ -3,11 +3,12 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain
 import java.util.NoSuchElementException
 
 import com.twitter.util.Future
-import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.{Annotation, Document}
+import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.{ Annotation, Document }
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.oauth.Token
 
 import scala.collection.mutable
 
+@SuppressWarnings(Array("scalafix:Disable.mutable")) //This is a temporary file
 object Database {
   private val users: mutable.Map[Long, User] = mutable.Map.empty[Long, User]
   private val documents: mutable.Map[Long, Document] = mutable.Map.empty[Long, Document]

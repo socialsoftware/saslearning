@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning
 
-import javax.mail.internet.{AddressException, InternetAddress}
+import javax.mail.internet.{ AddressException, InternetAddress }
 
 import eu.timepit.refined.refineV
 import eu.timepit.refined.types.string.NonEmptyString
@@ -18,9 +18,7 @@ package object domain {
     either.left.map(_.getLocalizedMessage)
   }
 
-  def fromString[T](value: String)(f: NonEmptyString => T): Either[String, T] = {
+  def fromString[T](value: String)(f: NonEmptyString => T): Either[String, T] =
     refineV[NonEmpty](value).map(str => f(str))
-  }
-
 
 }

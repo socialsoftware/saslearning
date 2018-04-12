@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.api
 
 import com.twitter.finagle.http.Status
 import io.finch._
+import io.finch.syntax._
 import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.Database
 import pt.ulisboa.tecnico.socialsoftware.saslearning.services.OAuthService
 import shapeless.{:+:, CNil}

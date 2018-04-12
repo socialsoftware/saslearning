@@ -8,7 +8,8 @@ import scala.collection.immutable.Seq
 class WorkspaceSpec extends UnitSpec {
 
   private val prestineWorkspace = Workspace(defaultDocument)
-  private val workspaceWithDefaultAnnotation = Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation))
+  private val workspaceWithDefaultAnnotation =
+    Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation))
   private val anotherAnnotation = Annotation(None, 0l, 1l, "This is an annotation", user)
 
   "Posting an annotation" should {
@@ -20,8 +21,10 @@ class WorkspaceSpec extends UnitSpec {
       }
       "there is at least one annotation" in {
 
-        val expected = Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation, anotherAnnotation))
-        val actual = Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation)).post(anotherAnnotation)
+        val expected =
+          Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation, anotherAnnotation))
+        val actual =
+          Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation)).post(anotherAnnotation)
 
         assert(expected == actual)
       }
@@ -39,7 +42,8 @@ class WorkspaceSpec extends UnitSpec {
         assert(prestineWorkspace == actual)
       }
       "the annotation isn't present" in {
-        val actual = Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation)).delete(anotherAnnotation)
+        val actual =
+          Workspace(defaultDocument, Seq.empty, Seq(defaultAnnotation)).delete(anotherAnnotation)
         assert(prestineWorkspace == actual)
       }
     }

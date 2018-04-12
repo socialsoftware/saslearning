@@ -2,8 +2,10 @@ package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.oauth
 
 import java.net.URI
 
-case class Provider(name: String, site: URI,
-                    id: String, secret: String,
+case class Provider(name: String,
+                    site: URI,
+                    id: String,
+                    secret: String,
                     authorizePath: String = "/oauth/authorize",
                     tokenPath: String = "/oauth/token",
                     userProfileEndpoint: URI,
