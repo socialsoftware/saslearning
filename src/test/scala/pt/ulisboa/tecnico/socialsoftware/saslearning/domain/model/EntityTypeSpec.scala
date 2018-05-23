@@ -13,8 +13,8 @@ class EntityTypeSpec extends UnitSpec {
       val entityType = EntityType(name)
 
       entityType should be('right)
-      entityType.right.get.name.value shouldEqual name
-      entityType.right.get.rules shouldBe empty
+      entityType.right.value.name.value shouldEqual name
+      entityType.right.value.rules shouldBe empty
     }
   }
 
@@ -35,8 +35,8 @@ class EntityTypeSpec extends UnitSpec {
         EntityType(name, Map(connectionRule -> tactic))
 
       entityType should be('right)
-      entityType.right.get.name.value shouldEqual name
-      entityType.right.get.rules.get(connectionRule) shouldBe Some(tactic)
+      entityType.right.value.name.value shouldEqual name
+      entityType.right.value.rules.get(connectionRule) shouldBe Some(tactic)
     }
   }
 
