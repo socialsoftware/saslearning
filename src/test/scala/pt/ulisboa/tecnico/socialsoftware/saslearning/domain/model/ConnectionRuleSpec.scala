@@ -14,8 +14,8 @@ class ConnectionRuleSpec extends UnitSpec {
       val connectionRule = ConnectionRule(name, multiplicity)
 
       connectionRule should be('right)
-      connectionRule.right.get.name.value shouldEqual "Has Tactic"
-      connectionRule.right.get.multiplicity shouldBe multiplicity
+      connectionRule.right.value.name.value shouldEqual "Has Tactic"
+      connectionRule.right.value.multiplicity shouldBe multiplicity
     }
   }
 

@@ -13,8 +13,8 @@ class MetaModelSpec extends UnitSpec {
       val model = MetaModel(title, description, entityType)
 
       model should be('right)
-      model.right.get.title.value shouldEqual title
-      model.right.get.description.value shouldEqual description
+      model.right.value.title.value shouldEqual title
+      model.right.value.description.value shouldEqual description
     }
   }
   it can {
