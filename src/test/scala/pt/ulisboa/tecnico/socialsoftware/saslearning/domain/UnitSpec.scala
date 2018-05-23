@@ -11,6 +11,8 @@ import pt.ulisboa.tecnico.socialsoftware.saslearning.domain.collaboration.{ Anno
 
 abstract class UnitSpec extends WordSpec with Matchers with EitherValues {
 
+  def notWord: AfterWord = afterWord("not")
+
   def user: User = User(None, "test", new InternetAddress("john.doe@example.org"), "John Doe")
 
   def defaultUri: URI = URI.create("http://example.org")
