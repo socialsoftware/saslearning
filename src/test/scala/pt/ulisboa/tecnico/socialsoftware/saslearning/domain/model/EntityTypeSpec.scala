@@ -14,7 +14,7 @@ class EntityTypeSpec extends UnitSpec {
 
       entityType should be('right)
       entityType.right.value.name.value shouldEqual name
-      entityType.right.value.rules shouldBe empty
+      entityType.right.value.connections shouldBe empty
     }
   }
 
@@ -36,7 +36,7 @@ class EntityTypeSpec extends UnitSpec {
 
       entityType should be('right)
       entityType.right.value.name.value shouldEqual name
-      entityType.right.value.rules.get(connectionRule) shouldBe Some(tactic)
+      entityType.right.value.connections.get(connectionRule) shouldBe Some(tactic)
     }
   }
 
