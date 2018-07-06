@@ -1,3 +1,3 @@
 package pt.ulisboa.tecnico.socialsoftware.saslearning.domain.model
 
-class Entity {}
+case class Entity(entityType: EntityType)
