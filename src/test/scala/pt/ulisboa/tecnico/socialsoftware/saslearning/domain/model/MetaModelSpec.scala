@@ -35,7 +35,7 @@ class MetaModelSpec extends UnitSpec {
       val metaModel = MetaModel(NonEmptyString("Software Archictures Scenarios"), root)
       val model = Model(metaModel, ModelNode(Set.empty, root.description, Set.empty))
 
-      metaModel.toModel should equal(model)
+      metaModel.instantiate should equal(model)
 
     }
   }

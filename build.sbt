@@ -32,6 +32,7 @@ val testDependencies = Seq(
 
 val dependenciesSettings = Seq(
   libraryDependencies ++= Seq(
+    "org.typelevel" %% "cats-core" % "1.1.0",
     "com.github.finagle"      %% "finch-core" % finchVersion,
     "com.github.finagle"      %% "finch-circe" % finchVersion,
     "io.circe"                %% "circe-generic" % circeVersion,
