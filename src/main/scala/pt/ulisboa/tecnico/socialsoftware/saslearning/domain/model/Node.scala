@@ -53,7 +53,7 @@ object Node {
 
   case class MetaModelNode(description: NodeDescription, children: Set[MetaModelNode])
       extends Node[MetaModelNode] {
-    def toModelNode: ModelNode = ModelNode(Set.empty, description, children.map(_.toModelNode))
+    def instantiate: ModelNode = ModelNode(Set.empty, description, children.map(_.instantiate))
   }
 
 }
