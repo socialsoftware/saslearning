@@ -10,11 +10,11 @@ case class UserApi() extends Api[User :+: Seq[User] :+: CNil] {
   private val prefix = "users"
 
   private def user: Endpoint[User] = get(prefix :: path[String] :: authorize) {
-    (username: String, user: User) =>
+    (username: String, _: User) =>
       Database.getUser(username).map(Ok)
   }
 
-  private def users: Endpoint[Seq[User]] = get(prefix :: authorize) { (user: User) =>
+  private def users: Endpoint[Seq[User]] = get(prefix :: authorize) { _: User =>
     Database.getUsers.map(Ok)
   }
 

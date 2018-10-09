@@ -10,13 +10,13 @@ object JsonUtils {
   import cats.syntax.either._
 
   implicit val uriDecoder: Decoder[URI] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(URI.create(str)).leftMap(t => "Malformed URL.")
+    Either.catchNonFatal(URI.create(str)).leftMap(_ => "Malformed URL.")
   }
 
   implicit val uriEncoder: Encoder[URI] = Encoder.encodeString.contramap[URI](_.toString)
 
   implicit val internetAddressDecoder: Decoder[InternetAddress] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(new InternetAddress(str)).leftMap(t => "Invalid e-mail address.")
+    Either.catchNonFatal(new InternetAddress(str)).leftMap(_ => "Invalid e-mail address.")
   }
 
   implicit val internetAddressEncoder: Encoder[InternetAddress] =

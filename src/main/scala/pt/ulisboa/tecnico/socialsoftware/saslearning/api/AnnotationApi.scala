@@ -12,7 +12,7 @@ case class AnnotationApi() extends Api[Annotation :+: Long :+: Seq[Annotation] :
   private val prefix = "annotations"
 
   private def getAnnotation: Endpoint[Annotation] = get(prefix :: path[Long] :: authorize) {
-    (id: Long, user: User) =>
+    (id: Long, _: User) =>
       Database.getAnnotation(id).map(Ok)
   }
 
@@ -21,7 +21,7 @@ case class AnnotationApi() extends Api[Annotation :+: Long :+: Seq[Annotation] :
       Database.addAnnotation(createAnnotation(user)).map(Ok)
     }
 
-  private def getAnnotations: Endpoint[Seq[Annotation]] = get(prefix :: authorize) { (user: User) =>
+  private def getAnnotations: Endpoint[Seq[Annotation]] = get(prefix :: authorize) { _: User =>
     Database.getAnnotations.map(Ok)
   }
 

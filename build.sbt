@@ -4,7 +4,7 @@ lazy val buildSettings = Seq(
   name := "saslearning",
   organization := "pt.ulisboa.tecnico",
   version := "2.0.0-SNAPSHOT",
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.7",
   scmInfo := Some(
     ScmInfo(
       url("https://github.com/socialsoftware/saslearning"),
@@ -18,10 +18,10 @@ addCommandAlias("fix", "all compile:scalafixCli test:scalafixCli")
 
 addCompilerPlugin(scalafixSemanticdb)
 
-lazy val finchVersion = "0.19.0"
-lazy val circeVersion = "0.9.3"
-lazy val jwtVersion = "0.16.0"
-lazy val refinedVersion = "0.9.0"
+lazy val finchVersion = "0.24.0"
+lazy val circeVersion = "0.10.0"
+lazy val jwtVersion = "0.18.0"
+lazy val refinedVersion = "0.9.2"
 
 val testDependencies = Seq(
   "org.mockito"    % "mockito-all"         % "1.10.19",
@@ -32,7 +32,7 @@ val testDependencies = Seq(
 
 val dependenciesSettings = Seq(
   libraryDependencies ++= Seq(
-    "org.typelevel" %% "cats-core" % "1.1.0",
+    "org.typelevel"           %% "cats-core" % "1.4.0",
     "com.github.finagle"      %% "finch-core" % finchVersion,
     "com.github.finagle"      %% "finch-circe" % finchVersion,
     "io.circe"                %% "circe-generic" % circeVersion,
@@ -40,12 +40,12 @@ val dependenciesSettings = Seq(
     "io.circe"                %% "circe-parser" % circeVersion,
     "io.circe"                %% "circe-refined" % circeVersion,
     "eu.timepit"              %% "refined" % refinedVersion,
-    "com.sun.mail"            % "mailapi" % "1.6.1",
+    "com.sun.mail"            % "mailapi" % "1.6.2",
     "com.pauldijou"           %% "jwt-core" % jwtVersion,
     "com.pauldijou"           %% "jwt-circe" % jwtVersion,
-    "org.scalaj"              %% "scalaj-http" % "2.3.0",
-    "com.twitter"             %% "twitter-server" % "18.4.0",
-    "com.github.pureconfig"   %% "pureconfig" % "0.9.1",
+    "org.scalaj"              %% "scalaj-http" % "2.4.1",
+    "com.twitter"             %% "twitter-server" % "18.9.1",
+    "com.github.pureconfig"   %% "pureconfig" % "0.9.2",
   ) ++ testDependencies.map(_ % "test"),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),

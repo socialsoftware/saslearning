@@ -19,8 +19,8 @@ See [API.md](API.md) for a detailed description about the API provided by SAS Le
 In order to have a running version of this project you must setup your machine with:
 
 - Git
-- Scala 2.12.4
-- SBT 1.1
+- Scala 2.12.7
+- SBT 1.2
 
 Now clone the repository to your machine by:
 
